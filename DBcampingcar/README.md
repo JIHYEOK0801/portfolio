@@ -131,6 +131,7 @@ JAVA(swing GUI), MySQL
    - companylist (대여회사 테이블)
    - fixinformation (정비소별 정비내역 테이블)
    - presentrentcampingcarlist (현재 대여중인 캠핑카 테이블)
+   </
 
    ```java
    public void createTable() {
