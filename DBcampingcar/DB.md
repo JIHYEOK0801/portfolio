@@ -28,8 +28,8 @@ JAVA(swing GUI), MySQL
   1. #### 캠핑카 리스트 초기화
 
      <이미지></br>
-  ![](https://github.com/JIHYEOK0801/record/blob/main/DBcampingcar/img/ezgif.com-gif-maker.gif?raw=true){: width="300" height="270"}
-
+  <img src = "https://github.com/JIHYEOK0801/record/blob/main/DBcampingcar/img/ezgif.com-gif-maker.gif?raw=true" width="600px" height="270px">
+  
      '초기화' 버튼으로 데이터 초기화 수행. 초기 데이터에는 15개의 대여가능 캠핑카가 들어감
 
   2. #### 캠핑카 데이터 조작
