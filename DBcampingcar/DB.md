@@ -12,13 +12,13 @@
 - ### 개발기간
 
 2020.05 ~ 2020.06
-<br/>
+<br/><br/>
 
 
 - ### 사용기술
 
 JAVA(swing GUI), MySQL  
-<br/>
+<br/><br/>
 
 
 > ## Function
