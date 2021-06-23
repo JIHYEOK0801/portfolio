@@ -671,7 +671,7 @@ JAVA(swing GUI), MySQL
                }
    ```
 
-   
+   </br>
 
 4. ### 데이터 검색
 
