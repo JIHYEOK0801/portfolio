@@ -47,6 +47,6 @@
 ---
 
 1. #### 3D 가구 배치도 구현
-2. #### [캠핑카 대여/관리 프로그램](https://github.com/JIHYEOK0801/record/tree/main/DBcampingcar#%EC%BA%A0%ED%95%91%EC%B9%B4-%EB%8C%80%EC%97%AC%EA%B4%80%EB%A6%AC-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8)
+2. #### [캠핑카 대여/관리 프로그램](./DBcampingcar/README.md)
 3. #### 증권 정보 제공 App
 4. #### 기타
