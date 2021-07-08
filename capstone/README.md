@@ -4,15 +4,15 @@
 
 > ## 목차
 
-- ### [Description](/Descrpition)
+- ### [Description](#Descrpition)
 
-- ### [Function](/Function)
+- ### [Function](#Function)
 
-- ### [Development](/Development)
+- ### [Development](#Development)
 
-  1. [Machine Learning](/Machine Lerarning)
-  2. [Android Studio](/Android Studio)
-  3. [Server / DB](/ServerDB)
+  1. [Machine Learning](#Machine Lerarning)
+  2. [Android Studio](#Android Studio)
+  3. [Server / DB](#ServerDB)
 
 
 </br>
