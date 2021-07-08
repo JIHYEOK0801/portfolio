@@ -10,9 +10,9 @@
 
 - ### [Development](#Development-1)
 
-  1. [Machine Learning](#Machine-Lerarning)
-  2. [Android Studio](#Android-Studio)
-  3. [Server / DB](#ServerDB)
+  1. [Machine Learning](#machine-learning)
+  2. [Android Studio](#android-studio)
+  3. [Server / DB](#server--db)
 
 
 </br>
