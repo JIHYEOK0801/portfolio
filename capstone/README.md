@@ -4,11 +4,11 @@
 
 > ## 목차
 
-- ### [Description](#descrpition-1)
+- ### [Description](#Descrpition-1)
 
-- ### [Function](#Function)
+- ### [Function](#Function-1)
 
-- ### [Development](#Development)
+- ### [Development](#Development-1)
 
   1. [Machine Learning](#Machine-Lerarning)
   2. [Android Studio](#Android-Studio)
