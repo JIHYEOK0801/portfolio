@@ -4,7 +4,7 @@
 
 > ## 목차
 
-- ### [Description](#Descrpition-1)
+- ### [Description](#description-1)
 
 - ### [Function](#Function-1)
 
