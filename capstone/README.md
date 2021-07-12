@@ -8,12 +8,16 @@
 
 - ### [Function](#Function-1)
 
+  1. [kospi 지수 및 실시간 세계 주요 증권 지수 정보 제공](#kospi-지수-및-실시간-세계-주요-증권-지수-정보-제공)
+  2. [국내/외 증권정보 제공](#국내외-증권정보-제공)
+  3. [대형주 실시간 주가정보 제공](#대형주-실시간-주가정보-제공)
+  4. [관심주 관리 기능 제공](#관심주-관리-기능-제공)
+
 - ### [Development](#Development-1)
 
   1. [Machine Learning](#machine-learning)
   2. [Android Studio](#android-studio)
   3. [Server / DB](#server--db)
-
 
 </br>
 
