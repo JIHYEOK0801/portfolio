@@ -43,7 +43,7 @@
 
 - ### 소스코드
 
-  1. [Android Studio](./androidstudio/myapplication1)
+  1. [Android Studio](./AndroidStudio/myapplication1)
   2. [Server/DB](./server/model)
 
   
@@ -136,7 +136,7 @@
 
     - *예측 목표 요일* : 근무일 기준 5일 후(일반적으로 그 다음 주 금요일)로, 매주 한 번씩 실행
 
-      ​	*ex)* *예측 시행 요일* : 토요일 	- - >	*예측 목표 날* : 그 다음주 금요일
+      	*ex)* *예측 시행 요일* : 토요일 	- - >	*예측 목표 날* : 그 다음주 금요일
 
     </br>
 
@@ -1039,7 +1039,7 @@
 3. ### Stock 100 List
 
    - KOSPI 시가총액 100순위 안에 드는 종목 정보 표현
-   -  '[네이버 시세](https://finance.naver.com/item/main.nhn?code)'  웹사이트 크롤링을 통해 주가정보 획득
+   - '[네이버 시세](https://finance.naver.com/item/main.nhn?code)'  웹사이트 크롤링을 통해 주가정보 획득
 
    ```java
    public class List_Window extends Fragment {
@@ -2212,4 +2212,3 @@
    ```
 
    
-
