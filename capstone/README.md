@@ -87,11 +87,9 @@
 
 > ## Development
 
----
-
 ## Machine Learning
 
-- > KOSPI 지수 예측에 사용한 일별 데이터(총 27개의 column)
+- > ### KOSPI 지수 예측에 사용한 일별 데이터(총 27개의 column)
 
   1. *close(종가)*
   2. *daebi(대비)*
@@ -139,7 +137,7 @@
 
 </br>
 
-- > 예측 과정
+- > ### 예측 과정
 
   - **예측 시행 요일 및 예측 목표 요일**
 
@@ -160,7 +158,7 @@
 
   </br>
 
-- > 서버 내 모델 실행코드
+- > ### 서버 내 모델 실행코드
 
   ```python
   from copy import deepcopy
@@ -1542,7 +1540,7 @@
 
 ## Server & DB
 
-- > **Server** & **DB**가 필요한 이유
+- > ### **Server** & **DB**가 필요한 이유
 
 **Server** : KOSPI 지수 예측에 필요한 데이터를 수집, DB 데이터 갱신
 
@@ -1552,9 +1550,9 @@
 
 </br>
 
-- > **Server** & **DB** 실행
+- > ### **Server** & **DB** 실행
 
-  - Server와 DB의 실행 과정
+  - **Server와 DB의 실행 과정**
 
     1. [모델예측에 필요한 데이터 수집](#모델-예측에-필요한-데이터-수집)
     2. [DB 갱신](#db-데이터-갱신)
@@ -1569,7 +1567,7 @@
 
      데이터 수집 방법은 두 가지로 **웹페이지 크롤링**과 제공되는 **API  활용**
 
-     - > 크롤링(crawling)
+     - > ### 크롤링(crawling)
 
        '[네이버 증권'](https://finance.naver.com/) 웹페이지 크롤링을 통해 각국의 주가지수, 유가 등의 정보 획득
 
@@ -1686,7 +1684,7 @@
 
      </br>
 
-     - > API
+     - > ### API
 
        [한국은행 경제통계시스템 : ecos API](https://ecos.bok.or.kr/jsp/openapi/OpenApiController.jsp) - '환율' 
 
