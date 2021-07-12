@@ -89,49 +89,49 @@
 
 - > KOSPI 지수 예측에 사용한 일별 데이터(총 27개의 column)
 
-  1. close(종가)
-  2. daebi(대비)
-  3. updown(등락률)
+  1. *close(종가)*
+  2. *daebi(대비)*
+  3. *updown(등락률)*
 
-  4. open(시가)
+  4. *open(시가)*
 
-  5. high(고가)
+  5. *high(고가)*
 
-  6. low(저가)
+  6. *low(저가)*
 
-  7. volume(거래량)
+  7. *volume(거래량)*
 
-  8. association(기관 순매수금)
+  8. *association(기관 순매수금)*
 
-  9. foreign(외국인 순매수금)
+  9. *foreign(외국인 순매수금)*
 
-  10. person(개인 순매수금)
+  10. *person(개인 순매수금)*
 
-  11. pension(연기금 순매수금)
+  11. *pension(연기금 순매수금)*
 
-  12. hsi(홍콩 hsi지수)
+  12. *hsi(홍콩 hsi지수)*
 
-  13. shanghai(중국 상해지수)
+  13. *shanghai(중국 상해지수)*
 
-  14. nasdaq(미국 나스닥지수)
+  14. *nasdaq(미국 나스닥지수)*
 
-  15. spy(미국 spi500 지수)
+  15. *spy(미국 spi500 지수)*
 
-  16. dji(미국 다우지수)
+  16. *dji(미국 다우지수)*
 
-  17. nikkei(일본 니케이지수)
+  17. *nikkei(일본 니케이지수)*
 
-  18. won/USdollar(달러환율)
+  18. *won/USdollar(달러환율)*
 
-  19. won/100en(엔환율)
+  19. *won/100en(엔환율)*
 
-  20. won/euro(유로환율)
+  20. *won/euro(유로환율)*
 
-  21. WTI(유가)
+  21. *WTI(유가)*
 
-  22. ema(지수이동평균 : 5,10,20,60,120일)
+  22. *ema(지수이동평균 : 5,10,20,60,120일)*
 
-  23. disp(이격도 : 주가와 지수이동평균선의 괴리를 수치화하여 나타낸 것)
+  23. *disp(이격도 : 주가와 지수이동평균선의 괴리를 수치화하여 나타낸 것)*
 
 </br>
 
