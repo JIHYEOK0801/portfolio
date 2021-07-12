@@ -1532,8 +1532,6 @@
 
     </br>
 
-
-
 ## Server & DB
 
 - > **Server** & **DB**가 필요한 이유
@@ -1563,7 +1561,7 @@
 
      데이터 수집 방법은 두 가지로 **웹페이지 크롤링**과 제공되는 **API  활용**
 
-     - 크롤링(crawling)
+     - > 크롤링(crawling)
 
        '[네이버 증권'](https://finance.naver.com/) 웹페이지 크롤링을 통해 각국의 주가지수, 유가 등의 정보 획득
 
@@ -1680,7 +1678,7 @@
 
      </br>
 
-     - API
+     - > API
 
        [한국은행 경제통계시스템 : ecos API](https://ecos.bok.or.kr/jsp/openapi/OpenApiController.jsp) - '환율' 
 
@@ -1693,86 +1691,13 @@
        </br>
 
      ```python
-     ##---------<use_ecos.py>----------##
-     
-     # 한국은행의 환율 정보를 가져오는데 사용
-     
-     # -*- coding: utf-8 -*-
-     import requests 
-     import xml.etree.ElementTree as ET 
-     from datetime import datetime
-     from datetime import timedelta
-     import time
-     import isHoliday
-     print('<-----use_ecos.py import complete----------------->')
-     key = 'RHXCFZZB7E5KGJLPID'
-     
-     ## API 호출
-     def runAPI(url):
-         response = requests.get(url)  ## http 요청이 성공했을때 API의 리턴값을 가져옵니다.
-         
-         if response.status_code == 200:
-             try:
-                 contents = response.text
-                 ecosRoot = ET.fromstring(contents)
-                 
-                 if ecosRoot[0].text[:4] in ("INFO","ERRO"):  ## 오류 확인
-                     print(ecosRoot[0].text + " : " + ecosRoot[1].text)  ## 오류메세지를 확인하고 처리합니다.
-                     
-                 else:
-                     return(ecosRoot[1][10].text)    ## 결과값 확인
-     
-             except Exception as e:    ##예외 프린트
-                 print(str(e))
-     
-     def get_exchange(): ## 환율
-     
-         d = datetime.today().strftime('%Y%m%d')
-         statisticcode = '036Y001'
-         ## exchange_items = 미국달러, 일본엔, 유럽유로
-         exchange_items = ['0000001', '0000002', '0000003']  
-         exchanges = []
-         for itemcode in exchange_items:
-                 url = "http://ecos.bok.or.kr/api/StatisticSearch/"+key+"/xml/kr/1/5/"+statisticcode+"/DD/"+d+"/"+d+"/" + itemcode
-                 exchanges.append(runAPI(url))
-     
-         return exchanges
+     ##---------<use_ecos.py>----------### 한국은행의 환율 정보를 가져오는데 사용# -*- coding: utf-8 -*-import requests import xml.etree.ElementTree as ET from datetime import datetimefrom datetime import timedeltaimport timeimport isHolidayprint('<-----use_ecos.py import complete----------------->')key = 'RHXCFZZB7E5KGJLPID'## API 호출def runAPI(url):    response = requests.get(url)  ## http 요청이 성공했을때 API의 리턴값을 가져옵니다.        if response.status_code == 200:        try:            contents = response.text            ecosRoot = ET.fromstring(contents)                        if ecosRoot[0].text[:4] in ("INFO","ERRO"):  ## 오류 확인                print(ecosRoot[0].text + " : " + ecosRoot[1].text)  ## 오류메세지를 확인하고 처리합니다.                            else:                return(ecosRoot[1][10].text)    ## 결과값 확인        except Exception as e:    ##예외 프린트            print(str(e))def get_exchange(): ## 환율    d = datetime.today().strftime('%Y%m%d')    statisticcode = '036Y001'    ## exchange_items = 미국달러, 일본엔, 유럽유로    exchange_items = ['0000001', '0000002', '0000003']      exchanges = []    for itemcode in exchange_items:            url = "http://ecos.bok.or.kr/api/StatisticSearch/"+key+"/xml/kr/1/5/"+statisticcode+"/DD/"+d+"/"+d+"/" + itemcode            exchanges.append(runAPI(url))    return exchanges
      ```
 
      </br>
 
      ```python
-     ##---------<kospidetail.py>----------##
-     
-     # kospi지수의 시가, 고가, 저가 종가, 거래량과 각 투자처(개인,기관,외국인,연기금)별 순거래금액을 가져온다.
-     
-     # -*- coding: utf-8 -*-
-     import time
-     from pykrx import stock
-     from datetime import datetime,timedelta
-     print('<-----kospidetail.py import complete--------------->')
-     ## documents : https://github.com/sharebook-kr/pykrx
-     def get_kospi_detail():
-         day = (datetime.today()).strftime("%Y%m%d")#####################
-         df = stock.get_index_ohlcv_by_date(day, day, "1001")
-         open = df.iloc[0, 0] # 시가
-         high = df.iloc[0, 1] # 고가
-         low = df.iloc[0, 2] # 저가
-         close = df.iloc[0, 3] # 종가
-         volume = int(df.iloc[0, 4] * 0.001) # 거래량
-         return open,high,low,close,volume
-         
-     def get_trading_value():
-         day = (datetime.today()).strftime("%Y%m%d")###########################
-         df = stock.get_market_trading_value_by_date(day, day, "KOSPI")
-         association = int(df.iloc[0,0] * 0.000001) # 기관 순매수금
-         person = int(df.iloc[0,2]* 0.000001) # 개인 순매수금
-         foreign = int(df.iloc[0,3]* 0.000001) # 외국인 순매수금
-         
-         df = stock.get_market_trading_value_by_date(day, day, "KOSPI",detail=True)
-         pension = int(df.iloc[0,6]* 0.000001) # 연기금 순매수금
-         
-         return association,foreign,person,pension
+     ##---------<kospidetail.py>----------### kospi지수의 시가, 고가, 저가 종가, 거래량과 각 투자처(개인,기관,외국인,연기금)별 순거래금액을 가져온다.# -*- coding: utf-8 -*-import timefrom pykrx import stockfrom datetime import datetime,timedeltaprint('<-----kospidetail.py import complete--------------->')## documents : https://github.com/sharebook-kr/pykrxdef get_kospi_detail():    day = (datetime.today()).strftime("%Y%m%d")#####################    df = stock.get_index_ohlcv_by_date(day, day, "1001")    open = df.iloc[0, 0] # 시가    high = df.iloc[0, 1] # 고가    low = df.iloc[0, 2] # 저가    close = df.iloc[0, 3] # 종가    volume = int(df.iloc[0, 4] * 0.001) # 거래량    return open,high,low,close,volume    def get_trading_value():    day = (datetime.today()).strftime("%Y%m%d")###########################    df = stock.get_market_trading_value_by_date(day, day, "KOSPI")    association = int(df.iloc[0,0] * 0.000001) # 기관 순매수금    person = int(df.iloc[0,2]* 0.000001) # 개인 순매수금    foreign = int(df.iloc[0,3]* 0.000001) # 외국인 순매수금        df = stock.get_market_trading_value_by_date(day, day, "KOSPI",detail=True)    pension = int(df.iloc[0,6]* 0.000001) # 연기금 순매수금        return association,foreign,person,pension
      ```
 
      </br>
@@ -1792,58 +1717,7 @@
      </br>
 
      ```python
-     ##---------<fb.py>----------##
-     
-     # -*- coding: utf-8 -*-
-     from firebase_admin import credentials
-     from firebase_admin import firestore
-     from copy import deepcopy
-     from pandas import Series,DataFrame
-     from datetime import datetime,timedelta
-     import isHoliday
-     import pandas as pd
-     import firebase_admin
-     import crawling
-     
-     print('<-----fb_dailyupdate.py import complete----------->')
-     cred = credentials.Certificate("team1-1a267-firebase-adminsdk.json")
-     firebase_admin.initialize_app(cred, {'databaseURL' : 'https://team1-1a267.firebaseio.com'})
-     
-     db = firestore.client()
-     
-     print('<-----firebase 권한획득완료-------------------------->')
-     
-     def fb_update_ecos(day_str, day_factors):
-         print('<-----firebase 1차 갱신중----------------------------->')
-         doc_ref = db.collection(u'data').document(u'dailydata')
-     
-         day_factors = ['NaN','NaN','NaN','NaN','NaN','NaN','NaN','NaN','NaN','NaN',
-                         'NaN','NaN','NaN','NaN','NaN','NaN','NaN']+day_factors+['NaN']
-         
-         doc_ref.set({day_str : day_factors}, merge = True)
-         
-         
-         print('<-----firebase 1차 갱신완료-------------------------->')
-         
-     
-     
-     def fb_update_crawling(today_str, today_factors):
-         print('<-----firebase 2차 갱신중----------------------------->')
-         
-         doc_ref = db.collection(u'data').document(u'dailydata')
-         
-         doc = doc_ref.get()
-     
-         dic = deepcopy(doc.to_dict())
-     
-         today_list = dic[today_str]
-         
-         today_list = today_factors[:17] + today_list[17:20] + [today_factors[20]]
-         today_list = list(map(str, today_list))
-         
-     
-         doc_ref.update({today_str : today_list})
-         print('<-----firebase 2차 갱신완료--------------------------->')
+     ##---------<fb.py>----------### -*- coding: utf-8 -*-from firebase_admin import credentialsfrom firebase_admin import firestorefrom copy import deepcopyfrom pandas import Series,DataFramefrom datetime import datetime,timedeltaimport isHolidayimport pandas as pdimport firebase_adminimport crawlingprint('<-----fb_dailyupdate.py import complete----------->')cred = credentials.Certificate("team1-1a267-firebase-adminsdk.json")firebase_admin.initialize_app(cred, {'databaseURL' : 'https://team1-1a267.firebaseio.com'})db = firestore.client()print('<-----firebase 권한획득완료-------------------------->')def fb_update_ecos(day_str, day_factors):    print('<-----firebase 1차 갱신중----------------------------->')    doc_ref = db.collection(u'data').document(u'dailydata')    day_factors = ['NaN','NaN','NaN','NaN','NaN','NaN','NaN','NaN','NaN','NaN',                    'NaN','NaN','NaN','NaN','NaN','NaN','NaN']+day_factors+['NaN']        doc_ref.set({day_str : day_factors}, merge = True)            print('<-----firebase 1차 갱신완료-------------------------->')    def fb_update_crawling(today_str, today_factors):    print('<-----firebase 2차 갱신중----------------------------->')        doc_ref = db.collection(u'data').document(u'dailydata')        doc = doc_ref.get()    dic = deepcopy(doc.to_dict())    today_list = dic[today_str]        today_list = today_factors[:17] + today_list[17:20] + [today_factors[20]]    today_list = list(map(str, today_list))        doc_ref.update({today_str : today_list})    print('<-----firebase 2차 갱신완료--------------------------->')
      ```
 
      </br>
@@ -1851,12 +1725,7 @@
      위의 코드에 추가로 Application UI에 표현될 KOSPI 차트에 필요한 '지수'데이터 또한 갱신
 
      ```python
-     def fb_update_daioykospi_android(today, kospi): ## KOSPI 차트표현에 필요한 데이터 갱신
-         print('<-----안드로이드차트용 kospi지수 갱신중----------->')
-     
-         doc_ref = db.collection(u'data').document(u'dailykospi_android')
-         doc_ref.set({today : kospi}, merge = True) #DB에 금일 날짜와 KOSPI 지수 추가
-         print('<-----안드로이드차트용 kospi지수 갱신완료--------->')
+     def fb_update_daioykospi_android(today, kospi): ## KOSPI 차트표현에 필요한 데이터 갱신    print('<-----안드로이드차트용 kospi지수 갱신중----------->')    doc_ref = db.collection(u'data').document(u'dailykospi_android')    doc_ref.set({today : kospi}, merge = True) #DB에 금일 날짜와 KOSPI 지수 추가    print('<-----안드로이드차트용 kospi지수 갱신완료--------->')
      ```
 
      </br>
@@ -1880,115 +1749,7 @@
      가중치값들이 저장되어있는 모델 파일(파일명 : 75_LSTM.h5)을 실행해서 예측값을 return받는 모듈
 
      ```python
-     ## 모델파일 실행 모듈
-     ##---------<model.py>----------##
-     
-     ## 머신러닝 라이브러리 tensorflow, keras import
-     from copy import deepcopy
-     
-     import pandas as pd
-     from pandas import Series,DataFrame
-     import numpy as np
-     
-     import tensorflow as tf
-     from tensorflow import keras
-     from sklearn.preprocessing import MinMaxScaler
-     from sklearn.model_selection import train_test_split
-     
-     from tensorflow.keras.models import Sequential
-     from tensorflow.keras.layers import Dense
-     from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
-     from tensorflow.keras.layers import LSTM
-     from tensorflow.keras.layers import Dropout
-     
-     from tensorflow.keras.losses import Huber
-     from tensorflow.keras.optimizers import Adam
-     from tensorflow.keras import optimizers
-     from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
-     
-     from sklearn.metrics import r2_score
-     from sklearn.metrics import mean_squared_error
-     
-     from tensorflow.keras.models import load_model
-     import os
-     
-     print('<-----model.py import complete----------->')
-     
-     
-     
-     
-     def run(model_data):
-         
-         model_data['EMA_close5'] = model_data['close'].ewm(5).mean() # 지수이동 평균(5일)
-         model_data['EMA_close10'] = model_data['close'].ewm(10).mean() # 지수이동 평균(10일) 
-         model_data['EMA_close20'] = model_data['close'].ewm(20).mean() # 지수이동 평균(20일)
-         model_data['EMA_close60'] = model_data['close'].ewm(60).mean() # 지수이동 평균(60일)
-         model_data['EMA_close120'] = model_data['close'].ewm(120).mean() # 지수이동 평균(120일)
-         model_data['disp5'] = (model_data['close']/model_data['EMA_close5']) * 100 # 이격도
-         model_data['after4days_close'] = model_data['close'].shift(-4) #close를 4칸 위로 올린 컬럼
-     
-         # 빈값을 위해 interpolate
-         model_data = model_data.interpolate(method = 'values', limit_direction = 'both')
-         
-         # 정확한 지수이동 평균값과 이격도값은 121번째 row부터 들어있기에 데이터 슬라이스
-         model_data = model_data[120:]
-         today_k=model_data['close'].iloc[-1]
-         
-     	# 데이터 전처리 - MinMaxScaler 적용
-         new_scaler = MinMaxScaler()
-         new_scaler.fit(model_data['close'].values.reshape(-1,1))
-     
-         
-         for i in model_data.columns:
-             if i == 'date': continue
-             model_data[i] = MinMaxScaler().fit_transform(model_data[i].values.reshape(-1, 1)).round(4)
-     
-         feature_cols = ['volume','shanghai','dji', 'nikkei', 'hsi', 'won/US dollar', 'won/100en', 'won/euro','association','person','daebi',
-            'EMA_close5', 'EMA_close10', 'EMA_close20', 'EMA_close60', 'EMA_close120', 'disp5', 'updown','after4days_close']
-         label_cols = ['close']
-     
-     	###### 데이터셋 준비 완료
-         
-         base_dir = '' #모델 저장 위치 (서버용)
-         file_name = '75_LSTM.h5'  #모델 이름(파일명)
-         dir = os.path.join(base_dir, file_name)
-         model = load_model(dir)  #저장했던 모델 (dir에 있는거) 불러오는 코드
-     
-         print('model 불러오기 완료')
-     	
-         '''
-         find_pred 
-         : 다음날 예측을 5번 돌려서 마지막 도출된 값이 5일 후 예측된 값
-         '''
-         def find_pred():
-             
-             df = model_data[-24:] # 예측값 하나만 뽑기 위해 원래 -24:
-             
-             for i in range(5): # 1-4번째 예측 값으로 빈칸을 채우고, 5번째 예측값을 예측 값으로 이용
-                 df_tmp = df[i:i+20] #20개씩 잘라서 예측
-                 my_final_x_test = df_tmp[feature_cols]
-                 my_final_x_test = np.array(my_final_x_test)
-                 my_final_x_test = my_final_x_test.reshape(1, 20, 19) # 예측하기 위한 정리
-     
-                 my_final_y_pred = model.predict(my_final_x_test) # 예측하는 코드
-     
-                 if i == 4: #5번째 예측을 마쳤으므로 실제 오늘의 kospi값과 지수들을 통해 예측한 오늘로부터 5일 뒤 값을 return
-                     return new_scaler.inverse_transform(my_final_y_pred)[0][0]
-                 else: # 예측한 값을 df에 채워서 다음 예측을 위해 사용하므로 예측 값을 저장한다.
-                     df['after4days_close'].iloc[i+20] = my_final_y_pred[0][0]
-     
-         # return : 예측한 5일 뒤 코스피 값
-         pred = find_pred()
-         print('함수실행')
-         # 예측 값(pred) - 데이터의 마지막날 코스피지수(today_k) > 0 이면 상승이므로 1, 유지 또는 하락의 경우 0
-         ud_5days = 0
-         if pred - today_k > 0:
-             ud_5days = 1
-         else:
-             ud_5days = 0
-     
-         return ud_5days
-     
+     ## 모델파일 실행 모듈##---------<model.py>----------#### 머신러닝 라이브러리 tensorflow, keras importfrom copy import deepcopyimport pandas as pdfrom pandas import Series,DataFrameimport numpy as npimport tensorflow as tffrom tensorflow import kerasfrom sklearn.preprocessing import MinMaxScalerfrom sklearn.model_selection import train_test_splitfrom tensorflow.keras.models import Sequentialfrom tensorflow.keras.layers import Densefrom tensorflow.keras.callbacks import EarlyStopping, ModelCheckpointfrom tensorflow.keras.layers import LSTMfrom tensorflow.keras.layers import Dropoutfrom tensorflow.keras.losses import Huberfrom tensorflow.keras.optimizers import Adamfrom tensorflow.keras import optimizersfrom tensorflow.keras.callbacks import EarlyStopping, ModelCheckpointfrom sklearn.metrics import r2_scorefrom sklearn.metrics import mean_squared_errorfrom tensorflow.keras.models import load_modelimport osprint('<-----model.py import complete----------->')def run(model_data):        model_data['EMA_close5'] = model_data['close'].ewm(5).mean() # 지수이동 평균(5일)    model_data['EMA_close10'] = model_data['close'].ewm(10).mean() # 지수이동 평균(10일)     model_data['EMA_close20'] = model_data['close'].ewm(20).mean() # 지수이동 평균(20일)    model_data['EMA_close60'] = model_data['close'].ewm(60).mean() # 지수이동 평균(60일)    model_data['EMA_close120'] = model_data['close'].ewm(120).mean() # 지수이동 평균(120일)    model_data['disp5'] = (model_data['close']/model_data['EMA_close5']) * 100 # 이격도    model_data['after4days_close'] = model_data['close'].shift(-4) #close를 4칸 위로 올린 컬럼    # 빈값을 위해 interpolate    model_data = model_data.interpolate(method = 'values', limit_direction = 'both')        # 정확한 지수이동 평균값과 이격도값은 121번째 row부터 들어있기에 데이터 슬라이스    model_data = model_data[120:]    today_k=model_data['close'].iloc[-1]    	# 데이터 전처리 - MinMaxScaler 적용    new_scaler = MinMaxScaler()    new_scaler.fit(model_data['close'].values.reshape(-1,1))        for i in model_data.columns:        if i == 'date': continue        model_data[i] = MinMaxScaler().fit_transform(model_data[i].values.reshape(-1, 1)).round(4)    feature_cols = ['volume','shanghai','dji', 'nikkei', 'hsi', 'won/US dollar', 'won/100en', 'won/euro','association','person','daebi',       'EMA_close5', 'EMA_close10', 'EMA_close20', 'EMA_close60', 'EMA_close120', 'disp5', 'updown','after4days_close']    label_cols = ['close']	###### 데이터셋 준비 완료        base_dir = '' #모델 저장 위치 (서버용)    file_name = '75_LSTM.h5'  #모델 이름(파일명)    dir = os.path.join(base_dir, file_name)    model = load_model(dir)  #저장했던 모델 (dir에 있는거) 불러오는 코드    print('model 불러오기 완료')	    '''    find_pred     : 다음날 예측을 5번 돌려서 마지막 도출된 값이 5일 후 예측된 값    '''    def find_pred():                df = model_data[-24:] # 예측값 하나만 뽑기 위해 원래 -24:                for i in range(5): # 1-4번째 예측 값으로 빈칸을 채우고, 5번째 예측값을 예측 값으로 이용            df_tmp = df[i:i+20] #20개씩 잘라서 예측            my_final_x_test = df_tmp[feature_cols]            my_final_x_test = np.array(my_final_x_test)            my_final_x_test = my_final_x_test.reshape(1, 20, 19) # 예측하기 위한 정리            my_final_y_pred = model.predict(my_final_x_test) # 예측하는 코드            if i == 4: #5번째 예측을 마쳤으므로 실제 오늘의 kospi값과 지수들을 통해 예측한 오늘로부터 5일 뒤 값을 return                return new_scaler.inverse_transform(my_final_y_pred)[0][0]            else: # 예측한 값을 df에 채워서 다음 예측을 위해 사용하므로 예측 값을 저장한다.                df['after4days_close'].iloc[i+20] = my_final_y_pred[0][0]    # return : 예측한 5일 뒤 코스피 값    pred = find_pred()    print('함수실행')    # 예측 값(pred) - 데이터의 마지막날 코스피지수(today_k) > 0 이면 상승이므로 1, 유지 또는 하락의 경우 0    ud_5days = 0    if pred - today_k > 0:        ud_5days = 1    else:        ud_5days = 0    return ud_5days
      ```
 
      </br>
@@ -1998,30 +1759,7 @@
      모델이 예측한 등락 정보를 DB에 저장(1 : 전주 금요일보다 상승 // 0 : 전주 금요일보다 하락 or 동일)
 
      ```python
-     ##---------<fb.py>----------##
-     
-     def upload_predict_kospi(predict_kospi_index, origin_day, origin_kospi):
-         day = datetime.today()
-         predictday = 0
-         
-         #근무일 기준 5일후를 측정하기 위함
-         while predictday < 5:
-             day += timedelta(days=1)
-             if(isHoliday.isholiday(day) or isHoliday.isweekend(day)): ## 공휴일,주말이면 no count
-                 continue
-             predictday += 1
-     
-         day_str = day.strftime("%Y-%m-%d")
-     
-         doc_ref = db.collection(u'data').document(u'predictedkospi_test')
-         
-         doc_ref.set({day_str : predict_kospi_index})
-     
-         doc_ref_origin = db.collection(u'data').document(u'origin')
-         
-         origin_day = origin_day.strftime("%Y-%m-%d")
-     
-         doc_ref_origin.set({origin_day : origin_kospi})
+     ##---------<fb.py>----------##def upload_predict_kospi(predict_kospi_index, origin_day, origin_kospi):    day = datetime.today()    predictday = 0        #근무일 기준 5일후를 측정하기 위함    while predictday < 5:        day += timedelta(days=1)        if(isHoliday.isholiday(day) or isHoliday.isweekend(day)): ## 공휴일,주말이면 no count            continue        predictday += 1    day_str = day.strftime("%Y-%m-%d")    doc_ref = db.collection(u'data').document(u'predictedkospi_test')        doc_ref.set({day_str : predict_kospi_index})    doc_ref_origin = db.collection(u'data').document(u'origin')        origin_day = origin_day.strftime("%Y-%m-%d")    doc_ref_origin.set({origin_day : origin_kospi})
      ```
 
      </br>
