@@ -1548,6 +1548,8 @@
 
 </br>
 
+---
+
 > ### **Server** & **DB** 실행
 
 - **Server와 DB의 실행 과정**
@@ -1560,7 +1562,7 @@
 
   </br>
 
-  
+  ---
 
 1. ####  모델 예측에 필요한 데이터 수집
 
@@ -1780,6 +1782,8 @@
 
    </br>
 
+   ---
+
 2. #### DB 데이터 갱신
 
    - 1.에서 '크롤링'과 'API'를 사용하여 수집한 데이터는 일별데이터이므로 매일 DB를 갱신하는 코드를 작성
@@ -1875,6 +1879,8 @@
    <img src = "https://github.com/JIHYEOK0801/record/blob/main/capstone/img/dailykospi.PNG?raw=true">
 
    </br>
+
+   ---
 
 3. #### 예측 모델 실행
 
@@ -1996,6 +2002,8 @@
 
    </br>
 
+   ---
+
 4. #### KOSPI 등락 예측 정보 DB에 저장
 
    모델이 예측한 등락 정보를 DB에 저장(1 : 전주 금요일보다 상승 // 0 : 전주 금요일보다 하락 or 동일)
@@ -2034,6 +2042,8 @@
    <img src = "https://github.com/JIHYEOK0801/record/blob/main/capstone/img/predictkospi.PNG?raw=true">
 
    </br>
+
+   ---
 
 5. #### 스케줄러
 
