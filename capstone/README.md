@@ -1557,9 +1557,7 @@
 
   1. 모델 예측에 필요한 데이터 수집
 
-     데이터 수집 방법 두 가지로 **웹페이지 크롤링**과 제공되는 **API  활용**
-
-     </br>
+     데이터 수집 방법은 두 가지로 **웹페이지 크롤링**과 제공되는 **API  활용**
 
      - 크롤링(crawling)
 
@@ -1691,13 +1689,86 @@
        </br>
 
      ```python
-     ##---------<use_ecos.py>----------### 한국은행의 환율 정보를 가져오는데 사용# -*- coding: utf-8 -*-import requests import xml.etree.ElementTree as ET from datetime import datetimefrom datetime import timedeltaimport timeimport isHolidayprint('<-----use_ecos.py import complete----------------->')key = 'RHXCFZZB7E5KGJLPID'## API 호출def runAPI(url):    response = requests.get(url)  ## http 요청이 성공했을때 API의 리턴값을 가져옵니다.        if response.status_code == 200:        try:            contents = response.text            ecosRoot = ET.fromstring(contents)                        if ecosRoot[0].text[:4] in ("INFO","ERRO"):  ## 오류 확인                print(ecosRoot[0].text + " : " + ecosRoot[1].text)  ## 오류메세지를 확인하고 처리합니다.                            else:                return(ecosRoot[1][10].text)    ## 결과값 확인        except Exception as e:    ##예외 프린트            print(str(e))def get_exchange(): ## 환율    d = datetime.today().strftime('%Y%m%d')    statisticcode = '036Y001'    ## exchange_items = 미국달러, 일본엔, 유럽유로    exchange_items = ['0000001', '0000002', '0000003']      exchanges = []    for itemcode in exchange_items:            url = "http://ecos.bok.or.kr/api/StatisticSearch/"+key+"/xml/kr/1/5/"+statisticcode+"/DD/"+d+"/"+d+"/" + itemcode            exchanges.append(runAPI(url))    return exchanges
+     ##---------<use_ecos.py>----------##
+     
+     # 한국은행의 환율 정보를 가져오는데 사용
+     
+     # -*- coding: utf-8 -*-
+     import requests 
+     import xml.etree.ElementTree as ET 
+     from datetime import datetime
+     from datetime import timedelta
+     import time
+     import isHoliday
+     print('<-----use_ecos.py import complete----------------->')
+     key = 'RHXCFZZB7E5KGJLPID'
+     
+     ## API 호출
+     def runAPI(url):
+         response = requests.get(url)  ## http 요청이 성공했을때 API의 리턴값을 가져옵니다.
+         
+         if response.status_code == 200:
+             try:
+                 contents = response.text
+                 ecosRoot = ET.fromstring(contents)
+                 
+                 if ecosRoot[0].text[:4] in ("INFO","ERRO"):  ## 오류 확인
+                     print(ecosRoot[0].text + " : " + ecosRoot[1].text)  ## 오류메세지를 확인하고 처리합니다.
+                     
+                 else:
+                     return(ecosRoot[1][10].text)    ## 결과값 확인
+     
+             except Exception as e:    ##예외 프린트
+                 print(str(e))
+     
+     def get_exchange(): ## 환율
+     
+         d = datetime.today().strftime('%Y%m%d')
+         statisticcode = '036Y001'
+         ## exchange_items = 미국달러, 일본엔, 유럽유로
+         exchange_items = ['0000001', '0000002', '0000003']  
+         exchanges = []
+         for itemcode in exchange_items:
+                 url = "http://ecos.bok.or.kr/api/StatisticSearch/"+key+"/xml/kr/1/5/"+statisticcode+"/DD/"+d+"/"+d+"/" + itemcode
+                 exchanges.append(runAPI(url))
+     
+         return exchanges
      ```
 
      </br>
 
      ```python
-     ##---------<kospidetail.py>----------### kospi지수의 시가, 고가, 저가 종가, 거래량과 각 투자처(개인,기관,외국인,연기금)별 순거래금액을 가져온다.# -*- coding: utf-8 -*-import timefrom pykrx import stockfrom datetime import datetime,timedeltaprint('<-----kospidetail.py import complete--------------->')## documents : https://github.com/sharebook-kr/pykrxdef get_kospi_detail():    day = (datetime.today()).strftime("%Y%m%d")#####################    df = stock.get_index_ohlcv_by_date(day, day, "1001")    open = df.iloc[0, 0] # 시가    high = df.iloc[0, 1] # 고가    low = df.iloc[0, 2] # 저가    close = df.iloc[0, 3] # 종가    volume = int(df.iloc[0, 4] * 0.001) # 거래량    return open,high,low,close,volume    def get_trading_value():    day = (datetime.today()).strftime("%Y%m%d")###########################    df = stock.get_market_trading_value_by_date(day, day, "KOSPI")    association = int(df.iloc[0,0] * 0.000001) # 기관 순매수금    person = int(df.iloc[0,2]* 0.000001) # 개인 순매수금    foreign = int(df.iloc[0,3]* 0.000001) # 외국인 순매수금        df = stock.get_market_trading_value_by_date(day, day, "KOSPI",detail=True)    pension = int(df.iloc[0,6]* 0.000001) # 연기금 순매수금        return association,foreign,person,pension
+     ##---------<kospidetail.py>----------##
+     
+     # kospi지수의 시가, 고가, 저가 종가, 거래량과 각 투자처(개인,기관,외국인,연기금)별 순거래금액을 가져온다.
+     
+     # -*- coding: utf-8 -*-
+     import time
+     from pykrx import stock
+     from datetime import datetime,timedelta
+     print('<-----kospidetail.py import complete--------------->')
+     ## documents : https://github.com/sharebook-kr/pykrx
+     def get_kospi_detail():
+         day = (datetime.today()).strftime("%Y%m%d")#####################
+         df = stock.get_index_ohlcv_by_date(day, day, "1001")
+         open = df.iloc[0, 0] # 시가
+         high = df.iloc[0, 1] # 고가
+         low = df.iloc[0, 2] # 저가
+         close = df.iloc[0, 3] # 종가
+         volume = int(df.iloc[0, 4] * 0.001) # 거래량
+         return open,high,low,close,volume
+         
+     def get_trading_value():
+         day = (datetime.today()).strftime("%Y%m%d")###########################
+         df = stock.get_market_trading_value_by_date(day, day, "KOSPI")
+         association = int(df.iloc[0,0] * 0.000001) # 기관 순매수금
+         person = int(df.iloc[0,2]* 0.000001) # 개인 순매수금
+         foreign = int(df.iloc[0,3]* 0.000001) # 외국인 순매수금
+         
+         df = stock.get_market_trading_value_by_date(day, day, "KOSPI",detail=True)
+         pension = int(df.iloc[0,6]* 0.000001) # 연기금 순매수금
+         
+         return association,foreign,person,pension
      ```
 
      </br>
@@ -1717,7 +1788,58 @@
      </br>
 
      ```python
-     ##---------<fb.py>----------### -*- coding: utf-8 -*-from firebase_admin import credentialsfrom firebase_admin import firestorefrom copy import deepcopyfrom pandas import Series,DataFramefrom datetime import datetime,timedeltaimport isHolidayimport pandas as pdimport firebase_adminimport crawlingprint('<-----fb_dailyupdate.py import complete----------->')cred = credentials.Certificate("team1-1a267-firebase-adminsdk.json")firebase_admin.initialize_app(cred, {'databaseURL' : 'https://team1-1a267.firebaseio.com'})db = firestore.client()print('<-----firebase 권한획득완료-------------------------->')def fb_update_ecos(day_str, day_factors):    print('<-----firebase 1차 갱신중----------------------------->')    doc_ref = db.collection(u'data').document(u'dailydata')    day_factors = ['NaN','NaN','NaN','NaN','NaN','NaN','NaN','NaN','NaN','NaN',                    'NaN','NaN','NaN','NaN','NaN','NaN','NaN']+day_factors+['NaN']        doc_ref.set({day_str : day_factors}, merge = True)            print('<-----firebase 1차 갱신완료-------------------------->')    def fb_update_crawling(today_str, today_factors):    print('<-----firebase 2차 갱신중----------------------------->')        doc_ref = db.collection(u'data').document(u'dailydata')        doc = doc_ref.get()    dic = deepcopy(doc.to_dict())    today_list = dic[today_str]        today_list = today_factors[:17] + today_list[17:20] + [today_factors[20]]    today_list = list(map(str, today_list))        doc_ref.update({today_str : today_list})    print('<-----firebase 2차 갱신완료--------------------------->')
+     ##---------<fb.py>----------##
+     
+     # -*- coding: utf-8 -*-
+     from firebase_admin import credentials
+     from firebase_admin import firestore
+     from copy import deepcopy
+     from pandas import Series,DataFrame
+     from datetime import datetime,timedelta
+     import isHoliday
+     import pandas as pd
+     import firebase_admin
+     import crawling
+     
+     print('<-----fb_dailyupdate.py import complete----------->')
+     cred = credentials.Certificate("team1-1a267-firebase-adminsdk.json")
+     firebase_admin.initialize_app(cred, {'databaseURL' : 'https://team1-1a267.firebaseio.com'})
+     
+     db = firestore.client()
+     
+     print('<-----firebase 권한획득완료-------------------------->')
+     
+     def fb_update_ecos(day_str, day_factors):
+         print('<-----firebase 1차 갱신중----------------------------->')
+         doc_ref = db.collection(u'data').document(u'dailydata')
+     
+         day_factors = ['NaN','NaN','NaN','NaN','NaN','NaN','NaN','NaN','NaN','NaN',
+                         'NaN','NaN','NaN','NaN','NaN','NaN','NaN']+day_factors+['NaN']
+         
+         doc_ref.set({day_str : day_factors}, merge = True)
+         
+         
+         print('<-----firebase 1차 갱신완료-------------------------->')
+         
+     
+     
+     def fb_update_crawling(today_str, today_factors):
+         print('<-----firebase 2차 갱신중----------------------------->')
+         
+         doc_ref = db.collection(u'data').document(u'dailydata')
+         
+         doc = doc_ref.get()
+     
+         dic = deepcopy(doc.to_dict())
+     
+         today_list = dic[today_str]
+         
+         today_list = today_factors[:17] + today_list[17:20] + [today_factors[20]]
+         today_list = list(map(str, today_list))
+         
+     
+         doc_ref.update({today_str : today_list})
+         print('<-----firebase 2차 갱신완료--------------------------->')
      ```
 
      </br>
@@ -1725,7 +1847,12 @@
      위의 코드에 추가로 Application UI에 표현될 KOSPI 차트에 필요한 '지수'데이터 또한 갱신
 
      ```python
-     def fb_update_daioykospi_android(today, kospi): ## KOSPI 차트표현에 필요한 데이터 갱신    print('<-----안드로이드차트용 kospi지수 갱신중----------->')    doc_ref = db.collection(u'data').document(u'dailykospi_android')    doc_ref.set({today : kospi}, merge = True) #DB에 금일 날짜와 KOSPI 지수 추가    print('<-----안드로이드차트용 kospi지수 갱신완료--------->')
+     def fb_update_daioykospi_android(today, kospi): ## KOSPI 차트표현에 필요한 데이터 갱신
+         print('<-----안드로이드차트용 kospi지수 갱신중----------->')
+     
+         doc_ref = db.collection(u'data').document(u'dailykospi_android')
+         doc_ref.set({today : kospi}, merge = True) #DB에 금일 날짜와 KOSPI 지수 추가
+         print('<-----안드로이드차트용 kospi지수 갱신완료--------->')
      ```
 
      </br>
