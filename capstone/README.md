@@ -85,7 +85,7 @@
 
    - 머신러닝
 
-     - KOSPI 주가 예측에 사용한 일별 데이터(총 27개의 column)
+     - > KOSPI 주가 예측에 사용한 일별 데이터(총 27개의 column)
        - close(종가)
        - daebi(대비)
        - updown(등락률)
