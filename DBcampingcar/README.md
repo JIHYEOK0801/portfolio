@@ -31,19 +31,23 @@
 
 > ## Description
 
+- ### 개발주제
+
+  사용자 / 관리자가 사용할 수 있는 '캠핑카 대여 프로그램' 제작
+
 - ### 개발목적
 
-데이터베이스 교과목에서 JAVA언어와 MySQL DB를 연동하여 프로그래밍 언어로 DB의 모든 데이터를 조작하는 것과 SQL문 사용에  능숙해지기 위해 진행한 과제 
+  JAVA와 MySQL DB를 연동하여 프로그래밍 언어로 DB의 데이터 정의, 조작을 수행하는 쿼리문을 능숙하게 작성하기 위함
 
 
 - ### 개발기간
 
-2020.04 ~ 2020.06
+  2020.04 ~ 2020.06
 
 
 - ### 사용기술
 
-JAVA(swing GUI), MySQL
+  JAVA(swing GUI), MySQL
 
 </br>
 
@@ -53,35 +57,36 @@ JAVA(swing GUI), MySQL
 
 - ### 관리자
 
-  1. #### 캠핑카 리스트 데이터 초기화
+  > 1. #### 캠핑카 리스트 데이터 초기화
 
   <img src = "https://github.com/JIHYEOK0801/record/blob/main/DBcampingcar/img/1.gif?raw=true">
 
   
 
-  - '초기화' 버튼으로 동작하며, 데이터 초기화를 수행하는 기능
-  - 초기화 수행시 15개의 대여가능 캠핑카, 10개의 정비소, 10개의 대여회사, 10개의 고객 정보 생성
+  - '초기화' 버튼으로 실행. 데이터 초기화를 수행하는 기능
+  - 초기화 수행시 15개의 대여가능 캠핑카, 10개의 정비소, 10개의 대여회사, 10개의 고객 초기 데이터로 DB갱신
 
   </br>
 
-  2. #### 캠핑카 데이터 삽입/삭제/변경
+  > 2. #### 캠핑카 데이터 삽입/삭제/변경
 
   <img src = "https://github.com/JIHYEOK0801/record/blob/main/DBcampingcar/img/2.gif?raw=true">
 
-  - 'data 삽입/삭제/변경 및 반환' 버튼으로 동작하며, 데이터를 조작하는 기능
-  - 생성된 창에 '수행할 작업' 과 '변경할 테이블' 선택 후 '작업 선택 및 테이블 선택' 버튼으로 어떤 데이터를 기입해야 하는지 양식이 바뀐다
+  - 'data 삽입/삭제/변경 및 반환' 버튼으로 실행. 데이터를 조작하는 기능
+  - 생성된 창에 '수행할 작업' 과 '변경할 테이블'에 해당하는 번호 기입 
+  - '작업 선택 및 테이블 선택' 버튼 선택
 
   </br>
 
   <img src = "https://github.com/JIHYEOK0801/record/blob/main/DBcampingcar/img/3.gif?raw=true">
 
-  - 데이터 기입 후 '수행' 버튼으로 실제 데이터 변경이 실행된다.
+  - 내용 기입 후 '수행'
 
   - 데이터 변경은 총 5개 (대여회사, 캠핑카, 고객, 정비소, 정비정보)의 테이블 내에서 이뤄진다
 
   </br>
 
-  3. #### 검색기능
+  3. > #### 검색기능
 
      <img src = "https://github.com/JIHYEOK0801/record/blob/main/DBcampingcar/img/4.gif?raw=true">
 
@@ -91,25 +96,27 @@ JAVA(swing GUI), MySQL
      - 수리가 필요한 차량 테이블 검색 기능
      - 정비소별 정비내역 테이블 검색 기능
 
-  </br></br>
+  </br>
+
+  ---
 
 - ### 고객
 
-  1. #### 대여가능한 캠핑카 검색
+  1. > #### 대여가능한 캠핑카 검색
 
      <img src = "https://github.com/JIHYEOK0801/record/blob/main/DBcampingcar/img/5.gif?raw=true">
 
-     - '대여가능한 캠핑카 목록 검색' 버튼으로 동작하며, 현재 대여가 가능한 캠핑카의 목록을 검색하는 기능
+     - '대여가능한 캠핑카 목록 검색' 버튼으로 실행. 현재 대여 가능한 캠핑카의 목록을 검색하는 기능.
 
      </br>
 
-  2. #### 캠핑카 대여 신청
+  2. > #### 캠핑카 대여 신청
 
      <img src = "https://github.com/JIHYEOK0801/record/blob/main/DBcampingcar/img/6.gif?raw=true">
 
-     - 알맞은 양식 기입 후 '신청' 버튼으로 대여 신청이 실행된다.
-  
-  </br></br>
+     - 양식 기입 후 '신청' 버튼으로 대여 신청 실행.
+
+  </br>
 
 ---
 
@@ -117,7 +124,7 @@ JAVA(swing GUI), MySQL
 
 1. ### MySQL 연동
 
-   - 먼저 sql 라이브러리를 import 선언해준다.
+   - sql 라이브러리 import
 
    ```java
    import java.sql.*;
@@ -125,7 +132,8 @@ JAVA(swing GUI), MySQL
 
    
 
-   - Class.forName() 으로 드라이버를 로드하고, getConnection()으로 connection 인스턴스를 생성하여 DB와 연결하는 과정
+   - Class.forName() 으로 드라이버를 로드
+   -  getConnection()으로 connection 인스턴스를 생성 후 DB와 연결
 
    ```java
    public void conDB() {
@@ -147,13 +155,13 @@ JAVA(swing GUI), MySQL
       }
    ```
 
-   </br>
+   
+
+   ---
 
 2. ### 데이터 생성
 
-   총 8 개의 테이블을 생성하였다.
-
-   <테이블 명>
+   **<테이블 명>**
 
    - campingcarlist (모든 캠핑카 테이블)
    - availablecampingcarlist (대여가 가능한 캠핑카 테이블)
@@ -167,8 +175,14 @@ JAVA(swing GUI), MySQL
    ```java
    public void createTable() {
    /* 테이블 구현
-   Companylist,Campingcarlist,CampingCustomer,PresentRentCampingcarList,
-   CarCheck,FixInformation,CarcenterList,AvailableCampingcarlist
+   Campingcarlist,
+   AvailableCampingcarlist,
+   CampingCustomer,
+   CarcenterList,
+   CarCheck,
+   Companylist,
+   FixInformation,
+   PresentRentCampingcarList
    */
    	  try { 
    	   String sql[] = new String[8];
@@ -178,6 +192,8 @@ JAVA(swing GUI), MySQL
    	   stmt.execute("drop table if exists companylist,campingcarlist,campingcustomer,presentrentcampingcarlist,carcheck,fixinformation,carcenterlist,availablecampingcarlist");
           // 기존에 존재한 테이블이 있다면 drop	   
    	  // 각 테이블별 스키마 구성
+             
+         // Companylist
    	   sql[0] = sb.append("create table Companylist(")//table1
                   .append("companyid INTEGER PRIMARY KEY,")//캠핑카대여회사ID
                   .append("companyname varchar(45),")//회사명
@@ -189,6 +205,7 @@ JAVA(swing GUI), MySQL
    	   	stmt.execute(sql[0]);
    	   	sb.delete(0,sb.length());
    	   
+         	// Campingcarlist availablecampingcarlist
    	   sql[1] = sb.append("create table Campingcarlist(")//table2
                   .append("carid INTEGER PRIMARY KEY,")//캠핑카등록ID
                   .append("carname varchar(45),")//캠핑카 이름
@@ -203,7 +220,8 @@ JAVA(swing GUI), MySQL
                   .append(");").toString();
    	   	stmt.execute(sql[1]);
    	   	sb.delete(0,sb.length());
-   	   			
+             
+   	   	// CampingCustomer 
    	   	sql[2] = sb.append("create table CampingCustomer(")//table3
    	   			.append("licenseid INTEGER PRIMARY KEY,")//운전면허증번호
    	   			.append("customername varchar(45),")//고객명
@@ -213,7 +231,8 @@ JAVA(swing GUI), MySQL
    	   			.append(");").toString();
    	   	stmt.execute(sql[2]);
    	   	sb.delete(0, sb.length());
-   	   			
+             
+   	   	//  PresentRentCampingcarList
    	   	sql[3] = sb.append("create table PresentRentCampingcarList(")//table4
    	   			.append("rentid INTEGER PRIMARY KEY,")//고유대여번호
    	   			.append("carid INTEGER,")//캠핑카등록ID
@@ -228,7 +247,8 @@ JAVA(swing GUI), MySQL
    	   			.append(");").toString();
    	   	stmt.execute(sql[3]);
    	   	sb.delete(0,  sb.length());
-   	   			
+             
+   	   	// CarCheck
    	   	sql[4] = sb.append("create table CarCheck(")//table5
    	   			.append("rentid INTEGER PRIMARY KEY,")//고유대여번호
    	   			.append("carid INTEGER,")//캠핑카등록ID
@@ -241,7 +261,8 @@ JAVA(swing GUI), MySQL
    	   			.append(");").toString();
    	   	stmt.execute(sql[4]);
    	   	sb.delete(0,  sb.length());
-   	   			
+             
+   	   	// FixInformation
    	   	sql[5] = sb.append("create table FixInformation(")//table6
    	   			.append("fixid INTEGER PRIMARY KEY,")//고유정비번호
    	   			.append("carid INTEGER,")//캠핑카등록ID
@@ -257,6 +278,7 @@ JAVA(swing GUI), MySQL
    	   	stmt.execute(sql[5]);
    	   	sb.delete(0,  sb.length());
    	   	
+            // CarcenterList
    	   	sql[6] = sb.append("create table CarcenterList(")//table7
    	   			.append("carcenterid INTEGER PRIMARY KEY,")//캠핑카정비소ID
    	   			.append("carcentername varchar(45),")//정비소명
@@ -268,7 +290,7 @@ JAVA(swing GUI), MySQL
    	   	stmt.execute(sql[6]);
    	   	sb.delete(0,  sb.length());
    	   	
-   	   	
+   	   	// AvailableCampingcarlist
    	   	sql[7] = sb.append("create table AvailableCampingcarlist(")//table8
    	   			.append("carid INTEGER PRIMARY KEY,")//캠핑카등록ID
    	               .append("carname varchar(45),")//캠핑카 이름
@@ -294,7 +316,7 @@ JAVA(swing GUI), MySQL
 
    <br/>
 
-   실제 초기 데이터를 넣는 과정은 아래와 같이 INSERT문을 통해 실행하였다.
+   데이터 초기화(초기 데이터 삽입)
 
    ```java
       public void insertMydata() { //초기data구현
@@ -423,11 +445,13 @@ JAVA(swing GUI), MySQL
 
    </br>
 
+   ---
+
 3. ### 데이터 조작
 
    "**관리자**"의 데이터 조작에는 **입력, 삭제, 변경, 반환** 총 4가지가 존재한다.
 
-   1. #### 입력
+   1. > #### 입력
 
       INSERT문을 사용하여 각 테이블에 원하는 정보를 입력하고 싶을 때 사용하는 기능
 
@@ -473,7 +497,7 @@ JAVA(swing GUI), MySQL
 
       </br>
 
-   2. #### 삭제
+   2. > #### 삭제
 
       DELETE문을 사용하여 각 테이블에서 원하는 정보를 삭제하고 싶을 때 사용하는 기능
 
@@ -519,7 +543,7 @@ JAVA(swing GUI), MySQL
 
       </br>
 
-   3. #### 변경
+   3. > #### 변경
 
       UPDATE문을 사용하여 각 테이블에서 원하는 정보를 변경하고 싶을 때 사용하는 기능
 
@@ -628,7 +652,7 @@ JAVA(swing GUI), MySQL
 
       </br>
 
-   4. #### 반환
+   4. > #### 반환
 
       DELETE, INSERT문을 사용하여 고객이 캠핑카를 반납할 때 '차의 상태', '수리 여부'를 등록하기 위해 사용하는 기능
 
@@ -669,7 +693,9 @@ JAVA(swing GUI), MySQL
 
    </br>
 
-   "**고객**"의 데이터 조작에는 **대여 신청** 기능이 있다.
+   "**고객**"의 데이터 조작에는 **대여 신청** 기능만 존재
+
+   (대여 신청 시 AvailableCampingcarList 테이블에서 해당 튜플 삭제, PresentRentCampingcarList에 튜플 추가)
 
    ```java
     if (e.getSource() == btnRent) { // '대여 신청'을 눌렀을 때
@@ -707,11 +733,15 @@ JAVA(swing GUI), MySQL
 
    </br>
 
+   ---
+
 4. ### 데이터 검색
 
    데이터 검색은 SELECT문을 사용하여 **"고객"**, **"관리자"** 모두 할 수 있는 기능이다.
 
-   - 고객
+   - > #### 고객
+
+      **'대여가능한 캠핑카 목록 검색'** 
 
      ```java
      else if(e.getSource() == UbtnSearch1) {//'대여가능한 캠핑카 목록 검색' 버튼을 눌렀을 때
@@ -726,7 +756,11 @@ JAVA(swing GUI), MySQL
              						}
      ```
 
-   - 관리자
+   - > #### 관리자
+
+     1. **'대여고객 및 대여차량 검색'**
+     2. **'수리가 필요한 차량 검색'**
+     3. **'정비소별 정비내역'**
 
      ```java
      else if(e.getSource() == AbtnSearch1) {//'대여고객 및 대여차량 검색' 버튼을 눌렀을 때
@@ -775,11 +809,11 @@ JAVA(swing GUI), MySQL
 
    </br>
 
+   ---
+
 5. ### 전체 UI 화면 구성
 
 <img src = "https://github.com/JIHYEOK0801/record/blob/main/DBcampingcar/img/UI.PNG?raw=true">
 
 <img src = "https://github.com/JIHYEOK0801/record/blob/main/DBcampingcar/img/UI(1).PNG?raw=true">
-
----
 
