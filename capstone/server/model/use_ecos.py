@@ -6,7 +6,7 @@ from datetime import timedelta
 import time
 import isHoliday
 print('<-----use_ecos.py import complete----------------->')
-key = 'RHXCFZZB7E5KGJLPIDOT'
+key = 'RHXCFZZB7E5KGJLPID'
 
 ## 정의된 OpenAPI URL을 호출합니다.
 def runAPI(url):
