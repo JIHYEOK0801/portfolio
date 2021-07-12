@@ -43,7 +43,7 @@
 
 - ### 소스코드
 
-  1. [Android Studio](./android studio/myapplication1)
+  1. [Android Studio](./android-studio/myapplication1)
   2. [Server/DB](./server/model)
 
   
