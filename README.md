@@ -20,8 +20,6 @@
 
 - 언어
 
-  - C
-
   - JAVA
 
   - Python
