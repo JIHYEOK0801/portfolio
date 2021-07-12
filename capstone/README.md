@@ -85,7 +85,7 @@
 
 > ## Development
 
-### Machine Learning
+## Machine Learning
 
 - > KOSPI 지수 예측에 사용한 일별 데이터(총 27개의 column)
 
@@ -255,7 +255,7 @@
 
 </br>
 
-### Android Studio
+## Android Studio
 
 - Main 탭
 
@@ -1532,7 +1532,9 @@
 
     </br>
 
-### Server & DB
+
+
+## Server & DB
 
 - > **Server** & **DB**가 필요한 이유
 
