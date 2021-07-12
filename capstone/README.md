@@ -85,9 +85,9 @@
 
 > ## Development
 
-1. ### Machine Learning
+ ### Machine Learning
 
-   - > KOSPI 지수 예측에 사용한 일별 데이터(총 27개의 column)
+    > KOSPI 지수 예측에 사용한 일별 데이터(총 27개의 column)
 
      1. close(종가)
 
