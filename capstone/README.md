@@ -145,17 +145,14 @@
 
        *ex)* *예측 시행 요일* : 토요일 	- - >	*예측 목표 날* : 그 다음주 금요일
 
-  </br>
+       </br>
 
-  ​	2. 예측 단계 및 정보 제공
+  2. 예측 단계 및 정보 제공
 
-  ​		1. 예측 시행날 기준 1일 후(월요일)의 KOSPI 예측 지수 저장
-
-  ​		2. 1 에서 얻은 예측 지수를 기존의 데이터에 합하여 2일 후(화요일)값 예측 가능
-
-  ​		3. 1, 2 의 과정을 5번 반복하여 5일 후(금요일)의 지수 예측
-
-  ​		4. 이번주의 마지막 지수(이번주 금요일) 5일후의 지수(다음주 금요일)와 비교하여 0 or 1로 등락 표현
+     1. 예측 시행날 기준 1일 후(월요일)의 KOSPI 예측 지수 저장
+     2. 1 에서 얻은 예측 지수를 기존의 데이터에 합하여 2일 후(화요일)값 예측 가능
+     3. 1, 2 의 과정을 5번 반복하여 5일 후(금요일)의 지수 예측
+     4. 이번주의 마지막 지수(이번주 금요일) 5일후의 지수(다음주 금요일)와 비교하여 0 or 1로 등락 표현
 
   </br>
 
@@ -1571,7 +1568,112 @@
        </br>
 
      ```python
-     ##---------<crawling.py>----------### -*- coding: utf-8 -*-from bs4 import BeautifulSoupfrom datetime import datetimeimport requestsimport timeprint('<-----crawling.py import complete------------------>')def get_kospi_daebiupdown(): ##kospi 대비, 등락률    url= 'https://finance.naver.com/sise/sise_index_day.nhn?code=KOSPI'    result=requests.get(url)    result.encoding = 'utf-8'        soup=BeautifulSoup(result.content, "html.parser")    indice = soup.select("td.number_1")    updownpercent = float(indice[1].text.replace('%','').strip())    indice = soup.select("td.rate_down")    daebi = float(indice[0].text.strip())    updown = soup.select("img")[0]['alt']    if updown == '하락':        daebi = daebi * -1    return daebi, updownpercentdef get_hsi_indice():##홍콩 hsi 지수    url = 'https://finance.naver.com/world/sise.nhn?symbol=HSI@HSI'    result=requests.get(url)    result.encoding = 'utf-8'    soup=BeautifulSoup(result.content, "html.parser")    indice = soup.select("td.tb_td2")    return indice[0].text.replace(',','')def get_shanghai_indice(): ## 상하이 상해지수    url = 'https://finance.naver.com/world/sise.nhn?symbol=SHS@000001'    result=requests.get(url)    result.encoding = 'utf-8'    soup=BeautifulSoup(result.content, "html.parser")    indice = soup.select("td.tb_td2")    return indice[0].text.replace(',','')    def get_nikkei_indice():## 일본 니케이    url = 'https://finance.naver.com/world/sise.nhn?symbol=NII@NI225'    result=requests.get(url)    result.encoding = 'utf-8'    soup=BeautifulSoup(result.content, "html.parser")    indice = soup.select("td.tb_td2")    return indice[0].text.replace(',','')def get_dji_indice(): ## 미국 다우존스    url = 'https://finance.naver.com/world/sise.nhn?symbol=DJI@DJI'    result=requests.get(url)    result.encoding = 'utf-8'    soup=BeautifulSoup(result.content, "html.parser")    indice = soup.select("td.tb_td2")    return indice[0].text.replace(',','')def get_nas_indice():  ## 미국 나스닥    url = 'https://finance.naver.com/world/sise.nhn?symbol=NAS@IXIC&fdtc=0'    result=requests.get(url)    result.encoding = 'utf-8'    soup=BeautifulSoup(result.content, "html.parser")    indice = soup.select("td.tb_td2")    return indice[0].text.replace(',','')def get_spi_indice(): ## 미국 s&p 500    url = 'https://finance.naver.com/world/sise.nhn?symbol=SPI@SPX'    result=requests.get(url)    result.encoding = 'utf-8'    soup=BeautifulSoup(result.content, "html.parser")    indice = soup.select("td.tb_td2")    return indice[0].text.replace(',','')def get_oil_price(): ##wti 유가가격        wti_url = 'https://finance.naver.com/marketindex/worldDailyQuote.nhn?marketindexCd=OIL_CL&fdtc=2'            result=requests.get(wti_url)    result.encoding = 'utf-8'        soup=BeautifulSoup(result.content, "html.parser")        indice = soup.select("td.num")    wti = indice[0].text.strip()    return wti
+     ##---------<crawling.py>----------##
+     
+     # -*- coding: utf-8 -*-
+     from bs4 import BeautifulSoup
+     from datetime import datetime
+     import requests
+     import time
+     print('<-----crawling.py import complete------------------>')
+     
+     def get_kospi_daebiupdown(): ##kospi 대비, 등락률
+     
+         url= 'https://finance.naver.com/sise/sise_index_day.nhn?code=KOSPI'
+         result=requests.get(url)
+         result.encoding = 'utf-8'
+         
+         soup=BeautifulSoup(result.content, "html.parser")
+         indice = soup.select("td.number_1")
+         updownpercent = float(indice[1].text.replace('%','').strip())
+     
+         indice = soup.select("td.rate_down")
+         daebi = float(indice[0].text.strip())
+     
+         updown = soup.select("img")[0]['alt']
+         if updown == '하락':
+             daebi = daebi * -1
+     
+         return daebi, updownpercent
+     
+     def get_hsi_indice():##홍콩 hsi 지수
+     
+         url = 'https://finance.naver.com/world/sise.nhn?symbol=HSI@HSI'
+         result=requests.get(url)
+         result.encoding = 'utf-8'
+     
+         soup=BeautifulSoup(result.content, "html.parser")
+         indice = soup.select("td.tb_td2")
+         return indice[0].text.replace(',','')
+     
+     def get_shanghai_indice(): ## 상하이 상해지수
+     
+         url = 'https://finance.naver.com/world/sise.nhn?symbol=SHS@000001'
+         result=requests.get(url)
+         result.encoding = 'utf-8'
+     
+         soup=BeautifulSoup(result.content, "html.parser")
+         indice = soup.select("td.tb_td2")
+         return indice[0].text.replace(',','')
+         
+     
+     def get_nikkei_indice():## 일본 니케이
+     
+         url = 'https://finance.naver.com/world/sise.nhn?symbol=NII@NI225'
+         result=requests.get(url)
+         result.encoding = 'utf-8'
+     
+         soup=BeautifulSoup(result.content, "html.parser")
+         indice = soup.select("td.tb_td2")
+         return indice[0].text.replace(',','')
+     
+     
+     def get_dji_indice(): ## 미국 다우존스
+     
+         url = 'https://finance.naver.com/world/sise.nhn?symbol=DJI@DJI'
+         result=requests.get(url)
+         result.encoding = 'utf-8'
+     
+         soup=BeautifulSoup(result.content, "html.parser")
+         indice = soup.select("td.tb_td2")
+         return indice[0].text.replace(',','')
+     
+     def get_nas_indice():  ## 미국 나스닥
+     
+         url = 'https://finance.naver.com/world/sise.nhn?symbol=NAS@IXIC&fdtc=0'
+         result=requests.get(url)
+         result.encoding = 'utf-8'
+     
+         soup=BeautifulSoup(result.content, "html.parser")
+         indice = soup.select("td.tb_td2")
+         return indice[0].text.replace(',','')
+     
+     def get_spi_indice(): ## 미국 s&p 500
+     
+         url = 'https://finance.naver.com/world/sise.nhn?symbol=SPI@SPX'
+         result=requests.get(url)
+         result.encoding = 'utf-8'
+     
+         soup=BeautifulSoup(result.content, "html.parser")
+         indice = soup.select("td.tb_td2")
+         return indice[0].text.replace(',','')
+     
+     
+     def get_oil_price(): ##wti 유가가격
+         
+         wti_url = 'https://finance.naver.com/marketindex/worldDailyQuote.nhn?marketindexCd=OIL_CL&fdtc=2'
+         
+         
+         result=requests.get(wti_url)
+         result.encoding = 'utf-8'
+         
+         soup=BeautifulSoup(result.content, "html.parser")
+         
+         indice = soup.select("td.num")
+         wti = indice[0].text.strip()
+     
+         return wti
+     
      ```
 
      </br>
