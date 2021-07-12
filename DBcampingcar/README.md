@@ -49,6 +49,12 @@
 
   JAVA(swing GUI), MySQL
 
+- ### 소스코드
+
+  [CampingcarRent.java](./DBproject/src/CampingcarRent.java)
+
+  
+
 </br>
 
 ---
@@ -133,7 +139,7 @@
    
 
    - Class.forName() 으로 드라이버를 로드
-   -  getConnection()으로 connection 인스턴스를 생성 후 DB와 연결
+   - getConnection()으로 connection 인스턴스를 생성 후 DB와 연결
 
    ```java
    public void conDB() {
@@ -816,4 +822,3 @@
 <img src = "https://github.com/JIHYEOK0801/record/blob/main/DBcampingcar/img/UI.PNG?raw=true">
 
 <img src = "https://github.com/JIHYEOK0801/record/blob/main/DBcampingcar/img/UI(1).PNG?raw=true">
-
