@@ -256,10 +256,10 @@
 
 > ### 구성
 
-1. [Main](#Main)
-2. [News](#News)
-3. [Stock_100 List](#stock-100-list)
-4. [MyList](#MyList)
+1. [Main(메인)](#Main)
+2. [News(뉴스)](#News)
+3. [Stock_100 List(종목)](#stock-100-list)
+4. [MyList(My)](#MyList)
 
 </br>
 
