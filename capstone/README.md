@@ -21,6 +21,8 @@
 
 > ## Description
 
+- ### 개발 주제
+
 - ### 개발 목적
 
   국내 주식시장에 영향을 미치는 요인들을 분석, 파악 후 결과를 이용하여 예측한 시장 흐름 정보를 사용자에게 제공하기 위함
@@ -84,6 +86,8 @@
 ---
 
 > ## Development
+
+---
 
 ## Machine Learning
 
@@ -254,6 +258,8 @@
   
 
 </br>
+
+---
 
 ## Android Studio
 
@@ -1532,6 +1538,8 @@
 
     </br>
 
+---
+
 ## Server & DB
 
 - > **Server** & **DB**가 필요한 이유
@@ -1557,7 +1565,7 @@
 
     
 
-  1. #### 모델 예측에 필요한 데이터 수집
+  1. ####  모델 예측에 필요한 데이터 수집
 
      데이터 수집 방법은 두 가지로 **웹페이지 크롤링**과 제공되는 **API  활용**
 
@@ -1849,7 +1857,12 @@
      위의 코드에 추가로 Application UI에 표현될 KOSPI 차트에 필요한 '지수'데이터 또한 갱신
 
      ```python
-     def fb_update_daioykospi_android(today, kospi): ## KOSPI 차트표현에 필요한 데이터 갱신    print('<-----안드로이드차트용 kospi지수 갱신중----------->')    doc_ref = db.collection(u'data').document(u'dailykospi_android')    doc_ref.set({today : kospi}, merge = True) #DB에 금일 날짜와 KOSPI 지수 추가    print('<-----안드로이드차트용 kospi지수 갱신완료--------->')
+     def fb_update_daioykospi_android(today, kospi): ## KOSPI 차트표현에 필요한 데이터 갱신
+         print('<-----안드로이드차트용 kospi지수 갱신중----------->')
+     
+         doc_ref = db.collection(u'data').document(u'dailykospi_android')
+         doc_ref.set({today : kospi}, merge = True) #DB에 금일 날짜와 KOSPI 지수 추가
+         print('<-----안드로이드차트용 kospi지수 갱신완료--------->')
      ```
 
      </br>
