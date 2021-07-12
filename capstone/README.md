@@ -41,6 +41,13 @@
 
   Python, Firebase DB, AWS, Android Studio, TensorFlow, Keras
 
+- ### 소스코드
+
+  1. [Android Studio](./android studio/myapplication1)
+  2. [Server/DB](./server/model)
+
+  
+
 </br>
 
 ---
@@ -89,7 +96,7 @@
 
 > ## Development
 
-## Machine Learning
+## Machine Learning(ML)
 
 - > ### KOSPI 지수 예측에 사용한 일별 데이터(총 27개의 column)
 
@@ -245,1282 +252,1295 @@
 
 ---
 
-## Android Studio
+## Android Studio(UI)
 
-- Main 탭
+> ### 구성
 
-  - 차트
+1. Main
+2. News
+3. Stock_100 List
+4. MyList
 
-    - Main 탭의 차트 구성 부분
-    - Firestore DB에서 가져온 09년 부터의 데이터를 차트로 표현
-    - 차트 위에 5일 후의 KOSPI지수 등락을 색이 있는 정삼각형, 역삼각형으로 표현
+</br>
 
-    ```java
-    private void showChart() {
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            DocumentReference docRef = db.collection("data").document("dailykospi_android");
-    
-            ArrayList<String> real_date = new ArrayList<String>();
-            ArrayList<Float> real_kospi_index = new ArrayList<Float>();
-    
-            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful() && getActivity()!=null) {
-                        DocumentSnapshot document = task.getResult();
-                        real_date.clear();
-                        real_kospi_index.clear();
-    
-                        if (document.exists()) {
-                            HashMap<String,Object> kospi = new HashMap<String,Object>(document.getData());
-    
-                            Object[] mapkey = kospi.keySet().toArray();
-                            Arrays.sort(mapkey);
-    
-                            int count = 0;
-    
-                            for(Object nkey : mapkey) {
-                                real_date.add(count, nkey.toString());
-                                real_kospi_index.add(count, Float.valueOf(kospi.get(nkey).toString()));
-                                count++;
-                            }
-                        } else {
-                            Log.d("", "No such document");
-                        }
-                    } else {
-                        Log.d("", "get failed with ", task.getException());
-                    }
-                }
-            });
-    
-            DocumentReference docRef3 = db.collection("data").document("origin");
-    
-            docRef3.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful() && getActivity() != null) {
-                        DocumentSnapshot document = task.getResult();
-                        String date1 = new String();
-                        String up_down1 = new String();
-    
-                        if (document.exists()) {
-                            HashMap<String, Object> kospi = new HashMap<String, Object>(document.getData());
-    
-                            Object[] mapkey = kospi.keySet().toArray();
-                            Arrays.sort(mapkey);
-    
-                            for (Object nkey : mapkey) {
-                                date1 = nkey.toString();
-                                up_down1 = kospi.get(nkey).toString();
-                            }
-    
-                            what = new TextView(getContext());
-                            what.setText(Html.fromHtml("[예측] " + date1 + " "  + "<FONT color=" + "#FF9800" + ">" + up_down1 + "</FONT>"));
+---
+
+1. ### Main
+
+   > #### 실시간 차트
+
+   - Main 탭의 차트 구성 부분
+   - Firestore DB에서 가져온 09년 부터의 데이터를 차트로 표현
+   - 차트 위에 5일 후의 KOSPI지수 등락을 색이 있는 정삼각형, 역삼각형으로 표현
+
+   ```java
+   private void showChart() {
+           FirebaseFirestore db = FirebaseFirestore.getInstance();
+           DocumentReference docRef = db.collection("data").document("dailykospi_android");
+   
+           ArrayList<String> real_date = new ArrayList<String>();
+           ArrayList<Float> real_kospi_index = new ArrayList<Float>();
+   
+           docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+               @Override
+               public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                   if (task.isSuccessful() && getActivity()!=null) {
+                       DocumentSnapshot document = task.getResult();
+                       real_date.clear();
+                       real_kospi_index.clear();
+   
+                       if (document.exists()) {
+                           HashMap<String,Object> kospi = new HashMap<String,Object>(document.getData());
+   
+                           Object[] mapkey = kospi.keySet().toArray();
+                           Arrays.sort(mapkey);
+   
+                           int count = 0;
+   
+                           for(Object nkey : mapkey) {
+                               real_date.add(count, nkey.toString());
+                               real_kospi_index.add(count, Float.valueOf(kospi.get(nkey).toString()));
+                               count++;
                            }
-                    }
-                }
-            });
-    
-            DocumentReference docRef2 = db.collection("data").document("predictedkospi_test");
-    
-            docRef2.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task){
-                    if (task.isSuccessful() && getActivity()!=null) {
-                        DocumentSnapshot document = task.getResult();
-                        String date = new String();
-                        String up_down = new String();
-                        TextView show = (TextView)viewGroup.findViewById(R.id.show_predict);
-    
-                        if (document.exists()) {
-                            HashMap<String,Object> kospi = new HashMap<String,Object>(document.getData());
-    
-                            Object[] mapkey = kospi.keySet().toArray();
-                            Arrays.sort(mapkey);
-    
-                            for(Object nkey : mapkey) {
-                                date = nkey.toString();
-                                up_down = kospi.get(nkey).toString();
-                            }
-    
-    
-    
-                            if (up_down.equals("1")){
-                                Html.ImageGetter imageGetter = new Html.ImageGetter() {
-                                    @Override
-                                    public Drawable getDrawable(String source) {
-                                        if (source.equals("up_triangle")){
-                                            Drawable drawable = getResources().getDrawable(R.drawable.up_triangle);
-                                            drawable.setBounds(0, 0, drawable.getIntrinsicWidth()/2, drawable.getIntrinsicHeight()*5/13);
-                                            return drawable;
-                                        }
-                                        return null;
-                                    }
-                                };
-                                Spanned htmlText = Html.fromHtml("<img src=\"up_triangle\" width=20 height=20>", imageGetter, null);
-    
-                                if (real_date.size()>0){
-                                    show.setText(what.getText());
-                                    show.append(" 기준 : " + date + " (");
-                                    show.append(htmlText);
-                                    show.append(")");
-                                    show.setTextColor(Color.parseColor("#FF555555"));
-                                }
-                            }
-                            else if (up_down.equals("0")){
-                                Html.ImageGetter imageGetter = new Html.ImageGetter() {
-                                    @Override
-                                    public Drawable getDrawable(String source) {
-                                        if (source.equals("down_triangle")){
-                                            Drawable drawable = getResources().getDrawable(R.drawable.down_triangle);
-                                            drawable.setBounds( 0, 0, drawable.getIntrinsicWidth()/2, drawable.getIntrinsicHeight()*5/13);
-                                            return drawable;
-                                        }
-                                        return null;
-                                    }
-                                };
-                                Spanned htmlText = Html.fromHtml("<img src=\"down_triangle\" width=20 height=20>", imageGetter, null);
-    
-                                if (real_date.size()>0){
-                                    show.setText(what.getText());
-                                    show.append(" 기준 : " + date + " (");
-                                    show.append(htmlText);
-                                    show.append(")");
-                                    show.setTextColor(Color.parseColor("#FF555555"));
-                                }
-                            }
-    
-                            //차트 생성
-                            ArrayList<Entry> values = new ArrayList<>();
-                            for (int i=0;i<real_kospi_index.size();i++){
-                                values.add(new Entry(real_kospi_index.get(i), i));
-                            }
-    
-                            LineDataSet lineDataSet = new LineDataSet(values, "KOSPI");
-                            lineDataSet.setColor(ContextCompat.getColor(getContext(), R.color.red));
-                            lineDataSet.setDrawCircles(false);
-                            lineDataSet.setValueTextSize(10);
-    
-                            String[] xaxes = new String[real_date.size()];
-                            for (int i=0;i<real_date.size();i++)
-                                xaxes[i] = real_date.get(i);
-    
-                            XAxis xAxis = lineChart.getXAxis();
-                            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-                            xAxis.setTextColor(ContextCompat.getColor(getContext(), R.color.purple_500));
-                            xAxis.setTextSize(11);
-    
-                            YAxis yAxisLeft = lineChart.getAxisLeft();
-                            yAxisLeft.setDrawLabels(false);
-                            yAxisLeft.setDrawAxisLine(false);
-                            yAxisLeft.setDrawGridLines(false);
-    
-                            YAxis yAxisRight = lineChart.getAxisRight();
-                            yAxisRight.setTextColor(ContextCompat.getColor(getContext(), R.color.purple_700));
-                            yAxisRight.setTextSize(13);
-    
-                            lineChart.setDescription(null);
-                            lineChart.setTouchEnabled(true);
-    
-                            lineChart.getAxisLeft().setLabelCount(10, true);
-                            lineChart.getAxisRight().setLabelCount(3,true);
-    
-                            Legend legend = lineChart.getLegend();
-                            legend.setPosition(Legend.LegendPosition.BELOW_CHART_LEFT);
-                            legend.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
-    
-                            lineChart.setData(new LineData(xaxes, lineDataSet));
-                            lineChart.invalidate();
-                        } else {
-                            Log.d("", "No such document");
-                        }
-                    } else {
-                        Log.d("", "get failed with ", task.getException());
-                    }
-                }
-            });
-    
-            if (getActivity()!=null && real_date==null)
-                showChart();
-        }
-    ```
+                       } else {
+                           Log.d("", "No such document");
+                       }
+                   } else {
+                       Log.d("", "get failed with ", task.getException());
+                   }
+               }
+           });
+   
+           DocumentReference docRef3 = db.collection("data").document("origin");
+   
+           docRef3.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+               @Override
+               public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                   if (task.isSuccessful() && getActivity() != null) {
+                       DocumentSnapshot document = task.getResult();
+                       String date1 = new String();
+                       String up_down1 = new String();
+   
+                       if (document.exists()) {
+                           HashMap<String, Object> kospi = new HashMap<String, Object>(document.getData());
+   
+                           Object[] mapkey = kospi.keySet().toArray();
+                           Arrays.sort(mapkey);
+   
+                           for (Object nkey : mapkey) {
+                               date1 = nkey.toString();
+                               up_down1 = kospi.get(nkey).toString();
+                           }
+   
+                           what = new TextView(getContext());
+                           what.setText(Html.fromHtml("[예측] " + date1 + " "  + "<FONT color=" + "#FF9800" + ">" + up_down1 + "</FONT>"));
+                          }
+                   }
+               }
+           });
+   
+           DocumentReference docRef2 = db.collection("data").document("predictedkospi_test");
+   
+           docRef2.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
+               @Override
+               public void onComplete(@NonNull Task<DocumentSnapshot> task){
+                   if (task.isSuccessful() && getActivity()!=null) {
+                       DocumentSnapshot document = task.getResult();
+                       String date = new String();
+                       String up_down = new String();
+                       TextView show = (TextView)viewGroup.findViewById(R.id.show_predict);
+   
+                       if (document.exists()) {
+                           HashMap<String,Object> kospi = new HashMap<String,Object>(document.getData());
+   
+                           Object[] mapkey = kospi.keySet().toArray();
+                           Arrays.sort(mapkey);
+   
+                           for(Object nkey : mapkey) {
+                               date = nkey.toString();
+                               up_down = kospi.get(nkey).toString();
+                           }
+   
+   
+   
+                           if (up_down.equals("1")){
+                               Html.ImageGetter imageGetter = new Html.ImageGetter() {
+                                   @Override
+                                   public Drawable getDrawable(String source) {
+                                       if (source.equals("up_triangle")){
+                                           Drawable drawable = getResources().getDrawable(R.drawable.up_triangle);
+                                           drawable.setBounds(0, 0, drawable.getIntrinsicWidth()/2, drawable.getIntrinsicHeight()*5/13);
+                                           return drawable;
+                                       }
+                                       return null;
+                                   }
+                               };
+                               Spanned htmlText = Html.fromHtml("<img src=\"up_triangle\" width=20 height=20>", imageGetter, null);
+   
+                               if (real_date.size()>0){
+                                   show.setText(what.getText());
+                                   show.append(" 기준 : " + date + " (");
+                                   show.append(htmlText);
+                                   show.append(")");
+                                   show.setTextColor(Color.parseColor("#FF555555"));
+                               }
+                           }
+                           else if (up_down.equals("0")){
+                               Html.ImageGetter imageGetter = new Html.ImageGetter() {
+                                   @Override
+                                   public Drawable getDrawable(String source) {
+                                       if (source.equals("down_triangle")){
+                                           Drawable drawable = getResources().getDrawable(R.drawable.down_triangle);
+                                           drawable.setBounds( 0, 0, drawable.getIntrinsicWidth()/2, drawable.getIntrinsicHeight()*5/13);
+                                           return drawable;
+                                       }
+                                       return null;
+                                   }
+                               };
+                               Spanned htmlText = Html.fromHtml("<img src=\"down_triangle\" width=20 height=20>", imageGetter, null);
+   
+                               if (real_date.size()>0){
+                                   show.setText(what.getText());
+                                   show.append(" 기준 : " + date + " (");
+                                   show.append(htmlText);
+                                   show.append(")");
+                                   show.setTextColor(Color.parseColor("#FF555555"));
+                               }
+                           }
+   
+                           //차트 생성
+                           ArrayList<Entry> values = new ArrayList<>();
+                           for (int i=0;i<real_kospi_index.size();i++){
+                               values.add(new Entry(real_kospi_index.get(i), i));
+                           }
+   
+                           LineDataSet lineDataSet = new LineDataSet(values, "KOSPI");
+                           lineDataSet.setColor(ContextCompat.getColor(getContext(), R.color.red));
+                           lineDataSet.setDrawCircles(false);
+                           lineDataSet.setValueTextSize(10);
+   
+                           String[] xaxes = new String[real_date.size()];
+                           for (int i=0;i<real_date.size();i++)
+                               xaxes[i] = real_date.get(i);
+   
+                           XAxis xAxis = lineChart.getXAxis();
+                           xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+                           xAxis.setTextColor(ContextCompat.getColor(getContext(), R.color.purple_500));
+                           xAxis.setTextSize(11);
+   
+                           YAxis yAxisLeft = lineChart.getAxisLeft();
+                           yAxisLeft.setDrawLabels(false);
+                           yAxisLeft.setDrawAxisLine(false);
+                           yAxisLeft.setDrawGridLines(false);
+   
+                           YAxis yAxisRight = lineChart.getAxisRight();
+                           yAxisRight.setTextColor(ContextCompat.getColor(getContext(), R.color.purple_700));
+                           yAxisRight.setTextSize(13);
+   
+                           lineChart.setDescription(null);
+                           lineChart.setTouchEnabled(true);
+   
+                           lineChart.getAxisLeft().setLabelCount(10, true);
+                           lineChart.getAxisRight().setLabelCount(3,true);
+   
+                           Legend legend = lineChart.getLegend();
+                           legend.setPosition(Legend.LegendPosition.BELOW_CHART_LEFT);
+                           legend.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
+   
+                           lineChart.setData(new LineData(xaxes, lineDataSet));
+                           lineChart.invalidate();
+                       } else {
+                           Log.d("", "No such document");
+                       }
+                   } else {
+                       Log.d("", "get failed with ", task.getException());
+                   }
+               }
+           });
+   
+           if (getActivity()!=null && real_date==null)
+               showChart();
+       }
+   ```
 
-    
+   </br>
 
-  - 실시간 지수
+   ---
 
-    - Main 탭의 실시간 해외 주요 주가지수 표현 부분
+   > #### 실시간 지수
 
-    - '[네이버 시세](https://finance.naver.com/world/)' 웹사이트를 사용하여 실시간 지수를 크롤링
+   - Main 탭의 실시간 해외 주요 주가지수 표현 부분
+   - '[네이버 시세](https://finance.naver.com/world/)' 웹사이트를 사용하여 실시간 지수를 크롤링
 
-      ```java
-      public void get_data(){
-              if (getActivity()!=null){
-                  try{
-                      ndaq_arraylist.clear();
-      
-                      Document doc1 = Jsoup.connect(ndaq_url).get();
-                      Elements contents1 = doc1.select("td[class=tb_td2]");
-      
-                      for (Element e : contents1){
-                          String content = e.select("span").text();
-                          ndaq_arraylist.add(content);
+   ```java
+   public void get_data(){
+           if (getActivity()!=null){
+               try{
+                   ndaq_arraylist.clear();
+   
+                   Document doc1 = Jsoup.connect(ndaq_url).get();
+                   Elements contents1 = doc1.select("td[class=tb_td2]");
+   
+                   for (Element e : contents1){
+                       String content = e.select("span").text();
+                       ndaq_arraylist.add(content);
+                   }
+   
+                   spy_arraylist.clear();
+   
+                   Document doc2 = Jsoup.connect(spy_url).get();
+                   Elements contents2 = doc2.select("td[class=tb_td2]");
+   
+                   for (Element e : contents2){
+                       String content = e.select("span").text();
+                       spy_arraylist.add(content);
+                   }
+   
+                   dji_arraylist.clear();
+   
+                   Document doc3 = Jsoup.connect(dji_url).get();
+                   Elements contents3 = doc3.select("td[class=tb_td2]");
+   
+                   for (Element e : contents3){
+                       String content = e.select("span").text();
+                       dji_arraylist.add(content);
+                   }
+   
+                   stoxx50_arraylist.clear();
+   
+                   Document doc4 = Jsoup.connect(stoxx50_url).get();
+                   Elements contents4 = doc4.select("td[class=tb_td2]");
+   
+                   for (Element e : contents4){
+                       String content = e.select("span").text();
+                       stoxx50_arraylist.add(content);
+                   }
+   
+                   topix_arraylist.clear();
+   
+                   Document doc5 = Jsoup.connect(topix_url).get();
+                   Elements contents5 = doc5.select("dl[class=blind]");
+   
+                   for (Element e : contents5){
+                       String content = e.select("dd").text();
+                       topix_arraylist.add(content);
+                   }
+   
+                   nikkei_arraylist.clear();
+   
+                   Document doc6 = Jsoup.connect(nikkei_url).get();
+                   Elements contents6 = doc6.select("td[class=tb_td2]");
+   
+                   for (Element e : contents6){
+                       String content = e.select("span").text();
+                       nikkei_arraylist.add(content);
+                   }
+   
+                   ssec_arraylist.clear();
+   
+                   Document doc7 = Jsoup.connect(ssec_url).get();
+                   Elements contents7 = doc7.select("td[class=tb_td2]");
+   
+                   for (Element e : contents7){
+                       String content = e.select("span").text();
+                       ssec_arraylist.add(content);
+                   }
+   
+                   hsi_arraylist.clear();
+   
+                   Document doc8 = Jsoup.connect(hsi_url).get();
+                   Elements contents8 = doc8.select("td[class=tb_td2]");
+   
+                   for (Element e : contents8){
+                       String content = e.select("span").text();
+                       hsi_arraylist.add(content);
+                   }
+               }catch(IOException err){
+                   err.printStackTrace();
+               }
+           }
+   
+           if (getActivity()!=null && ndaq_arraylist!=null && spy_arraylist!=null && dji_arraylist!=null && stoxx50_arraylist!=null && topix_arraylist!=null && nikkei_arraylist!=null && ssec_arraylist!=null && hsi_arraylist!=null
+           && ndaq_arraylist.size()!=0 && spy_arraylist.size()!=0 && dji_arraylist.size()!=0 && stoxx50_arraylist.size()!=0 && topix_arraylist.size()!=0 && nikkei_arraylist.size()!=0 && ssec_arraylist.size()!=0 && hsi_arraylist.size()!=0){
+               this.getActivity().runOnUiThread(new Runnable(){
+                   @Override
+                   public void run(){
+                       String temp1 = ndaq_arraylist.get(0);
+                       String temp1_1 = temp1.replace(",", "");
+                       String temp1_2 = ndaq_arraylist.get(1);
+                       temp1_2 = temp1_2.replace(",", "");
+                       float compare1 = Float.parseFloat(temp1_1) - Float.parseFloat(temp1_2);
+   
+                       if (compare1>0){
+                           Html.ImageGetter imageGetter = new Html.ImageGetter() {
+                               @Override
+                               public Drawable getDrawable(String source) {
+                                   if (source.equals("up_triangle")){
+                                       Drawable drawable = getResources().getDrawable(R.drawable.up_triangle);
+                                       drawable.setBounds(0, 0, drawable.getIntrinsicWidth()/2, drawable.getIntrinsicHeight()*5/13);
+                                       return drawable;
+                                   }
+                                   return null;
+                               }
+                           };
+                           Spanned htmlText = Html.fromHtml("<img src=\"up_triangle\" width=20 height=20>", imageGetter, null);
+   
+                           ndaq_textview.setText(temp1 + "(" );
+                           ndaq_textview.append(htmlText);
+                           ndaq_textview.append(")");
+                       }
+                       else if (compare1<0){
+                           Html.ImageGetter imageGetter = new Html.ImageGetter() {
+                               @Override
+                               public Drawable getDrawable(String source) {
+                                   if (source.equals("down_triangle")){
+                                       Drawable drawable = getResources().getDrawable(R.drawable.down_triangle);
+                                       drawable.setBounds( 0, 0, drawable.getIntrinsicWidth()/2, drawable.getIntrinsicHeight()*5/13);
+                                       return drawable;
+                                   }
+                                   return null;
+                               }
+                           };
+                           Spanned htmlText = Html.fromHtml("<img src=\"down_triangle\" width=20 height=20>", imageGetter, null);
+   
+                           ndaq_textview.setText(temp1 + "(" );
+                           ndaq_textview.append(htmlText);
+                           ndaq_textview.append(")");
+                       }
+                       else
+                           ndaq_textview.setText(temp1 + "( - )");
+   
+                       String temp2 = spy_arraylist.get(0);
+                       String temp2_1 = temp2.replace(",", "");
+                       String temp2_2 = spy_arraylist.get(1);
+                       temp2_2 = temp2_2.replace(",", "");
+                       float compare2 = Float.parseFloat(temp2_1) - Float.parseFloat(temp2_2);
+   
+                       if (compare2>0){
+                           Html.ImageGetter imageGetter = new Html.ImageGetter() {
+                               @Override
+                               public Drawable getDrawable(String source) {
+                                   if (source.equals("up_triangle")){
+                                       Drawable drawable = getResources().getDrawable(R.drawable.up_triangle);
+                                       drawable.setBounds(0, 0, drawable.getIntrinsicWidth()/2, drawable.getIntrinsicHeight()*5/13);
+                                       return drawable;
+                                   }
+                                   return null;
+                               }
+                           };
+                           Spanned htmlText = Html.fromHtml("<img src=\"up_triangle\" width=20 height=20>", imageGetter, null);
+   
+                           spy_textview.setText(temp2 + "(" );
+                           spy_textview.append(htmlText);
+                           spy_textview.append(")");
+                       }
+                       else if (compare2<0){
+                           Html.ImageGetter imageGetter = new Html.ImageGetter() {
+                               @Override
+                               public Drawable getDrawable(String source) {
+                                   if (source.equals("down_triangle")){
+                                       Drawable drawable = getResources().getDrawable(R.drawable.down_triangle);
+                                       drawable.setBounds( 0, 0, drawable.getIntrinsicWidth()/2, drawable.getIntrinsicHeight()*5/13);
+                                       return drawable;
+                                   }
+                                   return null;
+                               }
+                           };
+                           Spanned htmlText = Html.fromHtml("<img src=\"down_triangle\" width=20 height=20>", imageGetter, null);
+   
+                           spy_textview.setText(temp2 + "(" );
+                           spy_textview.append(htmlText);
+                           spy_textview.append(")");
+                       }
+                       else
+                           spy_textview.setText(temp2 + "( - )");
+   
+                       String temp3 = dji_arraylist.get(0);
+                       String temp3_1 = temp3.replace(",", "");
+                       String temp3_2 = dji_arraylist.get(1);
+                       temp3_2 = temp3_2.replace(",", "");
+                       float compare3 = Float.parseFloat(temp3_1) - Float.parseFloat(temp3_2);
+   
+                       if (compare3>0){
+                           Html.ImageGetter imageGetter = new Html.ImageGetter() {
+                               @Override
+                               public Drawable getDrawable(String source) {
+                                   if (source.equals("up_triangle")){
+                                       Drawable drawable = getResources().getDrawable(R.drawable.up_triangle);
+                                       drawable.setBounds(0, 0, drawable.getIntrinsicWidth()/2, drawable.getIntrinsicHeight()*5/13);
+                                       return drawable;
+                                   }
+                                   return null;
+                               }
+                           };
+                           Spanned htmlText = Html.fromHtml("<img src=\"up_triangle\" width=20 height=20>", imageGetter, null);
+   
+                           dji_textview.setText(temp3 + "(" );
+                           dji_textview.append(htmlText);
+                           dji_textview.append(")");
+                       }
+                       else if (compare3<0){
+                           Html.ImageGetter imageGetter = new Html.ImageGetter() {
+                               @Override
+                               public Drawable getDrawable(String source) {
+                                   if (source.equals("down_triangle")){
+                                       Drawable drawable = getResources().getDrawable(R.drawable.down_triangle);
+                                       drawable.setBounds( 0, 0, drawable.getIntrinsicWidth()/2, drawable.getIntrinsicHeight()*5/13);
+                                       return drawable;
+                                   }
+                                   return null;
+                               }
+                           };
+                           Spanned htmlText = Html.fromHtml("<img src=\"down_triangle\" width=20 height=20>", imageGetter, null);
+   
+                           dji_textview.setText(temp3 + "(" );
+                           dji_textview.append(htmlText);
+                           dji_textview.append(")");
+                       }
+                       else
+                           dji_textview.setText(temp3 + "( - )");
+   
+                       String temp4 = stoxx50_arraylist.get(0);
+                       String temp4_1 = temp4.replace(",", "");
+                       String temp4_2 = stoxx50_arraylist.get(1);
+                       temp4_2 = temp4_2.replace(",", "");
+                       float compare4 = Float.parseFloat(temp4_1) - Float.parseFloat(temp4_2);
+   
+                       if (compare4>0){
+                           Html.ImageGetter imageGetter = new Html.ImageGetter() {
+                               @Override
+                               public Drawable getDrawable(String source) {
+                                   if (source.equals("up_triangle")){
+                                       Drawable drawable = getResources().getDrawable(R.drawable.up_triangle);
+                                       drawable.setBounds(0, 0, drawable.getIntrinsicWidth()/2, drawable.getIntrinsicHeight()*5/13);
+                                       return drawable;
+                                   }
+                                   return null;
+                               }
+                           };
+                           Spanned htmlText = Html.fromHtml("<img src=\"up_triangle\" width=20 height=20>", imageGetter, null);
+   
+                           stoxx50_textview.setText(temp4 + "(" );
+                           stoxx50_textview.append(htmlText);
+                           stoxx50_textview.append(")");
+                       }
+                       else if (compare4<0){
+                           Html.ImageGetter imageGetter = new Html.ImageGetter() {
+                               @Override
+                               public Drawable getDrawable(String source) {
+                                   if (source.equals("down_triangle")){
+                                       Drawable drawable = getResources().getDrawable(R.drawable.down_triangle);
+                                       drawable.setBounds( 0, 0, drawable.getIntrinsicWidth()/2, drawable.getIntrinsicHeight()*5/13);
+                                       return drawable;
+                                   }
+                                   return null;
+                               }
+                           };
+                           Spanned htmlText = Html.fromHtml("<img src=\"down_triangle\" width=20 height=20>", imageGetter, null);
+   
+                           stoxx50_textview.setText(temp4 + "(" );
+                           stoxx50_textview.append(htmlText);
+                           stoxx50_textview.append(")");
+                       }
+                       else
+                           stoxx50_textview.setText(temp4 + "( - )");
+   
+                       String temp5_0 = topix_arraylist.get(0);
+                       String[] temp5_00 = temp5_0.split(" ");
+                       String temp5 = temp5_00[14];
+                       String temp5_1 = temp5.replace(",", "");
+                       String temp5_2 = temp5_00[22];
+                       temp5_2 = temp5_2.replace(",", "");
+                       float compare5 = Float.parseFloat(temp5_1) - Float.parseFloat(temp5_2);
+   
+                       if (compare5>0){
+                           Html.ImageGetter imageGetter = new Html.ImageGetter() {
+                               @Override
+                               public Drawable getDrawable(String source) {
+                                   if (source.equals("up_triangle")){
+                                       Drawable drawable = getResources().getDrawable(R.drawable.up_triangle);
+                                       drawable.setBounds(0, 0, drawable.getIntrinsicWidth()/2, drawable.getIntrinsicHeight()*5/13);
+                                       return drawable;
+                                   }
+                                   return null;
+                               }
+                           };
+                           Spanned htmlText = Html.fromHtml("<img src=\"up_triangle\" width=20 height=20>", imageGetter, null);
+   
+                           topix_textview.setText(temp5 + "(" );
+                           topix_textview.append(htmlText);
+                           topix_textview.append(")");
+                       }
+                       else if (compare5<0){
+                           Html.ImageGetter imageGetter = new Html.ImageGetter() {
+                               @Override
+                               public Drawable getDrawable(String source) {
+                                   if (source.equals("down_triangle")){
+                                       Drawable drawable = getResources().getDrawable(R.drawable.down_triangle);
+                                       drawable.setBounds( 0, 0, drawable.getIntrinsicWidth()/2, drawable.getIntrinsicHeight()*5/13);
+                                       return drawable;
+                                   }
+                                   return null;
+                               }
+                           };
+                           Spanned htmlText = Html.fromHtml("<img src=\"down_triangle\" width=20 height=20>", imageGetter, null);
+   
+                           topix_textview.setText(temp5 + "(" );
+                           topix_textview.append(htmlText);
+                           topix_textview.append(")");
+                       }
+                       else
+                           topix_textview.setText(temp5 + "( - )");
+   
+                       String temp6 = nikkei_arraylist.get(0);
+                       String temp6_1 = temp6.replace(",", "");
+                       String temp6_2 = nikkei_arraylist.get(1);
+                       temp6_2 = temp6_2.replace(",", "");
+                       float compare6 = Float.parseFloat(temp6_1) - Float.parseFloat(temp6_2);
+   
+                       if (compare6>0){
+                           Html.ImageGetter imageGetter = new Html.ImageGetter() {
+                               @Override
+                               public Drawable getDrawable(String source) {
+                                   if (source.equals("up_triangle")){
+                                       Drawable drawable = getResources().getDrawable(R.drawable.up_triangle);
+                                       drawable.setBounds(0, 0, drawable.getIntrinsicWidth()/2, drawable.getIntrinsicHeight()*5/13);
+                                       return drawable;
+                                   }
+                                   return null;
+                               }
+                           };
+                           Spanned htmlText = Html.fromHtml("<img src=\"up_triangle\" width=20 height=20>", imageGetter, null);
+   
+                           nikkei_textview.setText(temp6 + "(" );
+                           nikkei_textview.append(htmlText);
+                           nikkei_textview.append(")");
+                       }
+                       else if (compare6<0){
+                           Html.ImageGetter imageGetter = new Html.ImageGetter() {
+                               @Override
+                               public Drawable getDrawable(String source) {
+                                   if (source.equals("down_triangle")){
+                                       Drawable drawable = getResources().getDrawable(R.drawable.down_triangle);
+                                       drawable.setBounds( 0, 0, drawable.getIntrinsicWidth()/2, drawable.getIntrinsicHeight()*5/13);
+                                       return drawable;
+                                   }
+                                   return null;
+                               }
+                           };
+                           Spanned htmlText = Html.fromHtml("<img src=\"down_triangle\" width=20 height=20>", imageGetter, null);
+   
+                           nikkei_textview.setText(temp6 + "(" );
+                           nikkei_textview.append(htmlText);
+                           nikkei_textview.append(")");
+                       }
+                       else
+                           nikkei_textview.setText(temp6 + "( - )");
+   
+                       String temp7 = ssec_arraylist.get(0);
+                       String temp7_1 = temp7.replace(",", "");
+                       String temp7_2 = ssec_arraylist.get(1);
+                       temp7_2 = temp7_2.replace(",", "");
+                       float compare7 = Float.parseFloat(temp7_1) - Float.parseFloat(temp7_2);
+   
+                       if (compare7>0){
+                           Html.ImageGetter imageGetter = new Html.ImageGetter() {
+                               @Override
+                               public Drawable getDrawable(String source) {
+                                   if (source.equals("up_triangle")){
+                                       Drawable drawable = getResources().getDrawable(R.drawable.up_triangle);
+                                       drawable.setBounds(0, 0, drawable.getIntrinsicWidth()/2, drawable.getIntrinsicHeight()*5/13);
+                                       return drawable;
+                                   }
+                                   return null;
+                               }
+                           };
+                           Spanned htmlText = Html.fromHtml("<img src=\"up_triangle\" width=20 height=20>", imageGetter, null);
+   
+                           ssec_textview.setText(temp7 + "(" );
+                           ssec_textview.append(htmlText);
+                           ssec_textview.append(")");
+                       }
+                       else if (compare7<0){
+                           Html.ImageGetter imageGetter = new Html.ImageGetter() {
+                               @Override
+                               public Drawable getDrawable(String source) {
+                                   if (source.equals("down_triangle")){
+                                       Drawable drawable = getResources().getDrawable(R.drawable.down_triangle);
+                                       drawable.setBounds( 0, 0, drawable.getIntrinsicWidth()/2, drawable.getIntrinsicHeight()*5/13);
+                                       return drawable;
+                                   }
+                                   return null;
+                               }
+                           };
+                           Spanned htmlText = Html.fromHtml("<img src=\"down_triangle\" width=20 height=20>", imageGetter, null);
+   
+                           ssec_textview.setText(temp7 + "(" );
+                           ssec_textview.append(htmlText);
+                           ssec_textview.append(")");
+                       }
+                       else
+                           ssec_textview.setText(temp7 + "( - )");
+   
+                       String temp8 = hsi_arraylist.get(0);
+                       String temp8_1 = temp8.replace(",", "");
+                       String temp8_2 = hsi_arraylist.get(1);
+                       temp8_2 = temp8_2.replace(",", "");
+                       float compare8 = Float.parseFloat(temp8_1) - Float.parseFloat(temp8_2);
+   
+                       if (compare8>0){
+                           Html.ImageGetter imageGetter = new Html.ImageGetter() {
+                               @Override
+                               public Drawable getDrawable(String source) {
+                                   if (source.equals("up_triangle")){
+                                       Drawable drawable = getResources().getDrawable(R.drawable.up_triangle);
+                                       drawable.setBounds(0, 0, drawable.getIntrinsicWidth()/2, drawable.getIntrinsicHeight()*5/13);
+                                       return drawable;
+                                   }
+                                   return null;
+                               }
+                           };
+                           Spanned htmlText = Html.fromHtml("<img src=\"up_triangle\" width=20 height=20>", imageGetter, null);
+   
+                           hsi_textview.setText(temp8 + "(" );
+                           hsi_textview.append(htmlText);
+                           hsi_textview.append(")");
+                       }
+                       else if (compare8<0){
+                           Html.ImageGetter imageGetter = new Html.ImageGetter() {
+                               @Override
+                               public Drawable getDrawable(String source) {
+                                   if (source.equals("down_triangle")){
+                                       Drawable drawable = getResources().getDrawable(R.drawable.down_triangle);
+                                       drawable.setBounds( 0, 0, drawable.getIntrinsicWidth()/2, drawable.getIntrinsicHeight()*5/13);
+                                       return drawable;
+                                   }
+                                   return null;
+                               }
+                           };
+                           Spanned htmlText = Html.fromHtml("<img src=\"down_triangle\" width=20 height=20>", imageGetter, null);
+   
+                           hsi_textview.setText(temp8 + "(" );
+                           hsi_textview.append(htmlText);
+                           hsi_textview.append(")");
+                       }
+                       else
+                           hsi_textview.setText(temp8 + "( - )");
+                   }
+               });
+           }
+       }
+   ```
+
+   </br>
+
+   ---
+
+2. ### News
+
+   [매일경제 국내 증권 뉴스](https://vip.mk.co.kr/newSt/news/news_list.php?sCode=21)와 [매일경제 해외 증권 뉴스](https://vip.mk.co.kr/newSt/news/news_list.php?sCode=108) 웹사이트의 기사를 크롤링
+
+   > #### 국내 뉴스 기사
+
+   ```java
+   class task1 extends AsyncTask<Void, Void, Void> {
+           @Override
+           protected Void doInBackground(Void... voids) {
+               if (getActivity()!=null) {
+                   try {
+                       listView.setVisibility(View.INVISIBLE);
+   
+                       contentList.clear();
+                       titleList.clear();
+   
+                       Document doc = Jsoup.connect(url1).get();
+                       Elements titles = doc.select("td[class=title]");
+   
+                       for (Element e : titles) {
+                           String news_title = e.select("a").text();
+                           String news_link = e.select("a").attr("href");
+                           contentList.add(news_link);
+                           titleList.add(news_title);
+                       }
+                   } catch (IOException err1) {
+                       err1.printStackTrace();
+                   }
+               }
+   
+               if (getActivity()!=null){
+                   getActivity().runOnUiThread(new Runnable() {
+                       @Override
+                       public void run() {
+                           adapter.notifyDataSetChanged();
+                           listView.setVisibility(View.VISIBLE);
+                       }
+                   });
+               }
+   
+               return null;
+           }
+   
+           @Override
+           protected void onPreExecute() {
+               super.onPreExecute();
+           }
+       }
+   ```
+
+   > #### 해외 뉴스 기사
+
+   ```java
+   class task2 extends AsyncTask<Void, Void, Void> {
+           @Override
+           protected Void doInBackground(Void... voids) {
+               if (getActivity()!=null) {
+                   try {
+                       listView.setVisibility(View.INVISIBLE);
+   
+                       contentList.clear();
+                       titleList.clear();
+   
+                       Document doc = Jsoup.connect(url2).get();
+                       Elements titles = doc.select("td[class=title]");
+   
+                       for (Element e : titles) {
+                           String news_title = e.select("a").text();
+                           String news_link = e.select("a").attr("href");
+                           contentList.add(news_link);
+                           titleList.add(news_title);
+                       }
+                   } catch (IOException err1) {
+                       err1.printStackTrace();
+                   }
+               }
+   
+               if (getActivity()!=null){
+                   getActivity().runOnUiThread(new Runnable() {
+                       @Override
+                       public void run() {
+                           adapter.notifyDataSetChanged();
+                           listView.setVisibility(View.VISIBLE);
+                       }
+                   });
+               }
+   
+               return null;
+           }
+   
+           @Override
+           protected void onPreExecute() { super.onPreExecute(); }
+       }
+   ```
+
+   </br>
+
+   ---
+
+3. ### Stock 100 List
+
+   - KOSPI 시가총액 100순위 안에 드는 종목 정보 표현
+   -  '[네이버 시세](https://finance.naver.com/item/main.nhn?code)'  웹사이트 크롤링을 통해 주가정보 획득
+
+   ```java
+   public class List_Window extends Fragment {
+       ViewGroup viewGroup;
+   
+       Timer timer;
+       TimerTask t;
+       ExpandableListView listView;
+       CustomAdapter adapter;
+       ArrayList<GroupData> groupListDatas;
+       ArrayList<ArrayList<ChildData>> childListDatas;
+       private List<String> list;
+       private EditText editSearch;
+       int nowPosition;
+       static Resources list_resource;
+       String[] list_title = {"삼성전자", "SK하이닉스", "LG화학", "NAVER", "삼성바이오로직스", "카카오", "현대차", "삼성SDI", "셀트리온",
+               "기아", "POSCO", "현대모비스", "LG전자", "삼성물산", "SK텔레콤", "LG생활건강", "SK이노베이션", "KB금융", "신한지주",
+               "SK", "엔씨소프트", "삼성생명", "아모레퍼시픽", "한국전력", "삼성에스디에스", "삼성전기", "하나금융지주", "HMM", "KT&G",
+               "포스코케미칼", "넷마블", "한국조선해양", "S-Oil", "롯데케미칼", "삼성화재", "대한항공", "하이브", "한온시스템", "한화솔루션",
+               "LG디스플레이", "고려아연", "SK바이오팜", "금호석유", "우리금융지주", "KT", "현대제철", "현대글로비스", "기업은행", "미래에셋증권",
+               "CJ제일제당", "한국타이어앤테크놀로", "한국금융지주", "아모레G", "LG유플러스", "현대중공업지주", "현대건설", "강원랜드", "코웨이", "SKC",
+               "두산중공업", "이마트", "삼성중공업", "두산밥캣", "오리온", "LG이노텍", "맥쿼리인프라", "한미사이언스", "유한양행", "대우조선해양",
+               "GS", "녹십자", "삼성카드", "한미약품", "쌍용C&E", "CJ대한통운", "GS건설", "삼성증권", "롯데지주", "호텔신라",
+               "DB손해보험", "삼성엔지니어링", "롯데쇼핑", "NH투자증권", "한진칼", "키움증권", "신풍제약", "한국항공우주", "에스원", "일진머티리얼즈",
+               "한국가스공사", "동서", "SK케미칼", "만도", "CJ", "휠라홀딩스", "GS리테일", "더존비즈온", "두산퓨얼셀", "대웅"};
+       String[] list_code = {"005930", "000660", "051910", "035420", "207940", "035720", "005380", "006400", "068270",
+               "000270", "005490", "012330", "066570", "028260", "017670", "051900", "096770", "105560", "055550",
+               "034730", "036570", "032830", "090430", "015760", "018260", "009150", "086790", "011200", "033780",
+               "003670", "251270", "009540", "010950", "011170", "000810", "003490", "352820", "018880", "009830",
+               "034220", "010130", "326030", "011780", "316140", "030200", "004020", "086280", "024110", "006800",
+               "097950", "161390", "071050", "002790", "032640", "267250", "000720", "035250", "021240", "011790",
+               "034020", "139480", "010140", "241560", "271560", "011070", "088980", "008930", "000100", "042660",
+               "078930", "006280", "029780", "128940", "003410", "000120", "006360", "016360", "004990", "008770",
+               "005830", "028050", "023530", "005940", "180640", "039490", "019170", "047810", "012750", "020150",
+               "036460", "026960", "285130", "204320", "001040", "081660", "007070", "012510", "336260", "003090"};
+   
+       @Nullable
+       @Override
+       public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+           viewGroup = (ViewGroup) inflater.inflate(R.layout.list_fragment, container, false);
+           groupListDatas = new ArrayList<GroupData>();
+           childListDatas = new ArrayList<ArrayList<ChildData>>();
+           list = new ArrayList<String>();
+           list_resource = getResources();
+   
+           listView = (ExpandableListView)viewGroup.findViewById(R.id.all_list);
+   
+           settingList();
+           Collections.sort(list, cmpAsc);
+           setData();
+   
+           adapter = new CustomAdapter(container.getContext(), groupListDatas, childListDatas);
+           listView.setAdapter(adapter);
+   
+           listView.setGroupIndicator(null);
+   
+           listView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener(){
+               @Override
+               public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id){
+                   nowPosition = groupPosition;
+                   tempTask();
+   
+                   return false;
+               }
+           });
+   
+           listView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener(){
+               @Override
+               public void onGroupExpand(int groupPosition){
+                   int groupCount = adapter.getGroupCount();
+                   for (int i=0;i<groupCount;i++){
+                       if (!(i==groupPosition)) {
+                           listView.collapseGroup(i);
+                       }
+                   }
+               }
+           });
+   
+           editSearch = (EditText) viewGroup.findViewById(R.id.edit_search);
+           editSearch.setBackgroundColor(getResources().getColor(R.color.white));
+   
+           editSearch.addTextChangedListener(new TextWatcher() {
+               @Override
+               public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
+   
+                   //t.cancel();
+   
+                   for (int i=0;i<list_title.length;i++)
+                       listView.collapseGroup(i);
+               }
+   
+               @Override
+               public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                   String text = editSearch.getText().toString();
+                   search(text);
+               }
+   
+               @Override
+               public void afterTextChanged(Editable editable) { }
+           });
+   
+           return viewGroup;
+       }
+   
+       public void tempTask(){
+           if (getActivity()!=null){
+               t = new TimerTask(){
+                   @Override
+                   public void run(){
+                       get_real_time_data();
+                   }
+               };
+               timer = new Timer();
+               timer.schedule(t, 0, 1000);
+           }
+       }
+   
+       public void get_real_time_data(){
+           String[] temp = new String[15];
+           String url = "https://finance.naver.com/item/main.nhn?code=";
+   
+           if (getActivity() != null && nowPosition<adapter.getGroupCount() && nowPosition>=0 && adapter.getGroupCount()!=0) {
+               try {
+                   for (int i = 0; i < list_title.length; i++) {
+                       if (list.get(nowPosition).equals(list_title[i])) {
+                           url = url + list_code[i];
+                           break;
+                       }
+                   }
+                   int size = 0;
+   
+                   Document doc = Jsoup.connect(url).get();
+                   Elements elements = doc.select("dl[class=blind]");
+                   Elements elements1 = elements.select("dd");
+   
+                   for (Element e : elements1) {
+                       temp[size] = e.text();
+                       size++;
+                   }
+   
+   
+               } catch (IOException err) {
+                   err.printStackTrace();
+               }
+           }
+   
+           if (getActivity()!=null && nowPosition<adapter.getGroupCount() && nowPosition>=0 && adapter.getGroupCount()!=0){
+               this.getActivity().runOnUiThread(new Runnable(){
+                   @Override
+                   public void run(){
+                       String[] temp1 = temp[3].split(" ");
+                       String[] temp2 = temp[4].split(" ");
+                       String[] temp3 = temp[5].split(" ");
+                       String[] temp4 = temp[6].split(" ");
+                       String[] temp5 = temp[7].split(" ");
+                       String[] temp6 = temp[8].split(" ");
+                       String[] temp7 = temp[9].split(" ");
+                       String[] temp8 = temp[10].split(" ");
+                       String[] temp9 = temp[11].split(" ");
+   
+                       childListDatas.get(nowPosition).clear();
+                       childListDatas.get(nowPosition).add(new ChildData(temp1[1],temp1[3] + " " + temp1[4],temp2[1],temp3[1],temp4[1],temp6[1],temp5[1],temp7[1],temp8[1],temp9[1]));
+                       adapter.notifyDataSetChanged();
+                   }
+               });
+           }
+       }
+   
+       private void setData(){
+           if (getActivity()!=null){
+               for(int i=0;i<list.size();i++) {
+                   groupListDatas.add(new GroupData(list.get(i)));
+                   childListDatas.add(new ArrayList<ChildData>());
+                   childListDatas.get(i).add(new ChildData("wait", "wait", "wait", "wait", "wait", "wait", "wait", "wait", "wait", "wait"));
+               }
+           }
+       }
+   
+       Comparator<String> cmpAsc = new Comparator<String>() {
+           @Override
+           public int compare(String o1, String o2) { return o1.compareTo(o2); }
+       };
+   
+       private void settingList() {
+           if (getActivity()!=null){
+               list.clear();
+   
+               for (int i=0;i<list_title.length;i++){
+                   list.add(list_title[i]);
+               }
+           }
+       }
+   
+       public void search(String charText) {
+           if (getActivity()!=null){
+               charText = charText.toLowerCase(Locale.getDefault());
+   
+               list.clear();
+               childListDatas.clear();
+               groupListDatas.clear();
+   
+               if (charText.length() == 0){
+                   settingList();
+               }
+   
+               else {
+                   for(int i = 0;i<list_title.length;i++) {
+                       if (list_title[i].toLowerCase().contains(charText))
+                           list.add(list_title[i]);
+                   }
+               }
+               Collections.sort(list, cmpAsc);
+               setData();
+               adapter.notifyDataSetChanged();
+           }
+       }
+   }
+   ```
+
+   </br>
+
+   ---
+
+4. ### MyList
+
+- Stock 100 List 에서 선택해서 담은 종목들을 관리할 수 있는 탭
+
+  ```java
+  public class My_Window extends Fragment{
+      ViewGroup viewGroup;
+  
+      static Timer timer;
+      static ExpandableListView listView;
+      static My_CustomAdapter adapter;
+      static ArrayList<GroupData> groupListDatas;
+      static ArrayList<ArrayList<ChildData>> childListDatas;
+      static List<String> list;
+      static int nowPosition;
+  
+      static public ArrayList<String> my_list_title = new ArrayList<String>();
+      static public ArrayList<String> my_list_code = new ArrayList<String>();
+      static public ArrayList<String> temp_title = new ArrayList<String>();
+      static public ArrayList<String> temp_code = new ArrayList<String>();
+  
+      int cnt = 0;
+      static Context ctt;
+      static Activity act;
+      static Resources my_resource;
+  
+      @Nullable
+      @Override
+      public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
+          viewGroup=(ViewGroup) inflater.inflate(R.layout.my_fragment, container, false);
+          groupListDatas = new ArrayList<GroupData>();
+          childListDatas = new ArrayList<ArrayList<ChildData>>();
+          list = new ArrayList<String>();
+          ctt = getContext();
+          act = getActivity();
+          my_resource = getResources();
+  
+  
+          if (temp_title.size()!=0){
+              for (int i=0;i<temp_title.size();i++){
+                  my_list_title.add(temp_title.get(i));
+                  my_list_code.add(temp_code.get(i));
+              }
+  
+              temp_title.clear();
+              temp_code.clear();
+  
+              SaveTitleData(getContext(), my_list_title);
+              SaveCodeData(getContext(), my_list_code);
+              my_list_title = ReadTitleData(getContext());
+              my_list_code = ReadCodeData(getContext());
+          }
+          else{
+              my_list_title = ReadTitleData(getContext());
+              my_list_code = ReadCodeData(getContext());
+          }
+  
+          listView = (ExpandableListView)viewGroup.findViewById(R.id.my_list);
+          settingList();
+          setData();
+  
+          adapter = new My_CustomAdapter(getContext(), groupListDatas, childListDatas);
+          listView.setAdapter(adapter);
+  
+          listView.setGroupIndicator(null);
+  
+          listView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener(){
+              @Override
+              public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id){
+                  nowPosition = groupPosition;
+                  tempTask();
+  
+                  return false;
+              }
+          });
+  
+          listView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener(){
+              @Override
+              public void onGroupExpand(int groupPosition){
+                  int groupCount = adapter.getGroupCount();
+                  for (int i=0;i<groupCount;i++){
+                      if (!(i==groupPosition)) {
+                          listView.collapseGroup(i);
                       }
-      
-                      spy_arraylist.clear();
-      
-                      Document doc2 = Jsoup.connect(spy_url).get();
-                      Elements contents2 = doc2.select("td[class=tb_td2]");
-      
-                      for (Element e : contents2){
-                          String content = e.select("span").text();
-                          spy_arraylist.add(content);
-                      }
-      
-                      dji_arraylist.clear();
-      
-                      Document doc3 = Jsoup.connect(dji_url).get();
-                      Elements contents3 = doc3.select("td[class=tb_td2]");
-      
-                      for (Element e : contents3){
-                          String content = e.select("span").text();
-                          dji_arraylist.add(content);
-                      }
-      
-                      stoxx50_arraylist.clear();
-      
-                      Document doc4 = Jsoup.connect(stoxx50_url).get();
-                      Elements contents4 = doc4.select("td[class=tb_td2]");
-      
-                      for (Element e : contents4){
-                          String content = e.select("span").text();
-                          stoxx50_arraylist.add(content);
-                      }
-      
-                      topix_arraylist.clear();
-      
-                      Document doc5 = Jsoup.connect(topix_url).get();
-                      Elements contents5 = doc5.select("dl[class=blind]");
-      
-                      for (Element e : contents5){
-                          String content = e.select("dd").text();
-                          topix_arraylist.add(content);
-                      }
-      
-                      nikkei_arraylist.clear();
-      
-                      Document doc6 = Jsoup.connect(nikkei_url).get();
-                      Elements contents6 = doc6.select("td[class=tb_td2]");
-      
-                      for (Element e : contents6){
-                          String content = e.select("span").text();
-                          nikkei_arraylist.add(content);
-                      }
-      
-                      ssec_arraylist.clear();
-      
-                      Document doc7 = Jsoup.connect(ssec_url).get();
-                      Elements contents7 = doc7.select("td[class=tb_td2]");
-      
-                      for (Element e : contents7){
-                          String content = e.select("span").text();
-                          ssec_arraylist.add(content);
-                      }
-      
-                      hsi_arraylist.clear();
-      
-                      Document doc8 = Jsoup.connect(hsi_url).get();
-                      Elements contents8 = doc8.select("td[class=tb_td2]");
-      
-                      for (Element e : contents8){
-                          String content = e.select("span").text();
-                          hsi_arraylist.add(content);
-                      }
-                  }catch(IOException err){
-                      err.printStackTrace();
                   }
               }
-      
-              if (getActivity()!=null && ndaq_arraylist!=null && spy_arraylist!=null && dji_arraylist!=null && stoxx50_arraylist!=null && topix_arraylist!=null && nikkei_arraylist!=null && ssec_arraylist!=null && hsi_arraylist!=null
-              && ndaq_arraylist.size()!=0 && spy_arraylist.size()!=0 && dji_arraylist.size()!=0 && stoxx50_arraylist.size()!=0 && topix_arraylist.size()!=0 && nikkei_arraylist.size()!=0 && ssec_arraylist.size()!=0 && hsi_arraylist.size()!=0){
-                  this.getActivity().runOnUiThread(new Runnable(){
-                      @Override
-                      public void run(){
-                          String temp1 = ndaq_arraylist.get(0);
-                          String temp1_1 = temp1.replace(",", "");
-                          String temp1_2 = ndaq_arraylist.get(1);
-                          temp1_2 = temp1_2.replace(",", "");
-                          float compare1 = Float.parseFloat(temp1_1) - Float.parseFloat(temp1_2);
-      
-                          if (compare1>0){
-                              Html.ImageGetter imageGetter = new Html.ImageGetter() {
-                                  @Override
-                                  public Drawable getDrawable(String source) {
-                                      if (source.equals("up_triangle")){
-                                          Drawable drawable = getResources().getDrawable(R.drawable.up_triangle);
-                                          drawable.setBounds(0, 0, drawable.getIntrinsicWidth()/2, drawable.getIntrinsicHeight()*5/13);
-                                          return drawable;
-                                      }
-                                      return null;
-                                  }
-                              };
-                              Spanned htmlText = Html.fromHtml("<img src=\"up_triangle\" width=20 height=20>", imageGetter, null);
-      
-                              ndaq_textview.setText(temp1 + "(" );
-                              ndaq_textview.append(htmlText);
-                              ndaq_textview.append(")");
-                          }
-                          else if (compare1<0){
-                              Html.ImageGetter imageGetter = new Html.ImageGetter() {
-                                  @Override
-                                  public Drawable getDrawable(String source) {
-                                      if (source.equals("down_triangle")){
-                                          Drawable drawable = getResources().getDrawable(R.drawable.down_triangle);
-                                          drawable.setBounds( 0, 0, drawable.getIntrinsicWidth()/2, drawable.getIntrinsicHeight()*5/13);
-                                          return drawable;
-                                      }
-                                      return null;
-                                  }
-                              };
-                              Spanned htmlText = Html.fromHtml("<img src=\"down_triangle\" width=20 height=20>", imageGetter, null);
-      
-                              ndaq_textview.setText(temp1 + "(" );
-                              ndaq_textview.append(htmlText);
-                              ndaq_textview.append(")");
-                          }
-                          else
-                              ndaq_textview.setText(temp1 + "( - )");
-      
-                          String temp2 = spy_arraylist.get(0);
-                          String temp2_1 = temp2.replace(",", "");
-                          String temp2_2 = spy_arraylist.get(1);
-                          temp2_2 = temp2_2.replace(",", "");
-                          float compare2 = Float.parseFloat(temp2_1) - Float.parseFloat(temp2_2);
-      
-                          if (compare2>0){
-                              Html.ImageGetter imageGetter = new Html.ImageGetter() {
-                                  @Override
-                                  public Drawable getDrawable(String source) {
-                                      if (source.equals("up_triangle")){
-                                          Drawable drawable = getResources().getDrawable(R.drawable.up_triangle);
-                                          drawable.setBounds(0, 0, drawable.getIntrinsicWidth()/2, drawable.getIntrinsicHeight()*5/13);
-                                          return drawable;
-                                      }
-                                      return null;
-                                  }
-                              };
-                              Spanned htmlText = Html.fromHtml("<img src=\"up_triangle\" width=20 height=20>", imageGetter, null);
-      
-                              spy_textview.setText(temp2 + "(" );
-                              spy_textview.append(htmlText);
-                              spy_textview.append(")");
-                          }
-                          else if (compare2<0){
-                              Html.ImageGetter imageGetter = new Html.ImageGetter() {
-                                  @Override
-                                  public Drawable getDrawable(String source) {
-                                      if (source.equals("down_triangle")){
-                                          Drawable drawable = getResources().getDrawable(R.drawable.down_triangle);
-                                          drawable.setBounds( 0, 0, drawable.getIntrinsicWidth()/2, drawable.getIntrinsicHeight()*5/13);
-                                          return drawable;
-                                      }
-                                      return null;
-                                  }
-                              };
-                              Spanned htmlText = Html.fromHtml("<img src=\"down_triangle\" width=20 height=20>", imageGetter, null);
-      
-                              spy_textview.setText(temp2 + "(" );
-                              spy_textview.append(htmlText);
-                              spy_textview.append(")");
-                          }
-                          else
-                              spy_textview.setText(temp2 + "( - )");
-      
-                          String temp3 = dji_arraylist.get(0);
-                          String temp3_1 = temp3.replace(",", "");
-                          String temp3_2 = dji_arraylist.get(1);
-                          temp3_2 = temp3_2.replace(",", "");
-                          float compare3 = Float.parseFloat(temp3_1) - Float.parseFloat(temp3_2);
-      
-                          if (compare3>0){
-                              Html.ImageGetter imageGetter = new Html.ImageGetter() {
-                                  @Override
-                                  public Drawable getDrawable(String source) {
-                                      if (source.equals("up_triangle")){
-                                          Drawable drawable = getResources().getDrawable(R.drawable.up_triangle);
-                                          drawable.setBounds(0, 0, drawable.getIntrinsicWidth()/2, drawable.getIntrinsicHeight()*5/13);
-                                          return drawable;
-                                      }
-                                      return null;
-                                  }
-                              };
-                              Spanned htmlText = Html.fromHtml("<img src=\"up_triangle\" width=20 height=20>", imageGetter, null);
-      
-                              dji_textview.setText(temp3 + "(" );
-                              dji_textview.append(htmlText);
-                              dji_textview.append(")");
-                          }
-                          else if (compare3<0){
-                              Html.ImageGetter imageGetter = new Html.ImageGetter() {
-                                  @Override
-                                  public Drawable getDrawable(String source) {
-                                      if (source.equals("down_triangle")){
-                                          Drawable drawable = getResources().getDrawable(R.drawable.down_triangle);
-                                          drawable.setBounds( 0, 0, drawable.getIntrinsicWidth()/2, drawable.getIntrinsicHeight()*5/13);
-                                          return drawable;
-                                      }
-                                      return null;
-                                  }
-                              };
-                              Spanned htmlText = Html.fromHtml("<img src=\"down_triangle\" width=20 height=20>", imageGetter, null);
-      
-                              dji_textview.setText(temp3 + "(" );
-                              dji_textview.append(htmlText);
-                              dji_textview.append(")");
-                          }
-                          else
-                              dji_textview.setText(temp3 + "( - )");
-      
-                          String temp4 = stoxx50_arraylist.get(0);
-                          String temp4_1 = temp4.replace(",", "");
-                          String temp4_2 = stoxx50_arraylist.get(1);
-                          temp4_2 = temp4_2.replace(",", "");
-                          float compare4 = Float.parseFloat(temp4_1) - Float.parseFloat(temp4_2);
-      
-                          if (compare4>0){
-                              Html.ImageGetter imageGetter = new Html.ImageGetter() {
-                                  @Override
-                                  public Drawable getDrawable(String source) {
-                                      if (source.equals("up_triangle")){
-                                          Drawable drawable = getResources().getDrawable(R.drawable.up_triangle);
-                                          drawable.setBounds(0, 0, drawable.getIntrinsicWidth()/2, drawable.getIntrinsicHeight()*5/13);
-                                          return drawable;
-                                      }
-                                      return null;
-                                  }
-                              };
-                              Spanned htmlText = Html.fromHtml("<img src=\"up_triangle\" width=20 height=20>", imageGetter, null);
-      
-                              stoxx50_textview.setText(temp4 + "(" );
-                              stoxx50_textview.append(htmlText);
-                              stoxx50_textview.append(")");
-                          }
-                          else if (compare4<0){
-                              Html.ImageGetter imageGetter = new Html.ImageGetter() {
-                                  @Override
-                                  public Drawable getDrawable(String source) {
-                                      if (source.equals("down_triangle")){
-                                          Drawable drawable = getResources().getDrawable(R.drawable.down_triangle);
-                                          drawable.setBounds( 0, 0, drawable.getIntrinsicWidth()/2, drawable.getIntrinsicHeight()*5/13);
-                                          return drawable;
-                                      }
-                                      return null;
-                                  }
-                              };
-                              Spanned htmlText = Html.fromHtml("<img src=\"down_triangle\" width=20 height=20>", imageGetter, null);
-      
-                              stoxx50_textview.setText(temp4 + "(" );
-                              stoxx50_textview.append(htmlText);
-                              stoxx50_textview.append(")");
-                          }
-                          else
-                              stoxx50_textview.setText(temp4 + "( - )");
-      
-                          String temp5_0 = topix_arraylist.get(0);
-                          String[] temp5_00 = temp5_0.split(" ");
-                          String temp5 = temp5_00[14];
-                          String temp5_1 = temp5.replace(",", "");
-                          String temp5_2 = temp5_00[22];
-                          temp5_2 = temp5_2.replace(",", "");
-                          float compare5 = Float.parseFloat(temp5_1) - Float.parseFloat(temp5_2);
-      
-                          if (compare5>0){
-                              Html.ImageGetter imageGetter = new Html.ImageGetter() {
-                                  @Override
-                                  public Drawable getDrawable(String source) {
-                                      if (source.equals("up_triangle")){
-                                          Drawable drawable = getResources().getDrawable(R.drawable.up_triangle);
-                                          drawable.setBounds(0, 0, drawable.getIntrinsicWidth()/2, drawable.getIntrinsicHeight()*5/13);
-                                          return drawable;
-                                      }
-                                      return null;
-                                  }
-                              };
-                              Spanned htmlText = Html.fromHtml("<img src=\"up_triangle\" width=20 height=20>", imageGetter, null);
-      
-                              topix_textview.setText(temp5 + "(" );
-                              topix_textview.append(htmlText);
-                              topix_textview.append(")");
-                          }
-                          else if (compare5<0){
-                              Html.ImageGetter imageGetter = new Html.ImageGetter() {
-                                  @Override
-                                  public Drawable getDrawable(String source) {
-                                      if (source.equals("down_triangle")){
-                                          Drawable drawable = getResources().getDrawable(R.drawable.down_triangle);
-                                          drawable.setBounds( 0, 0, drawable.getIntrinsicWidth()/2, drawable.getIntrinsicHeight()*5/13);
-                                          return drawable;
-                                      }
-                                      return null;
-                                  }
-                              };
-                              Spanned htmlText = Html.fromHtml("<img src=\"down_triangle\" width=20 height=20>", imageGetter, null);
-      
-                              topix_textview.setText(temp5 + "(" );
-                              topix_textview.append(htmlText);
-                              topix_textview.append(")");
-                          }
-                          else
-                              topix_textview.setText(temp5 + "( - )");
-      
-                          String temp6 = nikkei_arraylist.get(0);
-                          String temp6_1 = temp6.replace(",", "");
-                          String temp6_2 = nikkei_arraylist.get(1);
-                          temp6_2 = temp6_2.replace(",", "");
-                          float compare6 = Float.parseFloat(temp6_1) - Float.parseFloat(temp6_2);
-      
-                          if (compare6>0){
-                              Html.ImageGetter imageGetter = new Html.ImageGetter() {
-                                  @Override
-                                  public Drawable getDrawable(String source) {
-                                      if (source.equals("up_triangle")){
-                                          Drawable drawable = getResources().getDrawable(R.drawable.up_triangle);
-                                          drawable.setBounds(0, 0, drawable.getIntrinsicWidth()/2, drawable.getIntrinsicHeight()*5/13);
-                                          return drawable;
-                                      }
-                                      return null;
-                                  }
-                              };
-                              Spanned htmlText = Html.fromHtml("<img src=\"up_triangle\" width=20 height=20>", imageGetter, null);
-      
-                              nikkei_textview.setText(temp6 + "(" );
-                              nikkei_textview.append(htmlText);
-                              nikkei_textview.append(")");
-                          }
-                          else if (compare6<0){
-                              Html.ImageGetter imageGetter = new Html.ImageGetter() {
-                                  @Override
-                                  public Drawable getDrawable(String source) {
-                                      if (source.equals("down_triangle")){
-                                          Drawable drawable = getResources().getDrawable(R.drawable.down_triangle);
-                                          drawable.setBounds( 0, 0, drawable.getIntrinsicWidth()/2, drawable.getIntrinsicHeight()*5/13);
-                                          return drawable;
-                                      }
-                                      return null;
-                                  }
-                              };
-                              Spanned htmlText = Html.fromHtml("<img src=\"down_triangle\" width=20 height=20>", imageGetter, null);
-      
-                              nikkei_textview.setText(temp6 + "(" );
-                              nikkei_textview.append(htmlText);
-                              nikkei_textview.append(")");
-                          }
-                          else
-                              nikkei_textview.setText(temp6 + "( - )");
-      
-                          String temp7 = ssec_arraylist.get(0);
-                          String temp7_1 = temp7.replace(",", "");
-                          String temp7_2 = ssec_arraylist.get(1);
-                          temp7_2 = temp7_2.replace(",", "");
-                          float compare7 = Float.parseFloat(temp7_1) - Float.parseFloat(temp7_2);
-      
-                          if (compare7>0){
-                              Html.ImageGetter imageGetter = new Html.ImageGetter() {
-                                  @Override
-                                  public Drawable getDrawable(String source) {
-                                      if (source.equals("up_triangle")){
-                                          Drawable drawable = getResources().getDrawable(R.drawable.up_triangle);
-                                          drawable.setBounds(0, 0, drawable.getIntrinsicWidth()/2, drawable.getIntrinsicHeight()*5/13);
-                                          return drawable;
-                                      }
-                                      return null;
-                                  }
-                              };
-                              Spanned htmlText = Html.fromHtml("<img src=\"up_triangle\" width=20 height=20>", imageGetter, null);
-      
-                              ssec_textview.setText(temp7 + "(" );
-                              ssec_textview.append(htmlText);
-                              ssec_textview.append(")");
-                          }
-                          else if (compare7<0){
-                              Html.ImageGetter imageGetter = new Html.ImageGetter() {
-                                  @Override
-                                  public Drawable getDrawable(String source) {
-                                      if (source.equals("down_triangle")){
-                                          Drawable drawable = getResources().getDrawable(R.drawable.down_triangle);
-                                          drawable.setBounds( 0, 0, drawable.getIntrinsicWidth()/2, drawable.getIntrinsicHeight()*5/13);
-                                          return drawable;
-                                      }
-                                      return null;
-                                  }
-                              };
-                              Spanned htmlText = Html.fromHtml("<img src=\"down_triangle\" width=20 height=20>", imageGetter, null);
-      
-                              ssec_textview.setText(temp7 + "(" );
-                              ssec_textview.append(htmlText);
-                              ssec_textview.append(")");
-                          }
-                          else
-                              ssec_textview.setText(temp7 + "( - )");
-      
-                          String temp8 = hsi_arraylist.get(0);
-                          String temp8_1 = temp8.replace(",", "");
-                          String temp8_2 = hsi_arraylist.get(1);
-                          temp8_2 = temp8_2.replace(",", "");
-                          float compare8 = Float.parseFloat(temp8_1) - Float.parseFloat(temp8_2);
-      
-                          if (compare8>0){
-                              Html.ImageGetter imageGetter = new Html.ImageGetter() {
-                                  @Override
-                                  public Drawable getDrawable(String source) {
-                                      if (source.equals("up_triangle")){
-                                          Drawable drawable = getResources().getDrawable(R.drawable.up_triangle);
-                                          drawable.setBounds(0, 0, drawable.getIntrinsicWidth()/2, drawable.getIntrinsicHeight()*5/13);
-                                          return drawable;
-                                      }
-                                      return null;
-                                  }
-                              };
-                              Spanned htmlText = Html.fromHtml("<img src=\"up_triangle\" width=20 height=20>", imageGetter, null);
-      
-                              hsi_textview.setText(temp8 + "(" );
-                              hsi_textview.append(htmlText);
-                              hsi_textview.append(")");
-                          }
-                          else if (compare8<0){
-                              Html.ImageGetter imageGetter = new Html.ImageGetter() {
-                                  @Override
-                                  public Drawable getDrawable(String source) {
-                                      if (source.equals("down_triangle")){
-                                          Drawable drawable = getResources().getDrawable(R.drawable.down_triangle);
-                                          drawable.setBounds( 0, 0, drawable.getIntrinsicWidth()/2, drawable.getIntrinsicHeight()*5/13);
-                                          return drawable;
-                                      }
-                                      return null;
-                                  }
-                              };
-                              Spanned htmlText = Html.fromHtml("<img src=\"down_triangle\" width=20 height=20>", imageGetter, null);
-      
-                              hsi_textview.setText(temp8 + "(" );
-                              hsi_textview.append(htmlText);
-                              hsi_textview.append(")");
-                          }
-                          else
-                              hsi_textview.setText(temp8 + "( - )");
+          });
+  
+          return viewGroup;
+      }
+  
+      public static Context getAppContext(){
+          return ctt;
+      }
+  
+      public void tempTask(){
+          if (getActivity()!=null){
+              TimerTask t = new TimerTask(){
+                  @Override
+                  public void run(){
+                      get_real_time_data();
+                  }
+              };
+              timer = new Timer();
+              timer.schedule(t, 0, 1000);
+          }
+      }
+  
+      public void get_real_time_data(){
+          String[] temp = new String[15];
+          String url = "https://finance.naver.com/item/main.nhn?code=";
+  
+          if (getActivity()!=null && nowPosition<my_list_title.size() && nowPosition>=0 && adapter.getGroupCount()!=0){
+              try{
+                  for(int i=0;i<my_list_title.size();i++){
+                      if (list.get(nowPosition).equals(my_list_title.get(i))) {
+                          url = url + my_list_code.get(i);
+                          break;
                       }
-                  });
+                  }
+                  int size = 0;
+  
+                  Document doc = Jsoup.connect(url).get();
+                  Elements elements = doc.select("dl[class=blind]");
+                  Elements elements1 = elements.select("dd");
+  
+                  for (Element e : elements1){
+                      temp[size] = e.text();
+                      size++;
+                  }
+  
+  
+              }catch(IOException err){
+                  err.printStackTrace();
               }
           }
-      ```
+  
+          if (getActivity()!=null && temp!=null && nowPosition<my_list_title.size() && nowPosition>=0 && adapter.getGroupCount()!=0){
+              this.getActivity().runOnUiThread(new Runnable(){
+                  @Override
+                  public void run(){
+                      String[] temp1 = temp[3].split(" ");
+                      String[] temp2 = temp[4].split(" ");
+                      String[] temp3 = temp[5].split(" ");
+                      String[] temp4 = temp[6].split(" ");
+                      String[] temp5 = temp[7].split(" ");
+                      String[] temp6 = temp[8].split(" ");
+                      String[] temp7 = temp[9].split(" ");
+                      String[] temp8 = temp[10].split(" ");
+                      String[] temp9 = temp[11].split(" ");
+  
+                      childListDatas.get(nowPosition).clear();
+                      childListDatas.get(nowPosition).add(new ChildData(temp1[1],temp1[3] + " " + temp1[4],temp2[1],temp3[1],temp4[1],temp6[1],temp5[1],temp7[1],temp8[1],temp9[1]));
+                      adapter.notifyDataSetChanged();
+                  }
+              });
+          }
+      }
+  
+      static void setData(){
+          if (act!=null){
+              groupListDatas.clear();
+              childListDatas.clear();
+  
+              for(int i=0;i<list.size();i++) {
+                  groupListDatas.add(new GroupData(list.get(i)));
+                  childListDatas.add(new ArrayList<ChildData>());
+                  childListDatas.get(i).add(new ChildData("wait", "wait", "wait", "wait", "wait", "wait", "wait", "wait", "wait", "wait"));
+              }
+          }
+      }
+  
+      static void settingList() {
+          if (act!=null){
+              list.clear();
+              my_list_code.clear();
+  
+              list = ReadTitleData(ctt);
+              my_list_title = ReadTitleData(ctt);
+              my_list_code = ReadCodeData(ctt);
+          }
+      }
+  
+      static void SaveTitleData(Context context, ArrayList<String> my_list_title){
+          if (act!=null){
+              SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+              SharedPreferences.Editor editor = preferences.edit();
+              JSONArray a = new JSONArray();
+  
+              for (int i=0;i<my_list_title.size();i++){
+                  a.put(my_list_title.get(i));
+              }
+  
+              if (!my_list_title.isEmpty()){
+                  editor.putString("titles_json", a.toString());
+              }
+              else{
+                  editor.putString("titles_json", null);
+              }
+  
+              editor.apply();
+          }
+      }
+  
+      static void SaveCodeData(Context context, ArrayList<String> my_list_code){
+          if (act!=null){
+              SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+              SharedPreferences.Editor editor = preferences.edit();
+              JSONArray a = new JSONArray();
+  
+              for (int i=0;i<my_list_code.size();i++){
+                  a.put(my_list_code.get(i));
+              }
+  
+              if (!my_list_code.isEmpty()){
+                  editor.putString("codes_json", a.toString());
+              }
+              else{
+                  editor.putString("codes_json", null);
+              }
+  
+              editor.apply();
+          }
+      }
+  
+      static ArrayList<String> ReadTitleData(Context context){
+          if (act!=null){
+              SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+              String json = preferences.getString("titles_json", null);
+              ArrayList<String> temp = new ArrayList<String>();
+  
+              if (json!=null){
+                  try{
+                      JSONArray a = new JSONArray(json);
+  
+                      for (int i=0;i<a.length();i++){
+                          String tmp = a.optString(i);
+                          temp.add(tmp);
+                      }
+                  }catch(JSONException e){
+                      e.printStackTrace();
+                  }
+              }
+  
+              return temp;
+          }
+  
+          return null;
+      }
+  
+      static ArrayList<String> ReadCodeData(Context context){
+          if (act!=null){
+              SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+              String json = preferences.getString("codes_json", null);
+              ArrayList<String> temp = new ArrayList<String>();
+  
+              if (json!=null){
+                  try{
+                      JSONArray a = new JSONArray(json);
+  
+                      for (int i=0;i<a.length();i++){
+                          String tmp = a.optString(i);
+                          temp.add(tmp);
+                      }
+                  }catch(JSONException e){
+                      e.printStackTrace();
+                  }
+              }
+  
+              return temp;
+          }
+  
+          return null;
+      }
+  }
+  ```
 
-      </br>
-
-- News 탭
-
-  - [매일경제 국내 증권 뉴스](https://vip.mk.co.kr/newSt/news/news_list.php?sCode=21)와 [매일경제 해외 증권 뉴스](https://vip.mk.co.kr/newSt/news/news_list.php?sCode=108) 웹사이트의 기사를 크롤링
-
-  - 국내 뉴스 기사를 가져오는 코드
-
-    ```java
-    class task1 extends AsyncTask<Void, Void, Void> {
-            @Override
-            protected Void doInBackground(Void... voids) {
-                if (getActivity()!=null) {
-                    try {
-                        listView.setVisibility(View.INVISIBLE);
-    
-                        contentList.clear();
-                        titleList.clear();
-    
-                        Document doc = Jsoup.connect(url1).get();
-                        Elements titles = doc.select("td[class=title]");
-    
-                        for (Element e : titles) {
-                            String news_title = e.select("a").text();
-                            String news_link = e.select("a").attr("href");
-                            contentList.add(news_link);
-                            titleList.add(news_title);
-                        }
-                    } catch (IOException err1) {
-                        err1.printStackTrace();
-                    }
-                }
-    
-                if (getActivity()!=null){
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            adapter.notifyDataSetChanged();
-                            listView.setVisibility(View.VISIBLE);
-                        }
-                    });
-                }
-    
-                return null;
-            }
-    
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-            }
-        }
-    ```
-
-    </br>
-
-  - 해외 뉴스 기사를 가져오는 코드
-
-    ```java
-    class task2 extends AsyncTask<Void, Void, Void> {
-            @Override
-            protected Void doInBackground(Void... voids) {
-                if (getActivity()!=null) {
-                    try {
-                        listView.setVisibility(View.INVISIBLE);
-    
-                        contentList.clear();
-                        titleList.clear();
-    
-                        Document doc = Jsoup.connect(url2).get();
-                        Elements titles = doc.select("td[class=title]");
-    
-                        for (Element e : titles) {
-                            String news_title = e.select("a").text();
-                            String news_link = e.select("a").attr("href");
-                            contentList.add(news_link);
-                            titleList.add(news_title);
-                        }
-                    } catch (IOException err1) {
-                        err1.printStackTrace();
-                    }
-                }
-    
-                if (getActivity()!=null){
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            adapter.notifyDataSetChanged();
-                            listView.setVisibility(View.VISIBLE);
-                        }
-                    });
-                }
-    
-                return null;
-            }
-    
-            @Override
-            protected void onPreExecute() { super.onPreExecute(); }
-        }
-    ```
-
-    </br>
-
-- Event 탭
-
-  - KOSPI 시가총액 100개의 실시간 주가 정보를 나타냄
-
-  - 주가 정보는 '[네이버 시세](https://finance.naver.com/item/main.nhn?code)' 웹사이트에서 크롤링 하였음
-
-  - 1초마다 주가 정보가 갱신되도록 설정
-
-    ```java
-    public class List_Window extends Fragment {
-        ViewGroup viewGroup;
-    
-        Timer timer;
-        TimerTask t;
-        ExpandableListView listView;
-        CustomAdapter adapter;
-        ArrayList<GroupData> groupListDatas;
-        ArrayList<ArrayList<ChildData>> childListDatas;
-        private List<String> list;
-        private EditText editSearch;
-        int nowPosition;
-        static Resources list_resource;
-        String[] list_title = {"삼성전자", "SK하이닉스", "LG화학", "NAVER", "삼성바이오로직스", "카카오", "현대차", "삼성SDI", "셀트리온",
-                "기아", "POSCO", "현대모비스", "LG전자", "삼성물산", "SK텔레콤", "LG생활건강", "SK이노베이션", "KB금융", "신한지주",
-                "SK", "엔씨소프트", "삼성생명", "아모레퍼시픽", "한국전력", "삼성에스디에스", "삼성전기", "하나금융지주", "HMM", "KT&G",
-                "포스코케미칼", "넷마블", "한국조선해양", "S-Oil", "롯데케미칼", "삼성화재", "대한항공", "하이브", "한온시스템", "한화솔루션",
-                "LG디스플레이", "고려아연", "SK바이오팜", "금호석유", "우리금융지주", "KT", "현대제철", "현대글로비스", "기업은행", "미래에셋증권",
-                "CJ제일제당", "한국타이어앤테크놀로", "한국금융지주", "아모레G", "LG유플러스", "현대중공업지주", "현대건설", "강원랜드", "코웨이", "SKC",
-                "두산중공업", "이마트", "삼성중공업", "두산밥캣", "오리온", "LG이노텍", "맥쿼리인프라", "한미사이언스", "유한양행", "대우조선해양",
-                "GS", "녹십자", "삼성카드", "한미약품", "쌍용C&E", "CJ대한통운", "GS건설", "삼성증권", "롯데지주", "호텔신라",
-                "DB손해보험", "삼성엔지니어링", "롯데쇼핑", "NH투자증권", "한진칼", "키움증권", "신풍제약", "한국항공우주", "에스원", "일진머티리얼즈",
-                "한국가스공사", "동서", "SK케미칼", "만도", "CJ", "휠라홀딩스", "GS리테일", "더존비즈온", "두산퓨얼셀", "대웅"};
-        String[] list_code = {"005930", "000660", "051910", "035420", "207940", "035720", "005380", "006400", "068270",
-                "000270", "005490", "012330", "066570", "028260", "017670", "051900", "096770", "105560", "055550",
-                "034730", "036570", "032830", "090430", "015760", "018260", "009150", "086790", "011200", "033780",
-                "003670", "251270", "009540", "010950", "011170", "000810", "003490", "352820", "018880", "009830",
-                "034220", "010130", "326030", "011780", "316140", "030200", "004020", "086280", "024110", "006800",
-                "097950", "161390", "071050", "002790", "032640", "267250", "000720", "035250", "021240", "011790",
-                "034020", "139480", "010140", "241560", "271560", "011070", "088980", "008930", "000100", "042660",
-                "078930", "006280", "029780", "128940", "003410", "000120", "006360", "016360", "004990", "008770",
-                "005830", "028050", "023530", "005940", "180640", "039490", "019170", "047810", "012750", "020150",
-                "036460", "026960", "285130", "204320", "001040", "081660", "007070", "012510", "336260", "003090"};
-    
-        @Nullable
-        @Override
-        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            viewGroup = (ViewGroup) inflater.inflate(R.layout.list_fragment, container, false);
-            groupListDatas = new ArrayList<GroupData>();
-            childListDatas = new ArrayList<ArrayList<ChildData>>();
-            list = new ArrayList<String>();
-            list_resource = getResources();
-    
-            listView = (ExpandableListView)viewGroup.findViewById(R.id.all_list);
-    
-            settingList();
-            Collections.sort(list, cmpAsc);
-            setData();
-    
-            adapter = new CustomAdapter(container.getContext(), groupListDatas, childListDatas);
-            listView.setAdapter(adapter);
-    
-            listView.setGroupIndicator(null);
-    
-            listView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener(){
-                @Override
-                public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id){
-                    nowPosition = groupPosition;
-                    tempTask();
-    
-                    return false;
-                }
-            });
-    
-            listView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener(){
-                @Override
-                public void onGroupExpand(int groupPosition){
-                    int groupCount = adapter.getGroupCount();
-                    for (int i=0;i<groupCount;i++){
-                        if (!(i==groupPosition)) {
-                            listView.collapseGroup(i);
-                        }
-                    }
-                }
-            });
-    
-            editSearch = (EditText) viewGroup.findViewById(R.id.edit_search);
-            editSearch.setBackgroundColor(getResources().getColor(R.color.white));
-    
-            editSearch.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
-    
-                    //t.cancel();
-    
-                    for (int i=0;i<list_title.length;i++)
-                        listView.collapseGroup(i);
-                }
-    
-                @Override
-                public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-                    String text = editSearch.getText().toString();
-                    search(text);
-                }
-    
-                @Override
-                public void afterTextChanged(Editable editable) { }
-            });
-    
-            return viewGroup;
-        }
-    
-        public void tempTask(){
-            if (getActivity()!=null){
-                t = new TimerTask(){
-                    @Override
-                    public void run(){
-                        get_real_time_data();
-                    }
-                };
-                timer = new Timer();
-                timer.schedule(t, 0, 1000);
-            }
-        }
-    
-        public void get_real_time_data(){
-            String[] temp = new String[15];
-            String url = "https://finance.naver.com/item/main.nhn?code=";
-    
-            if (getActivity() != null && nowPosition<adapter.getGroupCount() && nowPosition>=0 && adapter.getGroupCount()!=0) {
-                try {
-                    for (int i = 0; i < list_title.length; i++) {
-                        if (list.get(nowPosition).equals(list_title[i])) {
-                            url = url + list_code[i];
-                            break;
-                        }
-                    }
-                    int size = 0;
-    
-                    Document doc = Jsoup.connect(url).get();
-                    Elements elements = doc.select("dl[class=blind]");
-                    Elements elements1 = elements.select("dd");
-    
-                    for (Element e : elements1) {
-                        temp[size] = e.text();
-                        size++;
-                    }
-    
-    
-                } catch (IOException err) {
-                    err.printStackTrace();
-                }
-            }
-    
-            if (getActivity()!=null && nowPosition<adapter.getGroupCount() && nowPosition>=0 && adapter.getGroupCount()!=0){
-                this.getActivity().runOnUiThread(new Runnable(){
-                    @Override
-                    public void run(){
-                        String[] temp1 = temp[3].split(" ");
-                        String[] temp2 = temp[4].split(" ");
-                        String[] temp3 = temp[5].split(" ");
-                        String[] temp4 = temp[6].split(" ");
-                        String[] temp5 = temp[7].split(" ");
-                        String[] temp6 = temp[8].split(" ");
-                        String[] temp7 = temp[9].split(" ");
-                        String[] temp8 = temp[10].split(" ");
-                        String[] temp9 = temp[11].split(" ");
-    
-                        childListDatas.get(nowPosition).clear();
-                        childListDatas.get(nowPosition).add(new ChildData(temp1[1],temp1[3] + " " + temp1[4],temp2[1],temp3[1],temp4[1],temp6[1],temp5[1],temp7[1],temp8[1],temp9[1]));
-                        adapter.notifyDataSetChanged();
-                    }
-                });
-            }
-        }
-    
-        private void setData(){
-            if (getActivity()!=null){
-                for(int i=0;i<list.size();i++) {
-                    groupListDatas.add(new GroupData(list.get(i)));
-                    childListDatas.add(new ArrayList<ChildData>());
-                    childListDatas.get(i).add(new ChildData("wait", "wait", "wait", "wait", "wait", "wait", "wait", "wait", "wait", "wait"));
-                }
-            }
-        }
-    
-        Comparator<String> cmpAsc = new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) { return o1.compareTo(o2); }
-        };
-    
-        private void settingList() {
-            if (getActivity()!=null){
-                list.clear();
-    
-                for (int i=0;i<list_title.length;i++){
-                    list.add(list_title[i]);
-                }
-            }
-        }
-    
-        public void search(String charText) {
-            if (getActivity()!=null){
-                charText = charText.toLowerCase(Locale.getDefault());
-    
-                list.clear();
-                childListDatas.clear();
-                groupListDatas.clear();
-    
-                if (charText.length() == 0){
-                    settingList();
-                }
-    
-                else {
-                    for(int i = 0;i<list_title.length;i++) {
-                        if (list_title[i].toLowerCase().contains(charText))
-                            list.add(list_title[i]);
-                    }
-                }
-                Collections.sort(list, cmpAsc);
-                setData();
-                adapter.notifyDataSetChanged();
-            }
-        }
-    }
-    ```
-
-    </br>
-
-- My 탭
-
-  - Event 탭에서 선택해서 담은 종목들을 관리할 수 있는 탭
-
-    ```java
-    public class My_Window extends Fragment{
-        ViewGroup viewGroup;
-    
-        static Timer timer;
-        static ExpandableListView listView;
-        static My_CustomAdapter adapter;
-        static ArrayList<GroupData> groupListDatas;
-        static ArrayList<ArrayList<ChildData>> childListDatas;
-        static List<String> list;
-        static int nowPosition;
-    
-        static public ArrayList<String> my_list_title = new ArrayList<String>();
-        static public ArrayList<String> my_list_code = new ArrayList<String>();
-        static public ArrayList<String> temp_title = new ArrayList<String>();
-        static public ArrayList<String> temp_code = new ArrayList<String>();
-    
-        int cnt = 0;
-        static Context ctt;
-        static Activity act;
-        static Resources my_resource;
-    
-        @Nullable
-        @Override
-        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
-            viewGroup=(ViewGroup) inflater.inflate(R.layout.my_fragment, container, false);
-            groupListDatas = new ArrayList<GroupData>();
-            childListDatas = new ArrayList<ArrayList<ChildData>>();
-            list = new ArrayList<String>();
-            ctt = getContext();
-            act = getActivity();
-            my_resource = getResources();
-    
-    
-            if (temp_title.size()!=0){
-                for (int i=0;i<temp_title.size();i++){
-                    my_list_title.add(temp_title.get(i));
-                    my_list_code.add(temp_code.get(i));
-                }
-    
-                temp_title.clear();
-                temp_code.clear();
-    
-                SaveTitleData(getContext(), my_list_title);
-                SaveCodeData(getContext(), my_list_code);
-                my_list_title = ReadTitleData(getContext());
-                my_list_code = ReadCodeData(getContext());
-            }
-            else{
-                my_list_title = ReadTitleData(getContext());
-                my_list_code = ReadCodeData(getContext());
-            }
-    
-            listView = (ExpandableListView)viewGroup.findViewById(R.id.my_list);
-            settingList();
-            setData();
-    
-            adapter = new My_CustomAdapter(getContext(), groupListDatas, childListDatas);
-            listView.setAdapter(adapter);
-    
-            listView.setGroupIndicator(null);
-    
-            listView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener(){
-                @Override
-                public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id){
-                    nowPosition = groupPosition;
-                    tempTask();
-    
-                    return false;
-                }
-            });
-    
-            listView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener(){
-                @Override
-                public void onGroupExpand(int groupPosition){
-                    int groupCount = adapter.getGroupCount();
-                    for (int i=0;i<groupCount;i++){
-                        if (!(i==groupPosition)) {
-                            listView.collapseGroup(i);
-                        }
-                    }
-                }
-            });
-    
-            return viewGroup;
-        }
-    
-        public static Context getAppContext(){
-            return ctt;
-        }
-    
-        public void tempTask(){
-            if (getActivity()!=null){
-                TimerTask t = new TimerTask(){
-                    @Override
-                    public void run(){
-                        get_real_time_data();
-                    }
-                };
-                timer = new Timer();
-                timer.schedule(t, 0, 1000);
-            }
-        }
-    
-        public void get_real_time_data(){
-            String[] temp = new String[15];
-            String url = "https://finance.naver.com/item/main.nhn?code=";
-    
-            if (getActivity()!=null && nowPosition<my_list_title.size() && nowPosition>=0 && adapter.getGroupCount()!=0){
-                try{
-                    for(int i=0;i<my_list_title.size();i++){
-                        if (list.get(nowPosition).equals(my_list_title.get(i))) {
-                            url = url + my_list_code.get(i);
-                            break;
-                        }
-                    }
-                    int size = 0;
-    
-                    Document doc = Jsoup.connect(url).get();
-                    Elements elements = doc.select("dl[class=blind]");
-                    Elements elements1 = elements.select("dd");
-    
-                    for (Element e : elements1){
-                        temp[size] = e.text();
-                        size++;
-                    }
-    
-    
-                }catch(IOException err){
-                    err.printStackTrace();
-                }
-            }
-    
-            if (getActivity()!=null && temp!=null && nowPosition<my_list_title.size() && nowPosition>=0 && adapter.getGroupCount()!=0){
-                this.getActivity().runOnUiThread(new Runnable(){
-                    @Override
-                    public void run(){
-                        String[] temp1 = temp[3].split(" ");
-                        String[] temp2 = temp[4].split(" ");
-                        String[] temp3 = temp[5].split(" ");
-                        String[] temp4 = temp[6].split(" ");
-                        String[] temp5 = temp[7].split(" ");
-                        String[] temp6 = temp[8].split(" ");
-                        String[] temp7 = temp[9].split(" ");
-                        String[] temp8 = temp[10].split(" ");
-                        String[] temp9 = temp[11].split(" ");
-    
-                        childListDatas.get(nowPosition).clear();
-                        childListDatas.get(nowPosition).add(new ChildData(temp1[1],temp1[3] + " " + temp1[4],temp2[1],temp3[1],temp4[1],temp6[1],temp5[1],temp7[1],temp8[1],temp9[1]));
-                        adapter.notifyDataSetChanged();
-                    }
-                });
-            }
-        }
-    
-        static void setData(){
-            if (act!=null){
-                groupListDatas.clear();
-                childListDatas.clear();
-    
-                for(int i=0;i<list.size();i++) {
-                    groupListDatas.add(new GroupData(list.get(i)));
-                    childListDatas.add(new ArrayList<ChildData>());
-                    childListDatas.get(i).add(new ChildData("wait", "wait", "wait", "wait", "wait", "wait", "wait", "wait", "wait", "wait"));
-                }
-            }
-        }
-    
-        static void settingList() {
-            if (act!=null){
-                list.clear();
-                my_list_code.clear();
-    
-                list = ReadTitleData(ctt);
-                my_list_title = ReadTitleData(ctt);
-                my_list_code = ReadCodeData(ctt);
-            }
-        }
-    
-        static void SaveTitleData(Context context, ArrayList<String> my_list_title){
-            if (act!=null){
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-                SharedPreferences.Editor editor = preferences.edit();
-                JSONArray a = new JSONArray();
-    
-                for (int i=0;i<my_list_title.size();i++){
-                    a.put(my_list_title.get(i));
-                }
-    
-                if (!my_list_title.isEmpty()){
-                    editor.putString("titles_json", a.toString());
-                }
-                else{
-                    editor.putString("titles_json", null);
-                }
-    
-                editor.apply();
-            }
-        }
-    
-        static void SaveCodeData(Context context, ArrayList<String> my_list_code){
-            if (act!=null){
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-                SharedPreferences.Editor editor = preferences.edit();
-                JSONArray a = new JSONArray();
-    
-                for (int i=0;i<my_list_code.size();i++){
-                    a.put(my_list_code.get(i));
-                }
-    
-                if (!my_list_code.isEmpty()){
-                    editor.putString("codes_json", a.toString());
-                }
-                else{
-                    editor.putString("codes_json", null);
-                }
-    
-                editor.apply();
-            }
-        }
-    
-        static ArrayList<String> ReadTitleData(Context context){
-            if (act!=null){
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-                String json = preferences.getString("titles_json", null);
-                ArrayList<String> temp = new ArrayList<String>();
-    
-                if (json!=null){
-                    try{
-                        JSONArray a = new JSONArray(json);
-    
-                        for (int i=0;i<a.length();i++){
-                            String tmp = a.optString(i);
-                            temp.add(tmp);
-                        }
-                    }catch(JSONException e){
-                        e.printStackTrace();
-                    }
-                }
-    
-                return temp;
-            }
-    
-            return null;
-        }
-    
-        static ArrayList<String> ReadCodeData(Context context){
-            if (act!=null){
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-                String json = preferences.getString("codes_json", null);
-                ArrayList<String> temp = new ArrayList<String>();
-    
-                if (json!=null){
-                    try{
-                        JSONArray a = new JSONArray(json);
-    
-                        for (int i=0;i<a.length();i++){
-                            String tmp = a.optString(i);
-                            temp.add(tmp);
-                        }
-                    }catch(JSONException e){
-                        e.printStackTrace();
-                    }
-                }
-    
-                return temp;
-            }
-    
-            return null;
-        }
-    }
-    ```
-
-    </br>
+  </br>
 
 ---
 
