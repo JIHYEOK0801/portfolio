@@ -1,3 +1,6 @@
+## 1. lottos를 순회하면서 win_nums에 있으면 answer += 1, 0이면 continue 해준다.
+## 2. 최저 순위 : answer의 해당 순위, 최고 순위 : answer + 0의 개수의 해당 순위
+
 def solution(lottos, win_nums):
     answer = []
     count = 0
