@@ -63,7 +63,7 @@
 
 - ### 관리자
 
-  > 1. #### 캠핑카 리스트 데이터 초기화
+  > 1. ### 캠핑카 리스트 데이터 초기화
 
   <img src = "https://github.com/JIHYEOK0801/record/blob/main/DBcampingcar/img/1.gif?raw=true">
 
