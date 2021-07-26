@@ -165,7 +165,7 @@
 
    - > ### 데이터  스키마
 
-     <img src = "https://github.com/JIHYEOK0801/record/blob/main/DBcampingcar/img/datatable.PNG?raw=true"  width = '1920px'>
+     <img src = "https://github.com/JIHYEOK0801/record/blob/main/DBcampingcar/img/datatable2.PNG?raw=true">
 
      </br>
 
