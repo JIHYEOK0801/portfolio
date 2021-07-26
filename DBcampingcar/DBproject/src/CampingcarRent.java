@@ -1,13 +1,8 @@
 import java.awt.event.*;
 import java.awt.*;
-//import java.awt.event.ActionListener;
 import java.sql.*;
-
 import javax.swing.*;
-//import javax.swing.JFrame;
-//import javax.swing.JPanel;
-//import javax.swing.JScrollPane;
-//import javax.swing.JTextArea;
+
 
 class MyModalDialog extends JDialog{
 	private JTextField tfselect = new JTextField("");
@@ -23,22 +18,22 @@ class MyModalDialog extends JDialog{
 	private JTextField tf9 = new JTextField("");
 	private JTextField tf10 = new JTextField("");
 	
-	private JButton okButton = new JButton("ÀÛ¾÷ ¼±ÅÃ ¹× Å×ÀÌºí ¼±ÅÃ");
-	private JButton insertButton = new JButton("¼öÇà");
+	private JButton okButton = new JButton("ì‘ì—… ì„ íƒ ë° í…Œì´ë¸” ì„ íƒ");
+	private JButton insertButton = new JButton("ìˆ˜í–‰");
 	
-	private JLabel labelselect= new JLabel("¹øÈ£¸¦ °ñ¶ó ÀÔ·ÂÇÏ¼¼¿ä. (1 : ÀÔ·Â / 2 : »èÁ¦ / 3 : º¯°æ/ 4 : ¹İÈ¯)");
-	private JLabel labeltableselect = new JLabel("Å×ÀÌºíÀ» °í¸£°í ¹öÆ°À» ´­·¯ÁÖ¼¼¿ä.('¹İÈ¯'ÀÇ°æ¿ì ºóÄ­À¸·Î ³²°ÜµÒ)  1 : ´ë¿©È¸»ç / 2 : Ä·ÇÎÄ« / 3 : °í°´ / 4 : Á¤ºñ¼Ò / 5 : Á¤ºñÁ¤º¸");
+	private JLabel labelselect= new JLabel("ë²ˆí˜¸ë¥¼ ê³¨ë¼ ì…ë ¥í•˜ì„¸ìš”. (1 : ì…ë ¥ / 2 : ì‚­ì œ / 3 : ë³€ê²½/ 4 : ë°˜í™˜)");
+	private JLabel labeltableselect = new JLabel("í…Œì´ë¸”ì„ ê³ ë¥´ê³  ë²„íŠ¼ì„ ëˆŒëŸ¬ì£¼ì„¸ìš”.('ë°˜í™˜'ì˜ê²½ìš° ë¹ˆì¹¸ìœ¼ë¡œ ë‚¨ê²¨ë‘ )  1 : ëŒ€ì—¬íšŒì‚¬ / 2 : ìº í•‘ì¹´ / 3 : ê³ ê° / 4 : ì •ë¹„ì†Œ / 5 : ì •ë¹„ì •ë³´");
 	private JLabel labeltableselect2 = new JLabel("");
-	private JLabel label1 = new JLabel("µ¥ÀÌÅÍ1 :");
-	private JLabel label2 = new JLabel("µ¥ÀÌÅÍ2 :");
-	private JLabel label3 = new JLabel("µ¥ÀÌÅÍ3 :");
-	private JLabel label4 = new JLabel("µ¥ÀÌÅÍ4 :");
-	private JLabel label5 = new JLabel("µ¥ÀÌÅÍ5 :");
-	private JLabel label6 = new JLabel("µ¥ÀÌÅÍ6 :");
-	private JLabel label7 = new JLabel("µ¥ÀÌÅÍ7 :");
-	private JLabel label8 = new JLabel("µ¥ÀÌÅÍ8 :");
-	private JLabel label9 = new JLabel("µ¥ÀÌÅÍ9 :");
-	private JLabel label10 = new JLabel("µ¥ÀÌÅÍ10 :");
+	private JLabel label1 = new JLabel("ë°ì´í„°1 :");
+	private JLabel label2 = new JLabel("ë°ì´í„°2 :");
+	private JLabel label3 = new JLabel("ë°ì´í„°3 :");
+	private JLabel label4 = new JLabel("ë°ì´í„°4 :");
+	private JLabel label5 = new JLabel("ë°ì´í„°5 :");
+	private JLabel label6 = new JLabel("ë°ì´í„°6 :");
+	private JLabel label7 = new JLabel("ë°ì´í„°7 :");
+	private JLabel label8 = new JLabel("ë°ì´í„°8 :");
+	private JLabel label9 = new JLabel("ë°ì´í„°9 :");
+	private JLabel label10 = new JLabel("ë°ì´í„°10 :");
 	
 	public MyModalDialog(JFrame frame, String title) {
 		super(frame,title,true);
@@ -57,7 +52,7 @@ class MyModalDialog extends JDialog{
 		add(label8);		add(tf8);
 		add(label9);		add(tf9);
 		add(label10);		add(tf10);
-		add(new JLabel("¼öÇà¹öÆ°À» ´©¸£¼¼¿ä.")); add(insertButton);
+		add(new JLabel("ìˆ˜í–‰ë²„íŠ¼ì„ ëˆ„ë¥´ì„¸ìš”.")); add(insertButton);
 		setSize(1400,800);
 		
 		okButton.addActionListener(new ActionListener(){
@@ -68,176 +63,176 @@ class MyModalDialog extends JDialog{
 					{
 					if(tablenumber.compareTo("1")==0)
 					{
-						label1.setText("Ä·ÇÎÄ«´ë¿©È¸»çID :");//companyid
-						label2.setText("È¸»ç¸í :");//companyname
-						label3.setText("ÁÖ¼Ò :");//companyaddress
-						label4.setText("ÀüÈ­¹øÈ£ :");//companyphone
-						label5.setText("´ã´çÀÚ ÀÌ¸§ :");//managername
-						label6.setText("´ã´çÀÚ ÀÌ¸ŞÀÏ :");//manageremail
-						label7.setText("±âÀÔ X");
-						label8.setText("±âÀÔ X");
-						label9.setText("±âÀÔ X");
-						label10.setText("±âÀÔ X");
+						label1.setText("ìº í•‘ì¹´ëŒ€ì—¬íšŒì‚¬ID :");//companyid
+						label2.setText("íšŒì‚¬ëª… :");//companyname
+						label3.setText("ì£¼ì†Œ :");//companyaddress
+						label4.setText("ì „í™”ë²ˆí˜¸ :");//companyphone
+						label5.setText("ë‹´ë‹¹ì ì´ë¦„ :");//managername
+						label6.setText("ë‹´ë‹¹ì ì´ë©”ì¼ :");//manageremail
+						label7.setText("ê¸°ì… X");
+						label8.setText("ê¸°ì… X");
+						label9.setText("ê¸°ì… X");
+						label10.setText("ê¸°ì… X");
 					}
 					else if(tablenumber.compareTo("2")==0)
 					{
-						label1.setText("Ä·ÇÎÄ«µî·ÏID :");//carid
-						label2.setText("Ä·ÇÎÄ«ÀÌ¸§ :");//carname
-						label3.setText("Ä·ÇÎÄ« Â÷·®¹øÈ£ :");//carnumber
-						label4.setText("Ä·ÇÎÄ«½ÂÂ÷ ÀÎ¿ø¼ö :");//carmax
-						label5.setText("Á¦Á¶È¸»ç :");//carbrand
-						label6.setText("Á¦Á¶¿¬µµ(YYYY-MM-DD) :");//birthday
-						label7.setText("´©ÀûÁÖÇà°Å¸® :");//distance
-						label8.setText("Ä·ÇÎÄ«´ë¿©ºñ¿ë :");//rentprice
-						label9.setText("Ä·ÇÎÄ«´ë¿©È¸»çID :");//companyid
-						label10.setText("Ä·ÇÎÄ«µî·ÏÀÏÀÚ(YYYY-MM-DD) :");//enrolldate
+						label1.setText("ìº í•‘ì¹´ë“±ë¡ID :");//carid
+						label2.setText("ìº í•‘ì¹´ì´ë¦„ :");//carname
+						label3.setText("ìº í•‘ì¹´ ì°¨ëŸ‰ë²ˆí˜¸ :");//carnumber
+						label4.setText("ìº í•‘ì¹´ìŠ¹ì°¨ ì¸ì›ìˆ˜ :");//carmax
+						label5.setText("ì œì¡°íšŒì‚¬ :");//carbrand
+						label6.setText("ì œì¡°ì—°ë„(YYYY-MM-DD) :");//birthday
+						label7.setText("ëˆ„ì ì£¼í–‰ê±°ë¦¬ :");//distance
+						label8.setText("ìº í•‘ì¹´ëŒ€ì—¬ë¹„ìš© :");//rentprice
+						label9.setText("ìº í•‘ì¹´ëŒ€ì—¬íšŒì‚¬ID :");//companyid
+						label10.setText("ìº í•‘ì¹´ë“±ë¡ì¼ì(YYYY-MM-DD) :");//enrolldate
 					}
 					else if(tablenumber.compareTo("3")==0)
 					{
-						label1.setText("¿îÀü¸éÇãÁõ¹øÈ£ :");//licenseid
-						label2.setText("°í°´¸í :");//customername
-						label3.setText("°í°´ÁÖ¼Ò :");//customeraddress
-						label4.setText("°í°´ÀüÈ­¹øÈ£ :");//customerphone
-						label5.setText("°í°´ÀÌ¸ŞÀÏÁ¤º¸ :");//customermail
-						label6.setText("±âÀÔ X");
-						label7.setText("±âÀÔ X");
-						label8.setText("±âÀÔ X");
-						label9.setText("±âÀÔ X");
-						label10.setText("±âÀÔ X");
+						label1.setText("ìš´ì „ë©´í—ˆì¦ë²ˆí˜¸ :");//licenseid
+						label2.setText("ê³ ê°ëª… :");//customername
+						label3.setText("ê³ ê°ì£¼ì†Œ :");//customeraddress
+						label4.setText("ê³ ê°ì „í™”ë²ˆí˜¸ :");//customerphone
+						label5.setText("ê³ ê°ì´ë©”ì¼ì •ë³´ :");//customermail
+						label6.setText("ê¸°ì… X");
+						label7.setText("ê¸°ì… X");
+						label8.setText("ê¸°ì… X");
+						label9.setText("ê¸°ì… X");
+						label10.setText("ê¸°ì… X");
 					}
 					else if(tablenumber.compareTo("4")==0)
 					{
-						label1.setText("Á¤ºñ¼ÒID :");//carcenterid
-						label2.setText("Á¤ºñ¼Ò¸í :");//carcentername
-						label3.setText("Á¤ºñ¼ÒÁÖ¼Ò :");//carcenteraddress
-						label4.setText("Á¤ºñ¼ÒÀüÈ­¹øÈ£ :");//carcenterphone
-						label5.setText("´ã´çÀÚÀÌ¸§ :");//centermanagername
-						label6.setText("ÀÌ¸ŞÀÏ Á¤º¸");//centermanageremail
-						label7.setText("±âÀÔ X");
-						label8.setText("±âÀÔ X");
-						label9.setText("±âÀÔ X");
-						label10.setText("±âÀÔ X");
+						label1.setText("ì •ë¹„ì†ŒID :");//carcenterid
+						label2.setText("ì •ë¹„ì†Œëª… :");//carcentername
+						label3.setText("ì •ë¹„ì†Œì£¼ì†Œ :");//carcenteraddress
+						label4.setText("ì •ë¹„ì†Œì „í™”ë²ˆí˜¸ :");//carcenterphone
+						label5.setText("ë‹´ë‹¹ìì´ë¦„ :");//centermanagername
+						label6.setText("ì´ë©”ì¼ ì •ë³´");//centermanageremail
+						label7.setText("ê¸°ì… X");
+						label8.setText("ê¸°ì… X");
+						label9.setText("ê¸°ì… X");
+						label10.setText("ê¸°ì… X");
 					}
 					else if(tablenumber.compareTo("5")==0)
 					{
-						label1.setText("°íÀ¯Á¤ºñ¹øÈ£ :");//fixid
-						label2.setText("Ä·ÇÎÄ«µî·ÏID :");//carid
-						label3.setText("Ä·ÇÎÄ«Á¤ºñ¼ÒID :");//carcenterid
-						label4.setText("Ä·ÇÎÄ«´ë¿©È¸»çID :");//companyid
-						label5.setText("°í°´ ¿îÀü¸éÇãÁõ¹øÈ£ :");//licenseid
-						label6.setText("Á¤ºñ ³»¿ª :");//fix
-						label7.setText("¼ö¸® ³¯Â¥(YYYY-MM-DD) :");//fixdate
-						label8.setText("¼ö¸® ºñ¿ë :");//fixprice
-						label9.setText("³³ÀÔ ±âÇÑ(YYYY-MM-DD) :");//depositdate
-						label10.setText("±âÅ¸Á¤ºñ³»¿ª :");//etcfix
+						label1.setText("ê³ ìœ ì •ë¹„ë²ˆí˜¸ :");//fixid
+						label2.setText("ìº í•‘ì¹´ë“±ë¡ID :");//carid
+						label3.setText("ìº í•‘ì¹´ì •ë¹„ì†ŒID :");//carcenterid
+						label4.setText("ìº í•‘ì¹´ëŒ€ì—¬íšŒì‚¬ID :");//companyid
+						label5.setText("ê³ ê° ìš´ì „ë©´í—ˆì¦ë²ˆí˜¸ :");//licenseid
+						label6.setText("ì •ë¹„ ë‚´ì—­ :");//fix
+						label7.setText("ìˆ˜ë¦¬ ë‚ ì§œ(YYYY-MM-DD) :");//fixdate
+						label8.setText("ìˆ˜ë¦¬ ë¹„ìš© :");//fixprice
+						label9.setText("ë‚©ì… ê¸°í•œ(YYYY-MM-DD) :");//depositdate
+						label10.setText("ê¸°íƒ€ì •ë¹„ë‚´ì—­ :");//etcfix
 					}
 					else
 					{
-						label1.setText("µ¥ÀÌÅÍ1 :");
-						label2.setText("µ¥ÀÌÅÍ2 :");
-						label3.setText("µ¥ÀÌÅÍ3 :");
-						label4.setText("µ¥ÀÌÅÍ4 :");
-						label5.setText("µ¥ÀÌÅÍ5 :");
-						label6.setText("µ¥ÀÌÅÍ6 :");
-						label7.setText("µ¥ÀÌÅÍ7 :");
-						label8.setText("µ¥ÀÌÅÍ8 :");
-						label9.setText("µ¥ÀÌÅÍ9 :");
-						label10.setText("µ¥ÀÌÅÍ10 :");
+						label1.setText("ë°ì´í„°1 :");
+						label2.setText("ë°ì´í„°2 :");
+						label3.setText("ë°ì´í„°3 :");
+						label4.setText("ë°ì´í„°4 :");
+						label5.setText("ë°ì´í„°5 :");
+						label6.setText("ë°ì´í„°6 :");
+						label7.setText("ë°ì´í„°7 :");
+						label8.setText("ë°ì´í„°8 :");
+						label9.setText("ë°ì´í„°9 :");
+						label10.setText("ë°ì´í„°10 :");
 					}
 					}
 				else if(performnumber.compareTo("2")==0)
 				{
 					if(tablenumber.compareTo("1")==0)
 					{
-						label1.setText("»èÁ¦ÇÒ Ä·ÇÎÄ«´ë¿©È¸»çID :");//companyid
-						label2.setText("±âÀÔ X");//companyname
-						label3.setText("±âÀÔ X");//companyaddress
-						label4.setText("±âÀÔ X");//companyphone
-						label5.setText("±âÀÔ X");//managername
-						label6.setText("±âÀÔ X");//manageremail
-						label7.setText("±âÀÔ X");
-						label8.setText("±âÀÔ X");
-						label9.setText("±âÀÔ X");
-						label10.setText("±âÀÔ X");
+						label1.setText("ì‚­ì œí•  ìº í•‘ì¹´ëŒ€ì—¬íšŒì‚¬ID :");//companyid
+						label2.setText("ê¸°ì… X");//companyname
+						label3.setText("ê¸°ì… X");//companyaddress
+						label4.setText("ê¸°ì… X");//companyphone
+						label5.setText("ê¸°ì… X");//managername
+						label6.setText("ê¸°ì… X");//manageremail
+						label7.setText("ê¸°ì… X");
+						label8.setText("ê¸°ì… X");
+						label9.setText("ê¸°ì… X");
+						label10.setText("ê¸°ì… X");
 					}
 					else if(tablenumber.compareTo("2")==0)
 					{
-						label1.setText("»èÁ¦ÇÒ Ä·ÇÎÄ«µî·ÏID :");//carid
-						label2.setText("±âÀÔ X");//carname
-						label3.setText("±âÀÔ X");//carnumber
-						label4.setText("±âÀÔ X");//carmax
-						label5.setText("±âÀÔ X");//carbrand
-						label6.setText("±âÀÔ X");//birthday
-						label7.setText("±âÀÔ X");//distance
-						label8.setText("±âÀÔ X");//rentprice
-						label9.setText("±âÀÔ X");//companyid
-						label10.setText("±âÀÔ X");//enrolldate
+						label1.setText("ì‚­ì œí•  ìº í•‘ì¹´ë“±ë¡ID :");//carid
+						label2.setText("ê¸°ì… X");//carname
+						label3.setText("ê¸°ì… X");//carnumber
+						label4.setText("ê¸°ì… X");//carmax
+						label5.setText("ê¸°ì… X");//carbrand
+						label6.setText("ê¸°ì… X");//birthday
+						label7.setText("ê¸°ì… X");//distance
+						label8.setText("ê¸°ì… X");//rentprice
+						label9.setText("ê¸°ì… X");//companyid
+						label10.setText("ê¸°ì… X");//enrolldate
 					}
 					else if(tablenumber.compareTo("3")==0)
 					{
-						label1.setText("»èÁ¦ÇÒ ¿îÀü¸éÇãÁõ¹øÈ£ :");//licenseid
-						label2.setText("±âÀÔ X");//carname
-						label3.setText("±âÀÔ X");//carnumber
-						label4.setText("±âÀÔ X");//carmax
-						label5.setText("±âÀÔ X");//carbrand
-						label6.setText("±âÀÔ X");//birthday
-						label7.setText("±âÀÔ X");//distance
-						label8.setText("±âÀÔ X");//rentprice
-						label9.setText("±âÀÔ X");//companyid
-						label10.setText("±âÀÔ X");//enrolldate
+						label1.setText("ì‚­ì œí•  ìš´ì „ë©´í—ˆì¦ë²ˆí˜¸ :");//licenseid
+						label2.setText("ê¸°ì… X");//carname
+						label3.setText("ê¸°ì… X");//carnumber
+						label4.setText("ê¸°ì… X");//carmax
+						label5.setText("ê¸°ì… X");//carbrand
+						label6.setText("ê¸°ì… X");//birthday
+						label7.setText("ê¸°ì… X");//distance
+						label8.setText("ê¸°ì… X");//rentprice
+						label9.setText("ê¸°ì… X");//companyid
+						label10.setText("ê¸°ì… X");//enrolldate
 					}
 					else if(tablenumber.compareTo("4")==0)
 					{
-						label1.setText("»èÁ¦ÇÒ Á¤ºñ¼ÒID :");//carcenterid
-						label2.setText("±âÀÔ X");//carname
-						label3.setText("±âÀÔ X");//carnumber
-						label4.setText("±âÀÔ X");//carmax
-						label5.setText("±âÀÔ X");//carbrand
-						label6.setText("±âÀÔ X");//birthday
-						label7.setText("±âÀÔ X");//distance
-						label8.setText("±âÀÔ X");//rentprice
-						label9.setText("±âÀÔ X");//companyid
-						label10.setText("±âÀÔ X");//enrolldate
+						label1.setText("ì‚­ì œí•  ì •ë¹„ì†ŒID :");//carcenterid
+						label2.setText("ê¸°ì… X");//carname
+						label3.setText("ê¸°ì… X");//carnumber
+						label4.setText("ê¸°ì… X");//carmax
+						label5.setText("ê¸°ì… X");//carbrand
+						label6.setText("ê¸°ì… X");//birthday
+						label7.setText("ê¸°ì… X");//distance
+						label8.setText("ê¸°ì… X");//rentprice
+						label9.setText("ê¸°ì… X");//companyid
+						label10.setText("ê¸°ì… X");//enrolldate
 					}
 					else if(tablenumber.compareTo("5")==0)
 					{
-						label1.setText("»èÁ¦ÇÒ °íÀ¯Á¤ºñ¹øÈ£ :");//fixid
-						label2.setText("±âÀÔ X");//carname
-						label3.setText("±âÀÔ X");//carnumber
-						label4.setText("±âÀÔ X");//carmax
-						label5.setText("±âÀÔ X");//carbrand
-						label6.setText("±âÀÔ X");//birthday
-						label7.setText("±âÀÔ X");//distance
-						label8.setText("±âÀÔ X");//rentprice
-						label9.setText("±âÀÔ X");//companyid
-						label10.setText("±âÀÔ X");//enrolldate
+						label1.setText("ì‚­ì œí•  ê³ ìœ ì •ë¹„ë²ˆí˜¸ :");//fixid
+						label2.setText("ê¸°ì… X");//carname
+						label3.setText("ê¸°ì… X");//carnumber
+						label4.setText("ê¸°ì… X");//carmax
+						label5.setText("ê¸°ì… X");//carbrand
+						label6.setText("ê¸°ì… X");//birthday
+						label7.setText("ê¸°ì… X");//distance
+						label8.setText("ê¸°ì… X");//rentprice
+						label9.setText("ê¸°ì… X");//companyid
+						label10.setText("ê¸°ì… X");//enrolldate
 					}
 					else
 					{
-						label1.setText("µ¥ÀÌÅÍ1 :");
-						label2.setText("µ¥ÀÌÅÍ2 :");
-						label3.setText("µ¥ÀÌÅÍ3 :");
-						label4.setText("µ¥ÀÌÅÍ4 :");
-						label5.setText("µ¥ÀÌÅÍ5 :");
-						label6.setText("µ¥ÀÌÅÍ6 :");
-						label7.setText("µ¥ÀÌÅÍ7 :");
-						label8.setText("µ¥ÀÌÅÍ8 :");
-						label9.setText("µ¥ÀÌÅÍ9 :");
-						label10.setText("µ¥ÀÌÅÍ10 :");
+						label1.setText("ë°ì´í„°1 :");
+						label2.setText("ë°ì´í„°2 :");
+						label3.setText("ë°ì´í„°3 :");
+						label4.setText("ë°ì´í„°4 :");
+						label5.setText("ë°ì´í„°5 :");
+						label6.setText("ë°ì´í„°6 :");
+						label7.setText("ë°ì´í„°7 :");
+						label8.setText("ë°ì´í„°8 :");
+						label9.setText("ë°ì´í„°9 :");
+						label10.setText("ë°ì´í„°10 :");
 					}
 				}
 				else if(performnumber.compareTo("4")==0)
 				{
-					label1.setText("°íÀ¯´ë¿©¹øÈ£ :");//companyid
-					label2.setText("Ä·ÇÎÄ«µî·ÏID :");//companyname
-					label3.setText("¾ÕºÎºĞ¼³¸í :");//companyaddress
-					label4.setText("¿ŞÂÊ¼³¸í :");//companyphone
-					label5.setText("¿À¸¥ÂÊ¼³¸í :");//managername
-					label6.setText("µÚÂÊ¼³¸í :");//manageremail
-					label7.setText("¼ö¸®ÇÊ¿ä¿©ºÎ (¼ö¸®ÇÊ¿ä½Ã 1 ¾Æ´Ï¸é 0) :");
-					label8.setText("¿îÀü¸éÇãÁõ¹øÈ£");
-					label9.setText("±âÀÔ X");
-					label10.setText("±âÀÔ X");
+					label1.setText("ê³ ìœ ëŒ€ì—¬ë²ˆí˜¸ :");//companyid
+					label2.setText("ìº í•‘ì¹´ë“±ë¡ID :");//companyname
+					label3.setText("ì•ë¶€ë¶„ì„¤ëª… :");//companyaddress
+					label4.setText("ì™¼ìª½ì„¤ëª… :");//companyphone
+					label5.setText("ì˜¤ë¥¸ìª½ì„¤ëª… :");//managername
+					label6.setText("ë’¤ìª½ì„¤ëª… :");//manageremail
+					label7.setText("ìˆ˜ë¦¬í•„ìš”ì—¬ë¶€ (ìˆ˜ë¦¬í•„ìš”ì‹œ 1 ì•„ë‹ˆë©´ 0) :");
+					label8.setText("ìš´ì „ë©´í—ˆì¦ë²ˆí˜¸");
+					label9.setText("ê¸°ì… X");
+					label10.setText("ê¸°ì… X");
 				}
 				
 			}});
@@ -248,16 +243,16 @@ class MyModalDialog extends JDialog{
 			}});
 	}
 	void resetString() {
-		label1.setText("µ¥ÀÌÅÍ1 :");
-		label2.setText("µ¥ÀÌÅÍ2 :");
-		label3.setText("µ¥ÀÌÅÍ3 :");
-		label4.setText("µ¥ÀÌÅÍ4 :");
-		label5.setText("µ¥ÀÌÅÍ5 :");
-		label6.setText("µ¥ÀÌÅÍ6 :");
-		label7.setText("µ¥ÀÌÅÍ7 :");
-		label8.setText("µ¥ÀÌÅÍ8 :");
-		label9.setText("µ¥ÀÌÅÍ9 :");
-		label10.setText("µ¥ÀÌÅÍ10 :");
+		label1.setText("ë°ì´í„°1 :");
+		label2.setText("ë°ì´í„°2 :");
+		label3.setText("ë°ì´í„°3 :");
+		label4.setText("ë°ì´í„°4 :");
+		label5.setText("ë°ì´í„°5 :");
+		label6.setText("ë°ì´í„°6 :");
+		label7.setText("ë°ì´í„°7 :");
+		label8.setText("ë°ì´í„°8 :");
+		label9.setText("ë°ì´í„°9 :");
+		label10.setText("ë°ì´í„°10 :");
 		tfselect.setText("");
 		tftableselect.setText("");
 		tf1.setText("");
@@ -346,22 +341,22 @@ public class CampingcarRent extends JFrame implements ActionListener {
       layInit();
       conDB();
       setVisible(true);
-      setBounds(100, 30, 1280, 720); //°¡·ÎÀ§Ä¡,¼¼·ÎÀ§Ä¡,°¡·Î±æÀÌ,¼¼·Î±æÀÌ
+      setBounds(100, 30, 1280, 720); //ê°€ë¡œìœ„ì¹˜,ì„¸ë¡œìœ„ì¹˜,ê°€ë¡œê¸¸ì´,ì„¸ë¡œê¸¸ì´
       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       
-      dialog=new MyModalDialog(this,"ÀÛ¾÷Ã¢");
+      dialog=new MyModalDialog(this,"ì‘ì—…ì°½");
       
    }
 
    public void layInit() {
-      btnRent = new JButton("½ÅÃ»");
-      btnReset = new JButton("ÃÊ±âÈ­");
-      UbtnSearch1 = new JButton("´ë¿©°¡´ÉÇÑ Ä·ÇÎÄ«¸ñ·Ï °Ë»ö");
-      btnExecute = new JButton("data »ğÀÔ/»èÁ¦/º¯°æ ¹× ¹İÈ¯");
-      AbtnSearch1 = new JButton("´ë¿©°í°´ ¹× ´ë¿©Â÷·® °Ë»ö");
-      AbtnSearch2 = new JButton("¼ö¸®°¡ ÇÊ¿äÇÑ Â÷·® °Ë»ö");
-      AbtnSearch3 = new JButton("Á¤ºñ¼Òº° Á¤ºñ³»¿ª °Ë»ö");
-      AbtnSearch4 = new JButton("°í°´º° Ã»±¸ÇÒ ¼ö¸®ºñ¿ë °Ë»ö");
+      btnRent = new JButton("ì‹ ì²­");
+      btnReset = new JButton("ì´ˆê¸°í™”");
+      UbtnSearch1 = new JButton("ëŒ€ì—¬ê°€ëŠ¥í•œ ìº í•‘ì¹´ëª©ë¡ ê²€ìƒ‰");
+      btnExecute = new JButton("data ì‚½ì…/ì‚­ì œ/ë³€ê²½ ë° ë°˜í™˜");
+      AbtnSearch1 = new JButton("ëŒ€ì—¬ê³ ê° ë° ëŒ€ì—¬ì°¨ëŸ‰ ê²€ìƒ‰");
+      AbtnSearch2 = new JButton("ìˆ˜ë¦¬ê°€ í•„ìš”í•œ ì°¨ëŸ‰ ê²€ìƒ‰");
+      AbtnSearch3 = new JButton("ì •ë¹„ì†Œë³„ ì •ë¹„ë‚´ì—­ ê²€ìƒ‰");
+      AbtnSearch4 = new JButton("ê³ ê°ë³„ ì²­êµ¬í•  ìˆ˜ë¦¬ë¹„ìš© ê²€ìƒ‰");
       txtResult = new JTextArea();
       txtResult2 = new JTextArea();
       txtField1 = new JTextField("");
@@ -380,21 +375,21 @@ public class CampingcarRent extends JFrame implements ActionListener {
       
       
       pn2.setLayout(new GridLayout(6,2));
-      	pn2.add(new JLabel("ÀÏ¹İ»ç¿ëÀÚ ¹öÀüÀÔ´Ï´Ù.¹öÆ°À» ´­·¯ ´ë¿©°¡´ÉÇÑ Â÷·®À» °Ë»öÇÏ¼¼¿ä"));
+      	pn2.add(new JLabel("ëŒ€ì—¬ê°€ëŠ¥ ì°¨ëŸ‰ ê²€ìƒ‰"));
       	pn2.add(UbtnSearch1);
-      	pn2.add(new JLabel("º»ÀÎÀÇ ¿îÀü¸éÇãÁõ¹øÈ£¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä(LICENSE ID)"));
+      	pn2.add(new JLabel("ìš´ì „ë©´í—ˆì¦ ë²ˆí˜¸ ì…ë ¥(LICENSE ID)"));
       	pn2.add(txtField1);
-      	pn2.add(new JLabel("»ç¿ëÇÏ½Ã°í ½ÍÀº Â÷·®ID¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä."));
+      	pn2.add(new JLabel("ëŒ€ì—¬í•  ì°¨ëŸ‰ ID ì…ë ¥"));
       	pn2.add(txtField2);
-      	pn2.add(new JLabel("´ë¿©½ÃÀÛÀÏÀ» ÀÔ·ÂÇØÁÖ¼¼¿ä(YYYY-MM-DD):"));
+      	pn2.add(new JLabel("ëŒ€ì—¬ì‹œì‘ì¼ ì…ë ¥(YYYY-MM-DD):"));
       	pn2.add(txtField3);
-      	pn2.add(new JLabel("´ë¿©±â°£À» ÀÔ·ÂÇØÁÖ¼¼¿ä (ÀÏ):"));
+      	pn2.add(new JLabel("ëŒ€ì—¬ê¸°ê°„ ì…ë ¥(ì¼):"));
       	pn2.add(txtField4);
-      	pn2.add(new JLabel("´ë¿©¸¦ ½ÅÃ»ÇÏ·Á¸é ¹öÆ°À» ´©¸£¼¼¿ä"));
+      	pn2.add(new JLabel("ëŒ€ì—¬ì‹ ì²­"));
       	pn2.add(btnRent);
       
-      pn4.setLayout(new FlowLayout(FlowLayout.CENTER,300,40));
-      pn4.add(btnReset);//ÃÊ±âÈ­¹öÆ°
+      pn4.setLayout(new FlowLayout(FlowLayout.CENTER,300, 25));
+      pn4.add(btnReset);//ì´ˆê¸°í™”ë²„íŠ¼
       pn4.add(btnExecute);
       pn4.add(AbtnSearch1);
       pn4.add(AbtnSearch2);
@@ -434,20 +429,20 @@ public class CampingcarRent extends JFrame implements ActionListener {
    public void conDB() {
       try {
          Class.forName("com.mysql.cj.jdbc.Driver");
-         System.out.println("µå¶óÀÌ¹ö ·Îµå ¼º°ø");
+         System.out.println("ë“œë¼ì´ë²„ ë¡œë“œ ì„±ê³µ");
       } catch (ClassNotFoundException e) {
          e.printStackTrace();
       }
       
-      try { /* µ¥ÀÌÅÍº£ÀÌ½º¸¦ ¿¬°áÇÏ´Â °úÁ¤ */
-          System.out.println("µ¥ÀÌÅÍº£ÀÌ½º ¿¬°á ÁØºñ...");
+      try { /* ë°ì´í„°ë² ì´ìŠ¤ë¥¼ ì—°ê²°í•˜ëŠ” ê³¼ì • */
+          System.out.println("ë°ì´í„°ë² ì´ìŠ¤ ì—°ê²° ì¤€ë¹„...");
           con = DriverManager.getConnection(url, userid, pwd);
-          System.out.println("µ¥ÀÌÅÍº£ÀÌ½º ¿¬°á ¼º°ø");
+          System.out.println("ë°ì´í„°ë² ì´ìŠ¤ ì—°ê²° ì„±ê³µ");
        } catch (SQLException e1) {
           e1.printStackTrace();
        }
    }
-   public void createTable() {//Å×ÀÌºí ±¸Çö Companylist,Campingcarlist,CampingCustomer,PresentRentCampingcarList,CarCheck,FixInformation,CarcenterList,AvailableCampingcarlist
+   public void createTable() {//í…Œì´ë¸” êµ¬í˜„ Companylist,Campingcarlist,CampingCustomer,PresentRentCampingcarList,CarCheck,FixInformation,CarcenterList,AvailableCampingcarlist
 	  try { 
 	   String sql[] = new String[8];
 	   StringBuilder sb = new StringBuilder();
@@ -457,118 +452,118 @@ public class CampingcarRent extends JFrame implements ActionListener {
 	   
 	   
 	   sql[0] = sb.append("create table Companylist(")//table1
-               .append("companyid INTEGER PRIMARY KEY,")//Ä·ÇÎÄ«´ë¿©È¸»çID
-               .append("companyname varchar(45),")//È¸»ç¸í
-               .append("companyaddress varchar(45),")//ÁÖ¼Ò
-               .append("companyphone varchar(45),")//ÀüÈ­¹øÈ£
-               .append("managername varchar(45),")//´ã´çÀÚÀÌ¸§
-               .append("manageremail varchar(45)")//´ã´çÀÚÀÌ¸ŞÀÏ
+               .append("companyid INTEGER PRIMARY KEY,")//ìº í•‘ì¹´ëŒ€ì—¬íšŒì‚¬ID
+               .append("companyname varchar(45),")//íšŒì‚¬ëª…
+               .append("companyaddress varchar(45),")//ì£¼ì†Œ
+               .append("companyphone varchar(45),")//ì „í™”ë²ˆí˜¸
+               .append("managername varchar(45),")//ë‹´ë‹¹ìì´ë¦„
+               .append("manageremail varchar(45)")//ë‹´ë‹¹ìì´ë©”ì¼
                .append(");").toString();
 	   	stmt.execute(sql[0]);
 	   	sb.delete(0,sb.length());
 	   
 	   sql[1] = sb.append("create table Campingcarlist(")//table2
-               .append("carid INTEGER PRIMARY KEY,")//Ä·ÇÎÄ«µî·ÏID
-               .append("carname varchar(45),")//Ä·ÇÎÄ« ÀÌ¸§
-               .append("carnumber INTEGER,")//Ä·ÇÎÄ« Â÷·®¹øÈ£
-               .append("carmax INTEGER,")//Ä·ÇÎÄ« ÀÎ¿ø¼ö
-               .append("carbrand varchar(45),")//Â÷Á¦Á¶È¸»ç
-               .append("birthday DATE,")//Á¦Á¶¿¬µµ
-               .append("distance INTEGER,")//´©ÀûÁÖÇà°Å¸®
-               .append("rentprice INTEGER,")//Ä·ÇÎÄ«´ë¿©ºñ¿ë
-               .append("companyid INTEGER,")//Ä·ÇÎÄ«´ë¿©È¸»çID
-               .append("enrolldate DATE")//Ä·ÇÎÄ«µî·ÏÀÏÀÚ
+               .append("carid INTEGER PRIMARY KEY,")//ìº í•‘ì¹´ë“±ë¡ID
+               .append("carname varchar(45),")//ìº í•‘ì¹´ ì´ë¦„
+               .append("carnumber INTEGER,")//ìº í•‘ì¹´ ì°¨ëŸ‰ë²ˆí˜¸
+               .append("carmax INTEGER,")//ìº í•‘ì¹´ ì¸ì›ìˆ˜
+               .append("carbrand varchar(45),")//ì°¨ì œì¡°íšŒì‚¬
+               .append("birthday DATE,")//ì œì¡°ì—°ë„
+               .append("distance INTEGER,")//ëˆ„ì ì£¼í–‰ê±°ë¦¬
+               .append("rentprice INTEGER,")//ìº í•‘ì¹´ëŒ€ì—¬ë¹„ìš©
+               .append("companyid INTEGER,")//ìº í•‘ì¹´ëŒ€ì—¬íšŒì‚¬ID
+               .append("enrolldate DATE")//ìº í•‘ì¹´ë“±ë¡ì¼ì
                .append(");").toString();
 	   	stmt.execute(sql[1]);
 	   	sb.delete(0,sb.length());
 	   			
 	   	sql[2] = sb.append("create table CampingCustomer(")//table3
-	   			.append("licenseid INTEGER PRIMARY KEY,")//¿îÀü¸éÇãÁõ¹øÈ£
-	   			.append("customername varchar(45),")//°í°´¸í
-	   			.append("customeraddress varchar(45),")//°í°´ÁÖ¼Ò
-	   			.append("customerphone varchar(45),")//°í°´ÀüÈ­¹øÈ£
-	   			.append("customeremail varchar(45)")//°í°´ÀÌ¸ŞÀÏ
+	   			.append("licenseid INTEGER PRIMARY KEY,")//ìš´ì „ë©´í—ˆì¦ë²ˆí˜¸
+	   			.append("customername varchar(45),")//ê³ ê°ëª…
+	   			.append("customeraddress varchar(45),")//ê³ ê°ì£¼ì†Œ
+	   			.append("customerphone varchar(45),")//ê³ ê°ì „í™”ë²ˆí˜¸
+	   			.append("customeremail varchar(45)")//ê³ ê°ì´ë©”ì¼
 	   			.append(");").toString();
 	   	stmt.execute(sql[2]);
 	   	sb.delete(0, sb.length());
 	   			
 	   	sql[3] = sb.append("create table PresentRentCampingcarList(")//table4
-	   			.append("rentid INTEGER PRIMARY KEY,")//°íÀ¯´ë¿©¹øÈ£
-	   			.append("carid INTEGER,")//Ä·ÇÎÄ«µî·ÏID
-	   			.append("licenseid INTEGER,")//¿îÀü¸éÇãÁõ¹øÈ£
-	   			.append("companyid INTEGER,")//Ä·ÇÎÄ«´ë¿©È¸»çID
-	   			.append("startdate DATE,")//´ë¿©½ÃÀÛÀÏ
-	   			.append("enddate DATE,")//´ë¿©±â°£
-	   			.append("rentprice INTEGER,")//Ã»±¸¿ä±İ
-	   			.append("depositdate DATE,")//³³ÀÔ±âÇÑ
-	   			.append("etc varchar(45),")//±âÅ¸Ã»±¸³»¿ª
-	   			.append("etcprice INTEGER")//±âÅ¸Ã»±¸¿ä±İÁ¤º¸
+	   			.append("rentid INTEGER PRIMARY KEY,")//ê³ ìœ ëŒ€ì—¬ë²ˆí˜¸
+	   			.append("carid INTEGER,")//ìº í•‘ì¹´ë“±ë¡ID
+	   			.append("licenseid INTEGER,")//ìš´ì „ë©´í—ˆì¦ë²ˆí˜¸
+	   			.append("companyid INTEGER,")//ìº í•‘ì¹´ëŒ€ì—¬íšŒì‚¬ID
+	   			.append("startdate DATE,")//ëŒ€ì—¬ì‹œì‘ì¼
+	   			.append("enddate DATE,")//ëŒ€ì—¬ê¸°ê°„
+	   			.append("rentprice INTEGER,")//ì²­êµ¬ìš”ê¸ˆ
+	   			.append("depositdate DATE,")//ë‚©ì…ê¸°í•œ
+	   			.append("etc varchar(45),")//ê¸°íƒ€ì²­êµ¬ë‚´ì—­
+	   			.append("etcprice INTEGER")//ê¸°íƒ€ì²­êµ¬ìš”ê¸ˆì •ë³´
 	   			.append(");").toString();
 	   	stmt.execute(sql[3]);
 	   	sb.delete(0,  sb.length());
 	   			
 	   	sql[4] = sb.append("create table CarCheck(")//table5
-	   			.append("rentid INTEGER PRIMARY KEY,")//°íÀ¯´ë¿©¹øÈ£
-	   			.append("carid INTEGER,")//Ä·ÇÎÄ«µî·ÏID
-	   			.append("frontdescription varchar(45),")//¾ÕºÎºĞ¼³¸í
-	   			.append("leftdescription varchar(45),")//¿ŞÂÊ¼³¸í
-	   			.append("rightdescription varchar(45),")//¿À¸¥ÂÊ¼³¸í
-	   			.append("backdescription varchar(45),")//µÚÂÊ¼³¸í
-	   			.append("havetofix INTEGER,")//¼ö¸®ÇÊ¿ä¿©ºÎ
-	   			.append("licenseid INTEGER")//¿îÀü¸éÇãÁõ¹øÈ£
+	   			.append("rentid INTEGER PRIMARY KEY,")//ê³ ìœ ëŒ€ì—¬ë²ˆí˜¸
+	   			.append("carid INTEGER,")//ìº í•‘ì¹´ë“±ë¡ID
+	   			.append("frontdescription varchar(45),")//ì•ë¶€ë¶„ì„¤ëª…
+	   			.append("leftdescription varchar(45),")//ì™¼ìª½ì„¤ëª…
+	   			.append("rightdescription varchar(45),")//ì˜¤ë¥¸ìª½ì„¤ëª…
+	   			.append("backdescription varchar(45),")//ë’¤ìª½ì„¤ëª…
+	   			.append("havetofix INTEGER,")//ìˆ˜ë¦¬í•„ìš”ì—¬ë¶€
+	   			.append("licenseid INTEGER")//ìš´ì „ë©´í—ˆì¦ë²ˆí˜¸
 	   			.append(");").toString();
 	   	stmt.execute(sql[4]);
 	   	sb.delete(0,  sb.length());
 	   			
 	   	sql[5] = sb.append("create table FixInformation(")//table6
-	   			.append("fixid INTEGER PRIMARY KEY,")//°íÀ¯Á¤ºñ¹øÈ£
-	   			.append("carid INTEGER,")//Ä·ÇÎÄ«µî·ÏID
-	   			.append("carcenterid INTEGER,")//Ä·ÇÎÄ«Á¤ºñ¼ÒID
-	   			.append("companyid INTEGER,")//Ä·ÇÎÄ«´ë¿©È¸»çID
-	   			.append("licenseid INTEGER,")//¿îÀü¸éÇãÁõ¹øÈ£
-	   			.append("fix varchar(45),")//Á¤ºñ³»¿ª
-	   			.append("fixdate DATE,")//¼ö¸®³¯Â¥
-	   			.append("fixprice INTEGER,")//¼ö¸®ºñ¿ë
-	   			.append("depositdate DATE,")//³³ÀÔ±âÇÑ
-	   			.append("etcfix varchar(45)")//±âÅ¸Á¤ºñ³»¿ª
+	   			.append("fixid INTEGER PRIMARY KEY,")//ê³ ìœ ì •ë¹„ë²ˆí˜¸
+	   			.append("carid INTEGER,")//ìº í•‘ì¹´ë“±ë¡ID
+	   			.append("carcenterid INTEGER,")//ìº í•‘ì¹´ì •ë¹„ì†ŒID
+	   			.append("companyid INTEGER,")//ìº í•‘ì¹´ëŒ€ì—¬íšŒì‚¬ID
+	   			.append("licenseid INTEGER,")//ìš´ì „ë©´í—ˆì¦ë²ˆí˜¸
+	   			.append("fix varchar(45),")//ì •ë¹„ë‚´ì—­
+	   			.append("fixdate DATE,")//ìˆ˜ë¦¬ë‚ ì§œ
+	   			.append("fixprice INTEGER,")//ìˆ˜ë¦¬ë¹„ìš©
+	   			.append("depositdate DATE,")//ë‚©ì…ê¸°í•œ
+	   			.append("etcfix varchar(45)")//ê¸°íƒ€ì •ë¹„ë‚´ì—­
 	   			.append(");").toString();
 	   	stmt.execute(sql[5]);
 	   	sb.delete(0,  sb.length());
 	   	
 	   	sql[6] = sb.append("create table CarcenterList(")//table7
-	   			.append("carcenterid INTEGER PRIMARY KEY,")//Ä·ÇÎÄ«Á¤ºñ¼ÒID
-	   			.append("carcentername varchar(45),")//Á¤ºñ¼Ò¸í
-	   			.append("carcenteraddress varchar(45),")//Á¤ºñ¼ÒÁÖ¼Ò
-	   			.append("carcenterphone varchar(45),")//Á¤ºñ¼ÒÀüÈ­¹øÈ£
-	   			.append("centermanagername varchar(45),")//´ã´çÀÚÀÌ¸§
-	   			.append("centermanageremail varchar(45)")//ÀÌ¸ŞÀÏÁ¤º¸
+	   			.append("carcenterid INTEGER PRIMARY KEY,")//ìº í•‘ì¹´ì •ë¹„ì†ŒID
+	   			.append("carcentername varchar(45),")//ì •ë¹„ì†Œëª…
+	   			.append("carcenteraddress varchar(45),")//ì •ë¹„ì†Œì£¼ì†Œ
+	   			.append("carcenterphone varchar(45),")//ì •ë¹„ì†Œì „í™”ë²ˆí˜¸
+	   			.append("centermanagername varchar(45),")//ë‹´ë‹¹ìì´ë¦„
+	   			.append("centermanageremail varchar(45)")//ì´ë©”ì¼ì •ë³´
 	   			.append(");").toString();
 	   	stmt.execute(sql[6]);
 	   	sb.delete(0,  sb.length());
 	   	
 	   	
 	   	sql[7] = sb.append("create table AvailableCampingcarlist(")//table8
-	   			.append("carid INTEGER PRIMARY KEY,")//Ä·ÇÎÄ«µî·ÏID
-	               .append("carname varchar(45),")//Ä·ÇÎÄ« ÀÌ¸§
-	               .append("carnumber INTEGER,")//Ä·ÇÎÄ« Â÷·®¹øÈ£
-	               .append("carmax INTEGER,")//Ä·ÇÎÄ« ÀÎ¿ø¼ö
-	               .append("carbrand varchar(45),")//Â÷Á¦Á¶È¸»ç
-	               .append("birthday DATE,")//Á¦Á¶¿¬µµ
-	               .append("distance INTEGER,")//´©ÀûÁÖÇà°Å¸®
-	               .append("rentprice INTEGER,")//Ä·ÇÎÄ«´ë¿©ºñ¿ë
-	               .append("companyid INTEGER,")//Ä·ÇÎÄ«´ë¿©È¸»çID
-	               .append("enrolldate DATE")//Ä·ÇÎÄ«µî·ÏÀÏÀÚ
+	   			.append("carid INTEGER PRIMARY KEY,")//ìº í•‘ì¹´ë“±ë¡ID
+	               .append("carname varchar(45),")//ìº í•‘ì¹´ ì´ë¦„
+	               .append("carnumber INTEGER,")//ìº í•‘ì¹´ ì°¨ëŸ‰ë²ˆí˜¸
+	               .append("carmax INTEGER,")//ìº í•‘ì¹´ ì¸ì›ìˆ˜
+	               .append("carbrand varchar(45),")//ì°¨ì œì¡°íšŒì‚¬
+	               .append("birthday DATE,")//ì œì¡°ì—°ë„
+	               .append("distance INTEGER,")//ëˆ„ì ì£¼í–‰ê±°ë¦¬
+	               .append("rentprice INTEGER,")//ìº í•‘ì¹´ëŒ€ì—¬ë¹„ìš©
+	               .append("companyid INTEGER,")//ìº í•‘ì¹´ëŒ€ì—¬íšŒì‚¬ID
+	               .append("enrolldate DATE")//ìº í•‘ì¹´ë“±ë¡ì¼ì
 	               .append(");").toString();
 		   	stmt.execute(sql[7]);
 		   	sb.delete(0,sb.length());	   	
 	   	
 	  }catch(SQLException CreateError)
 		{
-			System.out.println("Å×ÀÌºíÃÊ±âÈ­ÀÛ¾÷½ÇÆĞ"+CreateError);
+			System.out.println("í…Œì´ë¸”ì´ˆê¸°í™”ì‘ì—…ì‹¤íŒ¨"+CreateError);
 		}
 	  
    }
-   public void insertMydata() { //ÃÊ±âdata±¸Çö
+   public void insertMydata() { //ì´ˆê¸°dataêµ¬í˜„
 	try{
 		String delete[] = new String[6];
 		String insertCompanyList[] = new String[15];
@@ -586,86 +581,86 @@ public class CampingcarRent extends JFrame implements ActionListener {
 	delete[4] = "delete from CarcenterList ;";
 	delete[5] = "SET foreign_key_checks =1;";
 	
-	insertCompanyList[0] = "INSERT INTO CompanyList Values (1,'»ï¼º','¼­¿ï °­³²','000-0000-0001','¸Ş½Ã','messi@gmail.com')";
-	insertCompanyList[1] = "INSERT INTO CompanyList Values (2,'LG','¼­¿ï ¼­ÃÊ','000-0000-0002','³×ÀÌ¸¶¸£','neymar@gmail.com')";
-	insertCompanyList[2] = "INSERT INTO CompanyList Values (3,'Çö´ë','¼­¿ï ¼ÛÆÄ','000-0000-0003','È£³¯µÎ','ronaldo@gmail.com')";
-	insertCompanyList[3] = "INSERT INTO CompanyList Values (4,'SK','¼º³² ºĞ´ç','000-0000-0004','º£ÀÏ','bale@gmail.com')";
-	insertCompanyList[4] = "INSERT INTO CompanyList Values (5,'·Ôµ¥','°æ±â ¿ëÀÎ','000-0000-0005','¿À½ºÄ«','oscar@gmail.com')";
-	insertCompanyList[5] = "INSERT INTO CompanyList Values (6,'Æ÷½ºÄÚ','°í¾ç ÀÏ»ê','000-0000-0006','Æ÷±×¹Ù','pogba@gmail.com')";
-	insertCompanyList[6] = "INSERT INTO CompanyList Values (7,'ÇÑÈ­','¼­¿ï ¸ñµ¿','000-0000-0007','·ç´Ï','rooney@gmail.com')";
-	insertCompanyList[7] = "INSERT INTO CompanyList Values (8,'GS','¼­¿ï µ¿ÀÛ','000-0000-0008','½Ç¹Ù','silva@gmail.com')";
-	insertCompanyList[8] = "INSERT INTO CompanyList Values (9,'³óÇù','¼­¿ï ¿µµîÆ÷','000-0000-0009','Æç·¹','pele@gmail.com')";
-	insertCompanyList[9] = "INSERT INTO CompanyList Values (10,'½Å¼¼°è','´ë±¸ ¼ö¼º','000-0000-0010','ÇæÅ©','hulk@gmail.com')";
-	insertCompanyList[10] = "INSERT INTO CompanyList Values (11,'CJ','¼­¿ï ¸¶Æ÷','000-0000-0011','µğ¸¶¸®¾Æ','dimaria@gmail.com')";
-	insertCompanyList[11] = "INSERT INTO CompanyList Values (12,'ÇÑÁø','°æ±â ¼ö¿ø','000-0000-0012','À½¹ÙÆä','mbappe@gmail.com')";
-	insertCompanyList[12] = "INSERT INTO CompanyList Values (13,'µÎ»ê','¼­¿ï ¿ë»ê','000-0000-0013','¼ö¾Æ·¹½º','suarez@gmail.com')";
-	insertCompanyList[13] = "INSERT INTO CompanyList Values (14,'´ë¸²','¼­¿ï ±¤Áø','000-0000-0014','Ä«¹Ù´Ï','cavani@gmail.com')";
-	insertCompanyList[14] = "INSERT INTO CompanyList Values (15,'KT','¼­¿ï °­¼­','000-0000-0015','ÇÇÄÉ','pique@gmail.com')";
+	insertCompanyList[0] = "INSERT INTO CompanyList Values (1,'ì‚¼ì„±','ì„œìš¸ ê°•ë‚¨','000-0000-0001','ë©”ì‹œ','messi@gmail.com')";
+	insertCompanyList[1] = "INSERT INTO CompanyList Values (2,'LG','ì„œìš¸ ì„œì´ˆ','000-0000-0002','ë„¤ì´ë§ˆë¥´','neymar@gmail.com')";
+	insertCompanyList[2] = "INSERT INTO CompanyList Values (3,'í˜„ëŒ€','ì„œìš¸ ì†¡íŒŒ','000-0000-0003','í˜¸ë‚ ë‘','ronaldo@gmail.com')";
+	insertCompanyList[3] = "INSERT INTO CompanyList Values (4,'SK','ì„±ë‚¨ ë¶„ë‹¹','000-0000-0004','ë² ì¼','bale@gmail.com')";
+	insertCompanyList[4] = "INSERT INTO CompanyList Values (5,'ë¡¯ë°','ê²½ê¸° ìš©ì¸','000-0000-0005','ì˜¤ìŠ¤ì¹´','oscar@gmail.com')";
+	insertCompanyList[5] = "INSERT INTO CompanyList Values (6,'í¬ìŠ¤ì½”','ê³ ì–‘ ì¼ì‚°','000-0000-0006','í¬ê·¸ë°”','pogba@gmail.com')";
+	insertCompanyList[6] = "INSERT INTO CompanyList Values (7,'í•œí™”','ì„œìš¸ ëª©ë™','000-0000-0007','ë£¨ë‹ˆ','rooney@gmail.com')";
+	insertCompanyList[7] = "INSERT INTO CompanyList Values (8,'GS','ì„œìš¸ ë™ì‘','000-0000-0008','ì‹¤ë°”','silva@gmail.com')";
+	insertCompanyList[8] = "INSERT INTO CompanyList Values (9,'ë†í˜‘','ì„œìš¸ ì˜ë“±í¬','000-0000-0009','í ë ˆ','pele@gmail.com')";
+	insertCompanyList[9] = "INSERT INTO CompanyList Values (10,'ì‹ ì„¸ê³„','ëŒ€êµ¬ ìˆ˜ì„±','000-0000-0010','í—í¬','hulk@gmail.com')";
+	insertCompanyList[10] = "INSERT INTO CompanyList Values (11,'CJ','ì„œìš¸ ë§ˆí¬','000-0000-0011','ë””ë§ˆë¦¬ì•„','dimaria@gmail.com')";
+	insertCompanyList[11] = "INSERT INTO CompanyList Values (12,'í•œì§„','ê²½ê¸° ìˆ˜ì›','000-0000-0012','ìŒë°”í˜','mbappe@gmail.com')";
+	insertCompanyList[12] = "INSERT INTO CompanyList Values (13,'ë‘ì‚°','ì„œìš¸ ìš©ì‚°','000-0000-0013','ìˆ˜ì•„ë ˆìŠ¤','suarez@gmail.com')";
+	insertCompanyList[13] = "INSERT INTO CompanyList Values (14,'ëŒ€ë¦¼','ì„œìš¸ ê´‘ì§„','000-0000-0014','ì¹´ë°”ë‹ˆ','cavani@gmail.com')";
+	insertCompanyList[14] = "INSERT INTO CompanyList Values (15,'KT','ì„œìš¸ ê°•ì„œ','000-0000-0015','í”¼ì¼€','pique@gmail.com')";
 	
 	
-	insertCampingcarList[0] = "INSERT INTO CampingcarList VALUES (1, 'QM3', 1111, 4, '»ï¼º', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 100000, 2, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
-	insertCampingcarList[1] = "INSERT INTO CampingcarList VALUES (2, '¿¢¼¾Æ® µğÁ©',1112, 4, 'Çö´ë', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 100000, 5, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
-	insertCampingcarList[2] = "INSERT INTO CampingcarList VALUES (3, '½î³ªÅ¸ ', 1113, 4, 'Çö´ë', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 100000, 2, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
-	insertCampingcarList[3] = "INSERT INTO CampingcarList VALUES (4, 'i30 µğÁ©', 1114, 4, 'Çö´ë', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 100000, 2, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
-	insertCampingcarList[4] = "INSERT INTO CampingcarList VALUES (5, 'K5 ÇÏÀÌºê¸®µå', 1115, 4, '±â¾Æ', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 100000, 4, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
-	insertCampingcarList[5] = "INSERT INTO CampingcarList VALUES (6, 'SM5 µğÁ©', 1116, 6, '»ï¼º', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 100000, 6, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
-	insertCampingcarList[6] = "INSERT INTO CampingcarList VALUES (7, '¸ğ´× CVT', 1117, 6, '±â¾Æ', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 120000, 9, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
-	insertCampingcarList[7] = "INSERT INTO CampingcarList VALUES (8, 'K3 µğÁ©', 1118, 6, '±â¾Æ', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 120000, 10, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
-	insertCampingcarList[8] = "INSERT INTO CampingcarList VALUES (9, '¾Æ¹İ¶¼ µğÁ©', 1119, 6, 'Çö´ë', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 120000, 11, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
-	insertCampingcarList[9] = "INSERT INTO CampingcarList VALUES (10, 'K7 ÇÏÀÌºê¸®µå', 1120, 8, '±â¾Æ', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 120000, 15, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
-	insertCampingcarList[10] = "INSERT INTO CampingcarList VALUES (11, '±×·£Àú ', 1121, 8, 'Çö´ë', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 120000, 12, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
-	insertCampingcarList[11] = "INSERT INTO CampingcarList VALUES (12, '½¦º¸·¹ ½ºÆÄÅ©', 1122, 8, 'GM', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 120000, 4, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
-	insertCampingcarList[12] = "INSERT INTO CampingcarList VALUES (13, '¿ÉÆ¼¸Ó½ºÇÁ¶óÀÓ', 1123, 8, '¿ÀÅäº¿', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 140000, 7, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
-	insertCampingcarList[13] = "INSERT INTO CampingcarList VALUES (14, '¹üºíºñ', 1124, 10, '¿ÀÅäº¿', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 140000, 8, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
-	insertCampingcarList[14] = "INSERT INTO CampingcarList VALUES (15, 'º¥Ã÷', 1125, 12, 'º¥Ã÷', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 990000, 3, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertCampingcarList[0] = "INSERT INTO CampingcarList VALUES (1, 'QM3', 1111, 4, 'ì‚¼ì„±', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 100000, 2, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertCampingcarList[1] = "INSERT INTO CampingcarList VALUES (2, 'ì—‘ì„¼íŠ¸ ë””ì ¤',1112, 4, 'í˜„ëŒ€', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 100000, 5, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertCampingcarList[2] = "INSERT INTO CampingcarList VALUES (3, 'ì˜ë‚˜íƒ€ ', 1113, 4, 'í˜„ëŒ€', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 100000, 2, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertCampingcarList[3] = "INSERT INTO CampingcarList VALUES (4, 'i30 ë””ì ¤', 1114, 4, 'í˜„ëŒ€', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 100000, 2, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertCampingcarList[4] = "INSERT INTO CampingcarList VALUES (5, 'K5 í•˜ì´ë¸Œë¦¬ë“œ', 1115, 4, 'ê¸°ì•„', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 100000, 4, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertCampingcarList[5] = "INSERT INTO CampingcarList VALUES (6, 'SM5 ë””ì ¤', 1116, 6, 'ì‚¼ì„±', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 100000, 6, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertCampingcarList[6] = "INSERT INTO CampingcarList VALUES (7, 'ëª¨ë‹ CVT', 1117, 6, 'ê¸°ì•„', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 120000, 9, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertCampingcarList[7] = "INSERT INTO CampingcarList VALUES (8, 'K3 ë””ì ¤', 1118, 6, 'ê¸°ì•„', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 120000, 10, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertCampingcarList[8] = "INSERT INTO CampingcarList VALUES (9, 'ì•„ë°˜ë–¼ ë””ì ¤', 1119, 6, 'í˜„ëŒ€', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 120000, 11, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertCampingcarList[9] = "INSERT INTO CampingcarList VALUES (10, 'K7 í•˜ì´ë¸Œë¦¬ë“œ', 1120, 8, 'ê¸°ì•„', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 120000, 15, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertCampingcarList[10] = "INSERT INTO CampingcarList VALUES (11, 'ê·¸ëœì € ', 1121, 8, 'í˜„ëŒ€', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 120000, 12, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertCampingcarList[11] = "INSERT INTO CampingcarList VALUES (12, 'ì‰ë³´ë ˆ ìŠ¤íŒŒí¬', 1122, 8, 'GM', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 120000, 4, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertCampingcarList[12] = "INSERT INTO CampingcarList VALUES (13, 'ì˜µí‹°ë¨¸ìŠ¤í”„ë¼ì„', 1123, 8, 'ì˜¤í† ë´‡', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 140000, 7, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertCampingcarList[13] = "INSERT INTO CampingcarList VALUES (14, 'ë²”ë¸”ë¹„', 1124, 10, 'ì˜¤í† ë´‡', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 140000, 8, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertCampingcarList[14] = "INSERT INTO CampingcarList VALUES (15, 'ë²¤ì¸ ', 1125, 12, 'ë²¤ì¸ ', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 990000, 3, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
 	
-	insertCampingCustomer[0] = "INSERT INTO CampingCustomer VALUES (1, 'Á¶¿µ³²', '¼­¿ï °­³²', '000-0000-0001', 'yn@gmail.com')";
-	insertCampingCustomer[1] = "INSERT INTO CampingCustomer VALUES (2, 'Á¤ÁöÈÆ', '¼­¿ï ¼­ÃÊ', '000-0000-0002', 'jh@gmail.com')";
-	insertCampingCustomer[2] = "INSERT INTO CampingCustomer VALUES (3, '±è³²ÁÖ', '¼­¿ï ¼ÛÆÄ', '000-0000-0003', 'nj@gmail.com')";
-	insertCampingCustomer[3] = "INSERT INTO CampingCustomer VALUES (4, '¼ÛÇı±³', '¼­¿ï ¿ë»ê', '000-0000-0004', 'hg@gmail.com')";
-	insertCampingCustomer[4] = "INSERT INTO CampingCustomer VALUES (5, 'ÇÑÃ¤¿µ', '¼­¿ï ¾çÃµ', '000-0000-0005', 'cy@gmail.com')";
-	insertCampingCustomer[5] = "INSERT INTO CampingCustomer VALUES (6, '¹ÚÁßÈÆ', '¼­¿ï ¸¶Æ÷', '000-0000-0006', 'jh@gmail.com')";
-	insertCampingCustomer[6] = "INSERT INTO CampingCustomer VALUES (7, 'ÃÖÁö¿ì', '¼­¿ï ±¤Áø', '000-0000-0007', 'jw@gmail.com')";
-	insertCampingCustomer[7] = "INSERT INTO CampingCustomer VALUES (8, 'Àå±Ù¼®', '¼­¿ï ¼ºµ¿', '000-0000-0008', 'gs@gmail.com')";
-	insertCampingCustomer[8] = "INSERT INTO CampingCustomer VALUES (9, 'À¯Àç¼®', '¼­¿ï °­µ¿', '000-0000-0009', 'js@gmail.com')";
-	insertCampingCustomer[9] = "INSERT INTO CampingCustomer VALUES (10, '°­È£µ¿', '¼­¿ï Áß±¸', '000-0000-0010', 'hd@gmail.com')";
-	insertCampingCustomer[10] = "INSERT INTO CampingCustomer VALUES (11, '±èÈñ¾Ö', '¼­¿ï ¿µµîÆ÷', '000-0000-0011', 'ha@gmail.com')";
-	insertCampingCustomer[11] = "INSERT INTO CampingCustomer VALUES (12, 'ÀÌ¼ö¸¸', '¼­¿ï µ¿ÀÛ', '000-0000-0012', 'sm@gmail.com')";
-	insertCampingCustomer[12] = "INSERT INTO CampingCustomer VALUES (13, 'ÀÌ½ÂÃ¶', '¼­¿ï Á¾·Î', '000-0000-0013', 'sc@gmail.com')";
-	insertCampingCustomer[13] = "INSERT INTO CampingCustomer VALUES (14, 'ÀÌÈ¿¸®', '¼­¿ï °­¼­', '000-0000-0014', 'hl@gmail.com')";
-	insertCampingCustomer[14] = "INSERT INTO CampingCustomer VALUES (15, '¼Û½ÂÇå', '¼­¿ï °ü¾Ç', '000-0000-0015', 'sh@gmail.com')";
+	insertCampingCustomer[0] = "INSERT INTO CampingCustomer VALUES (1, 'ì¡°ì˜ë‚¨', 'ì„œìš¸ ê°•ë‚¨', '000-0000-0001', 'yn@gmail.com')";
+	insertCampingCustomer[1] = "INSERT INTO CampingCustomer VALUES (2, 'ì •ì§€í›ˆ', 'ì„œìš¸ ì„œì´ˆ', '000-0000-0002', 'jh@gmail.com')";
+	insertCampingCustomer[2] = "INSERT INTO CampingCustomer VALUES (3, 'ê¹€ë‚¨ì£¼', 'ì„œìš¸ ì†¡íŒŒ', '000-0000-0003', 'nj@gmail.com')";
+	insertCampingCustomer[3] = "INSERT INTO CampingCustomer VALUES (4, 'ì†¡í˜œêµ', 'ì„œìš¸ ìš©ì‚°', '000-0000-0004', 'hg@gmail.com')";
+	insertCampingCustomer[4] = "INSERT INTO CampingCustomer VALUES (5, 'í•œì±„ì˜', 'ì„œìš¸ ì–‘ì²œ', '000-0000-0005', 'cy@gmail.com')";
+	insertCampingCustomer[5] = "INSERT INTO CampingCustomer VALUES (6, 'ë°•ì¤‘í›ˆ', 'ì„œìš¸ ë§ˆí¬', '000-0000-0006', 'jh@gmail.com')";
+	insertCampingCustomer[6] = "INSERT INTO CampingCustomer VALUES (7, 'ìµœì§€ìš°', 'ì„œìš¸ ê´‘ì§„', '000-0000-0007', 'jw@gmail.com')";
+	insertCampingCustomer[7] = "INSERT INTO CampingCustomer VALUES (8, 'ì¥ê·¼ì„', 'ì„œìš¸ ì„±ë™', '000-0000-0008', 'gs@gmail.com')";
+	insertCampingCustomer[8] = "INSERT INTO CampingCustomer VALUES (9, 'ìœ ì¬ì„', 'ì„œìš¸ ê°•ë™', '000-0000-0009', 'js@gmail.com')";
+	insertCampingCustomer[9] = "INSERT INTO CampingCustomer VALUES (10, 'ê°•í˜¸ë™', 'ì„œìš¸ ì¤‘êµ¬', '000-0000-0010', 'hd@gmail.com')";
+	insertCampingCustomer[10] = "INSERT INTO CampingCustomer VALUES (11, 'ê¹€í¬ì• ', 'ì„œìš¸ ì˜ë“±í¬', '000-0000-0011', 'ha@gmail.com')";
+	insertCampingCustomer[11] = "INSERT INTO CampingCustomer VALUES (12, 'ì´ìˆ˜ë§Œ', 'ì„œìš¸ ë™ì‘', '000-0000-0012', 'sm@gmail.com')";
+	insertCampingCustomer[12] = "INSERT INTO CampingCustomer VALUES (13, 'ì´ìŠ¹ì² ', 'ì„œìš¸ ì¢…ë¡œ', '000-0000-0013', 'sc@gmail.com')";
+	insertCampingCustomer[13] = "INSERT INTO CampingCustomer VALUES (14, 'ì´íš¨ë¦¬', 'ì„œìš¸ ê°•ì„œ', '000-0000-0014', 'hl@gmail.com')";
+	insertCampingCustomer[14] = "INSERT INTO CampingCustomer VALUES (15, 'ì†¡ìŠ¹í—Œ', 'ì„œìš¸ ê´€ì•…', '000-0000-0015', 'sh@gmail.com')";
 	
-	insertCarcenterList[0] = "INSERT INTO CarcenterList Values (1,'¼¼Á¾Á¤ºñ¼Ò','¼­¿ï °­³²','000-0000-0011','managerA','sj@gmail.com')";
-	insertCarcenterList[1] = "INSERT INTO CarcenterList Values (2,'ÇÑ¾çÁ¤ºñ¼Ò','¼­¿ï ¼­ÃÊ','000-0000-0021','managerB','hy@gmail.com')";
-	insertCarcenterList[2] = "INSERT INTO CarcenterList Values (3,'°Ç±¹Á¤ºñ¼Ò','¼­¿ï ¼ÛÆÄ','000-0000-0031','managerC','gg@gmail.com')";
-	insertCarcenterList[3] = "INSERT INTO CarcenterList Values (4,'¼­°­Á¤ºñ¼Ò','¼­¿ï ¿ë»ê','000-0000-0041','managerD','sg@gmail.com')";
-	insertCarcenterList[4] = "INSERT INTO CarcenterList Values (5,'¼º±Õ°üÁ¤ºñ¼Ò','¼­¿ï ¿ë»ê','000-0000-0051','managerE','ssg@gmail.com')";
-	insertCarcenterList[5] = "INSERT INTO CarcenterList Values (6,'¿¬¼¼Á¤ºñ¼Ò','¼­¿ï ¼­ÃÊ','000-0000-0061','managerF','ys@gmail.com')";
-	insertCarcenterList[6] = "INSERT INTO CarcenterList Values (7,'°í·ÁÁ¤ºñ¼Ò','¼­¿ï °­³²','000-0000-0071','managerG','kr@gmail.com')";
-	insertCarcenterList[7] = "INSERT INTO CarcenterList Values (8,'¼ş½ÇÁ¤ºñ¼Ò','¼­¿ï ¼ÛÆÄ','000-0000-0081','managerH','ss@gmail.com')";
-	insertCarcenterList[8] = "INSERT INTO CarcenterList Values (9,'Áß¾ÓÁ¤ºñ¼Ò','¼­¿ï ¿ë»ê','000-0000-0091','managerI','ca@gmail.com')";
-	insertCarcenterList[9] = "INSERT INTO CarcenterList Values (10,'µ¿±¹Á¤ºñ¼Ò','¼­¿ï ¼ÛÆÄ','000-0000-0101','managerJ','dk@gmail.com')";
-	insertCarcenterList[10] = "INSERT INTO CarcenterList Values (11,'È«ÀÍÁ¤ºñ¼Ò','¼­¿ï ¼­ÃÊ','000-0000-0201','managerK','hi@gmail.com')";
-	insertCarcenterList[11] = "INSERT INTO CarcenterList Values (12,'±¹¹ÎÁ¤ºñ¼Ò','¼­¿ï ¿ë»ê','000-0000-0301','managerL','km@gmail.com')";
-	insertCarcenterList[12] = "INSERT INTO CarcenterList Values (13,'±¤¿îÁ¤ºñ¼Ò','¼­¿ï ¼ÛÆÄ','000-0000-0401','managerM','gw@gmail.com')";
-	insertCarcenterList[13] = "INSERT INTO CarcenterList Values (14,'¼­¿ïÁ¤ºñ¼Ò','¼­¿ï °­³²','000-0000-0501','managerN','sl@gmail.com')";
-	insertCarcenterList[14] = "INSERT INTO CarcenterList Values (15,'°æÈñÁ¤ºñ¼Ò','¼­¿ï °­³²','000-0000-0601','managerO','kh@gmail.com')";
+	insertCarcenterList[0] = "INSERT INTO CarcenterList Values (1,'ì„¸ì¢…ì •ë¹„ì†Œ','ì„œìš¸ ê°•ë‚¨','000-0000-0011','managerA','sj@gmail.com')";
+	insertCarcenterList[1] = "INSERT INTO CarcenterList Values (2,'í•œì–‘ì •ë¹„ì†Œ','ì„œìš¸ ì„œì´ˆ','000-0000-0021','managerB','hy@gmail.com')";
+	insertCarcenterList[2] = "INSERT INTO CarcenterList Values (3,'ê±´êµ­ì •ë¹„ì†Œ','ì„œìš¸ ì†¡íŒŒ','000-0000-0031','managerC','gg@gmail.com')";
+	insertCarcenterList[3] = "INSERT INTO CarcenterList Values (4,'ì„œê°•ì •ë¹„ì†Œ','ì„œìš¸ ìš©ì‚°','000-0000-0041','managerD','sg@gmail.com')";
+	insertCarcenterList[4] = "INSERT INTO CarcenterList Values (5,'ì„±ê· ê´€ì •ë¹„ì†Œ','ì„œìš¸ ìš©ì‚°','000-0000-0051','managerE','ssg@gmail.com')";
+	insertCarcenterList[5] = "INSERT INTO CarcenterList Values (6,'ì—°ì„¸ì •ë¹„ì†Œ','ì„œìš¸ ì„œì´ˆ','000-0000-0061','managerF','ys@gmail.com')";
+	insertCarcenterList[6] = "INSERT INTO CarcenterList Values (7,'ê³ ë ¤ì •ë¹„ì†Œ','ì„œìš¸ ê°•ë‚¨','000-0000-0071','managerG','kr@gmail.com')";
+	insertCarcenterList[7] = "INSERT INTO CarcenterList Values (8,'ìˆ­ì‹¤ì •ë¹„ì†Œ','ì„œìš¸ ì†¡íŒŒ','000-0000-0081','managerH','ss@gmail.com')";
+	insertCarcenterList[8] = "INSERT INTO CarcenterList Values (9,'ì¤‘ì•™ì •ë¹„ì†Œ','ì„œìš¸ ìš©ì‚°','000-0000-0091','managerI','ca@gmail.com')";
+	insertCarcenterList[9] = "INSERT INTO CarcenterList Values (10,'ë™êµ­ì •ë¹„ì†Œ','ì„œìš¸ ì†¡íŒŒ','000-0000-0101','managerJ','dk@gmail.com')";
+	insertCarcenterList[10] = "INSERT INTO CarcenterList Values (11,'í™ìµì •ë¹„ì†Œ','ì„œìš¸ ì„œì´ˆ','000-0000-0201','managerK','hi@gmail.com')";
+	insertCarcenterList[11] = "INSERT INTO CarcenterList Values (12,'êµ­ë¯¼ì •ë¹„ì†Œ','ì„œìš¸ ìš©ì‚°','000-0000-0301','managerL','km@gmail.com')";
+	insertCarcenterList[12] = "INSERT INTO CarcenterList Values (13,'ê´‘ìš´ì •ë¹„ì†Œ','ì„œìš¸ ì†¡íŒŒ','000-0000-0401','managerM','gw@gmail.com')";
+	insertCarcenterList[13] = "INSERT INTO CarcenterList Values (14,'ì„œìš¸ì •ë¹„ì†Œ','ì„œìš¸ ê°•ë‚¨','000-0000-0501','managerN','sl@gmail.com')";
+	insertCarcenterList[14] = "INSERT INTO CarcenterList Values (15,'ê²½í¬ì •ë¹„ì†Œ','ì„œìš¸ ê°•ë‚¨','000-0000-0601','managerO','kh@gmail.com')";
 	
-	insertAvailableCampingcarList[0] = "INSERT INTO AvailableCampingcarList VALUES (1, 'QM3', 1111, 4, '»ï¼º', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 100000, 2, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
-	insertAvailableCampingcarList[1] = "INSERT INTO AvailableCampingcarList VALUES (2, '¿¢¼¾Æ® µğÁ©',1112, 4, 'Çö´ë', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 100000, 5, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
-	insertAvailableCampingcarList[2] = "INSERT INTO AvailableCampingcarList VALUES (3, '½î³ªÅ¸ ', 1113, 4, 'Çö´ë', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 100000, 2, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
-	insertAvailableCampingcarList[3] = "INSERT INTO AvailableCampingcarList VALUES (4, 'i30 µğÁ©', 1114, 4, 'Çö´ë', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 100000, 2, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
-	insertAvailableCampingcarList[4] = "INSERT INTO AvailableCampingcarList VALUES (5, 'K5 ÇÏÀÌºê¸®µå', 1115, 4, '±â¾Æ', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 100000, 4, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
-	insertAvailableCampingcarList[5] = "INSERT INTO AvailableCampingcarList VALUES (6, 'SM5 µğÁ©', 1116, 6, '»ï¼º', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 100000, 6, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
-	insertAvailableCampingcarList[6] = "INSERT INTO AvailableCampingcarList VALUES (7, '¸ğ´× CVT', 1117, 6, '±â¾Æ', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 120000, 9, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
-	insertAvailableCampingcarList[7] = "INSERT INTO AvailableCampingcarList VALUES (8, 'K3 µğÁ©', 1118, 6, '±â¾Æ', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 120000, 10, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
-	insertAvailableCampingcarList[8] = "INSERT INTO AvailableCampingcarList VALUES (9, '¾Æ¹İ¶¼ µğÁ©', 1119, 6, 'Çö´ë', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 120000, 11, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
-	insertAvailableCampingcarList[9] = "INSERT INTO AvailableCampingcarList VALUES (10, 'K7 ÇÏÀÌºê¸®µå', 1120, 8, '±â¾Æ', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 120000, 15, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
-	insertAvailableCampingcarList[10] = "INSERT INTO AvailableCampingcarList VALUES (11, '±×·£Àú ', 1121, 8, 'Çö´ë', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 120000, 12, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
-	insertAvailableCampingcarList[11] = "INSERT INTO AvailableCampingcarList VALUES (12, '½¦º¸·¹ ½ºÆÄÅ©', 1122, 8, 'GM', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 120000, 4, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
-	insertAvailableCampingcarList[12] = "INSERT INTO AvailableCampingcarList VALUES (13, '¿ÉÆ¼¸Ó½ºÇÁ¶óÀÓ', 1123, 8, '¿ÀÅäº¿', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 140000, 7, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
-	insertAvailableCampingcarList[13] = "INSERT INTO AvailableCampingcarList VALUES (14, '¹üºíºñ', 1124, 10, '¿ÀÅäº¿', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 140000, 8, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
-	insertAvailableCampingcarList[14] = "INSERT INTO AvailableCampingcarList VALUES (15, 'º¥Ã÷', 1125, 12, 'º¥Ã÷', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 990000, 3, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertAvailableCampingcarList[0] = "INSERT INTO AvailableCampingcarList VALUES (1, 'QM3', 1111, 4, 'ì‚¼ì„±', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 100000, 2, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertAvailableCampingcarList[1] = "INSERT INTO AvailableCampingcarList VALUES (2, 'ì—‘ì„¼íŠ¸ ë””ì ¤',1112, 4, 'í˜„ëŒ€', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 100000, 5, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertAvailableCampingcarList[2] = "INSERT INTO AvailableCampingcarList VALUES (3, 'ì˜ë‚˜íƒ€ ', 1113, 4, 'í˜„ëŒ€', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 100000, 2, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertAvailableCampingcarList[3] = "INSERT INTO AvailableCampingcarList VALUES (4, 'i30 ë””ì ¤', 1114, 4, 'í˜„ëŒ€', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 100000, 2, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertAvailableCampingcarList[4] = "INSERT INTO AvailableCampingcarList VALUES (5, 'K5 í•˜ì´ë¸Œë¦¬ë“œ', 1115, 4, 'ê¸°ì•„', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 100000, 4, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertAvailableCampingcarList[5] = "INSERT INTO AvailableCampingcarList VALUES (6, 'SM5 ë””ì ¤', 1116, 6, 'ì‚¼ì„±', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 100000, 6, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertAvailableCampingcarList[6] = "INSERT INTO AvailableCampingcarList VALUES (7, 'ëª¨ë‹ CVT', 1117, 6, 'ê¸°ì•„', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 120000, 9, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertAvailableCampingcarList[7] = "INSERT INTO AvailableCampingcarList VALUES (8, 'K3 ë””ì ¤', 1118, 6, 'ê¸°ì•„', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 120000, 10, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertAvailableCampingcarList[8] = "INSERT INTO AvailableCampingcarList VALUES (9, 'ì•„ë°˜ë–¼ ë””ì ¤', 1119, 6, 'í˜„ëŒ€', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 120000, 11, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertAvailableCampingcarList[9] = "INSERT INTO AvailableCampingcarList VALUES (10, 'K7 í•˜ì´ë¸Œë¦¬ë“œ', 1120, 8, 'ê¸°ì•„', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 120000, 15, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertAvailableCampingcarList[10] = "INSERT INTO AvailableCampingcarList VALUES (11, 'ê·¸ëœì € ', 1121, 8, 'í˜„ëŒ€', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 120000, 12, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertAvailableCampingcarList[11] = "INSERT INTO AvailableCampingcarList VALUES (12, 'ì‰ë³´ë ˆ ìŠ¤íŒŒí¬', 1122, 8, 'GM', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 120000, 4, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertAvailableCampingcarList[12] = "INSERT INTO AvailableCampingcarList VALUES (13, 'ì˜µí‹°ë¨¸ìŠ¤í”„ë¼ì„', 1123, 8, 'ì˜¤í† ë´‡', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 140000, 7, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertAvailableCampingcarList[13] = "INSERT INTO AvailableCampingcarList VALUES (14, 'ë²”ë¸”ë¹„', 1124, 10, 'ì˜¤í† ë´‡', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 140000, 8, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertAvailableCampingcarList[14] = "INSERT INTO AvailableCampingcarList VALUES (15, 'ë²¤ì¸ ', 1125, 12, 'ë²¤ì¸ ', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 990000, 3, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
 	
 	for(i=0;i<5;i++)
 		stmt.executeUpdate(delete[i]);
@@ -682,7 +677,7 @@ public class CampingcarRent extends JFrame implements ActionListener {
 	
 	}catch(SQLException e3)
 	{
-		System.out.println("Äõ¸®ÃÊ±âÈ­ÀÛ¾÷½ÇÆĞ"+e3);
+		System.out.println("ì¿¼ë¦¬ì´ˆê¸°í™”ì‘ì—…ì‹¤íŒ¨"+e3);
 	}
    }
    
@@ -690,13 +685,13 @@ public class CampingcarRent extends JFrame implements ActionListener {
    
    
    @Override
-   public void actionPerformed(ActionEvent e) { // ¾×¼Ç´ã´ç ÇÔ¼ö
+   public void actionPerformed(ActionEvent e) { // ì•¡ì…˜ë‹´ë‹¹ í•¨ìˆ˜
     
-      try {//ÀÏ¹İ »ç¿ëÀÚ¿ë ¿¡·¯°ËÃâ
+      try {//ì¼ë°˜ ì‚¬ìš©ììš© ì—ëŸ¬ê²€ì¶œ
          stmt = con.createStatement();
          String query;
          
-         if (e.getSource() == btnRent) { // btnRent¸¦ ´­·¶À» ¶§
+         if (e.getSource() == btnRent) { // btnRentë¥¼ ëˆŒë €ì„ ë•Œ
         	 String licenseid, carid,startdate,rentdays;
         	 int rentprice=0,companyid=0; 
         	 licenseid = txtField1.getText();
@@ -720,16 +715,16 @@ public class CampingcarRent extends JFrame implements ActionListener {
         	 stmt.executeUpdate("INSERT INTO PresentRentCampingcarList VALUES ("+rentid+","+carid+","+licenseid+","+companyid+","+ "STR_TO_DATE('"+startdate+"','%Y-%m-%d'),STR_TO_DATE('"+startdate+"','%Y-%m-%d')-1+"+rentdays+","+rentprice+"*"+rentdays+",STR_TO_DATE('"+startdate+"','%Y-%m-%d')-1,NULL,NULL)");
         	 rentid++;
         	 	stmt.executeUpdate("DELETE from availablecampingcarlist where carid="+carid);
-        	 txtResult.setText("·»Æ®¿Ï·á");
+        	 txtResult.setText("ë ŒíŠ¸ì™„ë£Œ");
         	 
             }
          
          
          
-         else if(e.getSource() == UbtnSearch1) {//°Ë»ö1¹öÆ°À» ´­·¶À» ¶§
+         else if(e.getSource() == UbtnSearch1) {//ê²€ìƒ‰1ë²„íŠ¼ì„ ëˆŒë €ì„ ë•Œ
         	 query = "SELECT * FROM availablecampingcarlist ";
         	txtResult.setText("");
-        	txtResult.setText("Â÷·® ID\tÄ·ÇÎÄ«ÀÌ¸§\tÂ÷·®¹øÈ£ \tÃÖ´ë½ÂÂ÷ÀÎ¿ø¼ö  Á¦Á¶È¸»ç\tÁ¦Á¶¿¬µµ\t´©ÀûÁÖÇà°Å¸®\t´ë¿©ºñ¿ë(1ÀÏ)\t\n");
+        	txtResult.setText("ì°¨ëŸ‰ ID\tìº í•‘ì¹´ì´ë¦„\tì°¨ëŸ‰ë²ˆí˜¸ \tìµœëŒ€ìŠ¹ì°¨ì¸ì›ìˆ˜  ì œì¡°íšŒì‚¬\tì œì¡°ì—°ë„\tëˆ„ì ì£¼í–‰ê±°ë¦¬\tëŒ€ì—¬ë¹„ìš©(1ì¼)\t\n");
         	rs = stmt.executeQuery(query);
         	while (rs.next()) {
                 String str = rs.getInt(1) + "\t" + rs.getString(2) + "\t" + rs.getInt(3) + "\t" + rs.getInt(4) + "\t" + rs.getString(5) + "\t" + rs.getString(6) +"\t" + rs.getInt(7) +"\t" + rs.getInt(8)
@@ -742,8 +737,8 @@ public class CampingcarRent extends JFrame implements ActionListener {
          
          
       } catch (Exception e2) {
-         System.out.println("Äõ¸® ÀĞ±â ½ÇÆĞ :" + e2);
-         txtResult.setText("¿À·ù ¸Ş¼¼Áö :" + e2);
+         System.out.println("ì¿¼ë¦¬ ì½ê¸° ì‹¤íŒ¨ :" + e2);
+         txtResult.setText("ì˜¤ë¥˜ ë©”ì„¸ì§€ :" + e2);
          
          
 /*      } finally {
@@ -759,23 +754,23 @@ public class CampingcarRent extends JFrame implements ActionListener {
          }
   */
       }
-      try {//°ü¸®ÀÚ¿ë ¿¡·¯ °ËÃâ
+      try {//ê´€ë¦¬ììš© ì—ëŸ¬ ê²€ì¶œ
     	  stmt = con.createStatement();
           String query;
-          if (e.getSource() == btnReset) {// btnResetÀ» ´­·¶À» ¶§
-              txtResult2.setText("");//È­¸éÀÇ ÅØ½ºÆ®µéÀ» Áö¿ì´Â ¿ªÇÒ
+          if (e.getSource() == btnReset) {// btnResetì„ ëˆŒë €ì„ ë•Œ
+              txtResult2.setText("");//í™”ë©´ì˜ í…ìŠ¤íŠ¸ë“¤ì„ ì§€ìš°ëŠ” ì—­í• 
               createTable();
               insertMydata();
               rentid = 0;
-              txtResult2.setText("µ¥ÀÌÅÍ°¡ ÃÊ±âÈ­ µÇ¾ú½À´Ï´Ù!!");
+              txtResult2.setText("ë°ì´í„°ê°€ ì´ˆê¸°í™” ë˜ì—ˆìŠµë‹ˆë‹¤!!");
            }
           
           
           
           
           
-          else if(e.getSource() == btnExecute) {//execute¹öÆ°À» ´­·¶À» ¶§
-         	 dialog.setVisible(true);// ´ÙÀÌ¾ó·Î±× ÀÛµ¿½ÃÀÛ
+          else if(e.getSource() == btnExecute) {//executeë²„íŠ¼ì„ ëˆŒë €ì„ ë•Œ
+         	 dialog.setVisible(true);// ë‹¤ì´ì–¼ë¡œê·¸ ì‘ë™ì‹œì‘
          	 String selectnumber = dialog.getInputSelect();
          	 String tablenumber = dialog.getInputTableSelect();
          	 String data1 = dialog.getInput1();
@@ -790,13 +785,13 @@ public class CampingcarRent extends JFrame implements ActionListener {
          	 String data10 = dialog.getInput10();
          	 dialog.resetString();
          	 
-         	 if(selectnumber.compareTo("1")==0)//'ÀÔ·Â'¼±ÅÃ½Ã
+         	 if(selectnumber.compareTo("1")==0)//'ì…ë ¥'ì„ íƒì‹œ
          	 {
          		if(tablenumber.compareTo("1")==0)
             	 {
             		 query = "insert into companylist values("+data1+",'"+data2+"','"+data3+"','"+data4+"','"+data5+"','"+data6+"')";
             		 stmt.executeUpdate(query);
-            		 txtResult2.setText("Ä·ÇÎÄ« ´ë¿©È¸»ç Å×ÀÌºí¿¡ Ä·ÇÎÄ«´ë¿©È¸»çID°¡ "+data1+"ÀÎ data°¡ ÀÔ·ÂµÇ¾ú½À´Ï´Ù.");
+            		 txtResult2.setText("ìº í•‘ì¹´ ëŒ€ì—¬íšŒì‚¬ í…Œì´ë¸”ì— ìº í•‘ì¹´ëŒ€ì—¬íšŒì‚¬IDê°€ "+data1+"ì¸ dataê°€ ì…ë ¥ë˜ì—ˆìŠµë‹ˆë‹¤.");
             	 }
             	 else if(tablenumber.compareTo("2")==0)
             	 {
@@ -804,34 +799,34 @@ public class CampingcarRent extends JFrame implements ActionListener {
             		 stmt.executeUpdate(query);
             		 query = "insert into availablecampingcarlist values("+data1+",'"+data2+"',"+data3+","+data4+",'"+data5+"',STR_TO_DATE('"+data6+"','%Y-%m-%d'),"+data7+","+data8+","+data9+",STR_TO_DATE('"+data10+"','%Y-%m-%d'))";
             		stmt.executeUpdate(query);
-           		 txtResult2.setText("Ä·ÇÎÄ« Å×ÀÌºí¿¡ Ä·ÇÎÄ«µî·ÏID°¡ "+data1+"ÀÎ data°¡ ÀÔ·ÂµÇ¾ú½À´Ï´Ù.");
+           		 txtResult2.setText("ìº í•‘ì¹´ í…Œì´ë¸”ì— ìº í•‘ì¹´ë“±ë¡IDê°€ "+data1+"ì¸ dataê°€ ì…ë ¥ë˜ì—ˆìŠµë‹ˆë‹¤.");
             	 }
             	 else if(tablenumber.compareTo("3")==0)
             	 {
             		 query = "insert into campingcustomer values("+data1+",'"+data2+"','"+data3+"','"+data4+"','"+data5+"')";
             		 stmt.executeUpdate(query);
-            		 txtResult2.setText("°í°´ Å×ÀÌºí¿¡ ¿îÀü¸éÇãÁõ¹øÈ£°¡ "+data1+"ÀÎ data°¡ ÀÔ·ÂµÇ¾ú½À´Ï´Ù.");
+            		 txtResult2.setText("ê³ ê° í…Œì´ë¸”ì— ìš´ì „ë©´í—ˆì¦ë²ˆí˜¸ê°€ "+data1+"ì¸ dataê°€ ì…ë ¥ë˜ì—ˆìŠµë‹ˆë‹¤.");
             	 }
             	 else if(tablenumber.compareTo("4")==0)
             	 {
             		 query = "insert into carcenterlist values("+data1+",'"+data2+"','"+data3+"','"+data4+"','"+data5+"','"+data6+"')";
             		 stmt.executeUpdate(query);
-            		 txtResult2.setText("Ä·ÇÎÄ«Á¤ºñ¼Ò Å×ÀÌºí¿¡ Ä·ÇÎÄ«Á¤ºñ¼ÒID°¡ "+data1+"ÀÎ data°¡ ÀÔ·ÂµÇ¾ú½À´Ï´Ù.");
+            		 txtResult2.setText("ìº í•‘ì¹´ì •ë¹„ì†Œ í…Œì´ë¸”ì— ìº í•‘ì¹´ì •ë¹„ì†ŒIDê°€ "+data1+"ì¸ dataê°€ ì…ë ¥ë˜ì—ˆìŠµë‹ˆë‹¤.");
             	 }
             	 else if(tablenumber.compareTo("5")==0)
             	 {
             		 query = "insert into FixInformation values("+data1+","+data2+","+data3+","+data4+","+data5+",'"+data6+"',STR_TO_DATE('"+data7+"','%Y-%m-%d'),"+data8+",STR_TO_DATE('"+data9+"','%Y-%m-%d'),'"+data10+"')";
             		 stmt.executeUpdate(query);
-           		 txtResult2.setText("Ä·ÇÎÄ«Á¤ºñÁ¤º¸ Å×ÀÌºí¿¡ °íÀ¯Á¤ºñ¹øÈ£°¡ "+data1+"ÀÎ data°¡ ÀÔ·ÂµÇ¾ú½À´Ï´Ù.");
+           		 txtResult2.setText("ìº í•‘ì¹´ì •ë¹„ì •ë³´ í…Œì´ë¸”ì— ê³ ìœ ì •ë¹„ë²ˆí˜¸ê°€ "+data1+"ì¸ dataê°€ ì…ë ¥ë˜ì—ˆìŠµë‹ˆë‹¤.");
             	 }
          	 }
-         	 else if(selectnumber.compareTo("2")==0) //'»èÁ¦' ¼±ÅÃ½Ã
+         	 else if(selectnumber.compareTo("2")==0) //'ì‚­ì œ' ì„ íƒì‹œ
          	 {
          		if(tablenumber.compareTo("1")==0)
            	 {
          		query = "delete from companylist where companyid ="+ data1;
          		stmt.executeUpdate(query);
-           		txtResult2.setText("Ä·ÇÎÄ« ´ë¿©È¸»ç Å×ÀÌºí¿¡¼­ Ä·ÇÎÄ«´ë¿©È¸»çID°¡ "+data1+" ÀÎ data°¡ »èÁ¦µÇ¾ú½À´Ï´Ù.");
+           		txtResult2.setText("ìº í•‘ì¹´ ëŒ€ì—¬íšŒì‚¬ í…Œì´ë¸”ì—ì„œ ìº í•‘ì¹´ëŒ€ì—¬íšŒì‚¬IDê°€ "+data1+" ì¸ dataê°€ ì‚­ì œë˜ì—ˆìŠµë‹ˆë‹¤.");
            		 
            	 }
            	 else if(tablenumber.compareTo("2")==0)
@@ -840,28 +835,28 @@ public class CampingcarRent extends JFrame implements ActionListener {
          		stmt.executeUpdate(query);
          		query = "delete from availablecampingcarlist where carid ="+ data1;
          		stmt.executeUpdate(query);
-           		txtResult2.setText("Ä·ÇÎÄ«Å×ÀÌºí ¹× ÇöÀç ´ë¿©°¡´ÉÇÑ Ä·ÇÎÄ«Å×ÀÌºí¿¡¼­ Ä·ÇÎÄ«µî·ÏID°¡ "+data1+" ÀÎ data°¡ »èÁ¦µÇ¾ú½À´Ï´Ù.");
+           		txtResult2.setText("ìº í•‘ì¹´í…Œì´ë¸” ë° í˜„ì¬ ëŒ€ì—¬ê°€ëŠ¥í•œ ìº í•‘ì¹´í…Œì´ë¸”ì—ì„œ ìº í•‘ì¹´ë“±ë¡IDê°€ "+data1+" ì¸ dataê°€ ì‚­ì œë˜ì—ˆìŠµë‹ˆë‹¤.");
            	 }
            	 else if(tablenumber.compareTo("3")==0)
            	 {
            		query = "delete from campingcustomer where licenseid ="+ data1;
          		stmt.executeUpdate(query);
-           		txtResult2.setText("°í°´ Å×ÀÌºí¿¡¼­ ¿îÀü¸éÇãÁõ¹øÈ£°¡ "+data1+" ÀÎ data°¡ »èÁ¦µÇ¾ú½À´Ï´Ù.");
+           		txtResult2.setText("ê³ ê° í…Œì´ë¸”ì—ì„œ ìš´ì „ë©´í—ˆì¦ë²ˆí˜¸ê°€ "+data1+" ì¸ dataê°€ ì‚­ì œë˜ì—ˆìŠµë‹ˆë‹¤.");
            	 }
            	 else if(tablenumber.compareTo("4")==0)
            	 {
            		query = "delete from carcenterlist where carcenterid ="+ data1;
          		stmt.executeUpdate(query);
-           		txtResult2.setText("Ä·ÇÎÄ«Á¤ºñ¼Ò  Å×ÀÌºí¿¡¼­ Ä·ÇÎÄ«Á¤ºñ¼ÒID°¡ "+data1+" ÀÎ data°¡ »èÁ¦µÇ¾ú½À´Ï´Ù.");
+           		txtResult2.setText("ìº í•‘ì¹´ì •ë¹„ì†Œ  í…Œì´ë¸”ì—ì„œ ìº í•‘ì¹´ì •ë¹„ì†ŒIDê°€ "+data1+" ì¸ dataê°€ ì‚­ì œë˜ì—ˆìŠµë‹ˆë‹¤.");
            	 }
            	 else if(tablenumber.compareTo("5")==0)
            	 {
            		query = "delete from fixinformation where fixid ="+ data1;
          		stmt.executeUpdate(query);
-           		txtResult2.setText("Á¤ºñÁ¤º¸ Å×ÀÌºí¿¡¼­ °íÀ¯Á¤ºñ¹øÈ£°¡ "+data1+" ÀÎ data°¡ »èÁ¦µÇ¾ú½À´Ï´Ù.");
+           		txtResult2.setText("ì •ë¹„ì •ë³´ í…Œì´ë¸”ì—ì„œ ê³ ìœ ì •ë¹„ë²ˆí˜¸ê°€ "+data1+" ì¸ dataê°€ ì‚­ì œë˜ì—ˆìŠµë‹ˆë‹¤.");
            	 }
          	 }
-         	 else if(selectnumber.compareTo("3")==0)//'º¯°æ'¼±ÅÃ½Ã
+         	 else if(selectnumber.compareTo("3")==0)//'ë³€ê²½'ì„ íƒì‹œ
          	 {
          		 String s[],d[];
          		if(tablenumber.compareTo("1")==0)
@@ -880,7 +875,7 @@ public class CampingcarRent extends JFrame implements ActionListener {
          					continue;
          				
          			}
-         			txtResult2.setText("Ä·ÇÎÄ« ´ë¿©È¸»ç Å×ÀÌºí¿¡¼­ Ä·ÇÎÄ«´ë¿©È¸»çID°¡ "+data1+" ÀÎ data°¡ º¯°æµÇ¾ú½À´Ï´Ù.");
+         			txtResult2.setText("ìº í•‘ì¹´ ëŒ€ì—¬íšŒì‚¬ í…Œì´ë¸”ì—ì„œ ìº í•‘ì¹´ëŒ€ì—¬íšŒì‚¬IDê°€ "+data1+" ì¸ dataê°€ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.");
 //         			
          		}
          		else if(tablenumber.compareTo("2")==0)
@@ -903,7 +898,7 @@ public class CampingcarRent extends JFrame implements ActionListener {
          				else
          					continue;
          			}
-         			txtResult2.setText("Ä·ÇÎÄ« Å×ÀÌºí¿¡¼­ Ä·ÇÎÄ«µî·ÏID°¡ "+data1+" ÀÎ data°¡ º¯°æµÇ¾ú½À´Ï´Ù.");
+         			txtResult2.setText("ìº í•‘ì¹´ í…Œì´ë¸”ì—ì„œ ìº í•‘ì¹´ë“±ë¡IDê°€ "+data1+" ì¸ dataê°€ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.");
          		}
          		else if(tablenumber.compareTo("3")==0)
          		{
@@ -920,7 +915,7 @@ public class CampingcarRent extends JFrame implements ActionListener {
          				else
          					continue;
          			}
-         			txtResult2.setText("°í°´ Å×ÀÌºí¿¡¼­ ¿îÀü¸éÇãÁõ¹øÈ£°¡ "+data1+" ÀÎ data°¡ º¯°æµÇ¾ú½À´Ï´Ù.");
+         			txtResult2.setText("ê³ ê° í…Œì´ë¸”ì—ì„œ ìš´ì „ë©´í—ˆì¦ë²ˆí˜¸ê°€ "+data1+" ì¸ dataê°€ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.");
          		}
          		else if(tablenumber.compareTo("4")==0)
          		{
@@ -937,7 +932,7 @@ public class CampingcarRent extends JFrame implements ActionListener {
          				else
          					continue;
          			}
-         			txtResult2.setText("Ä·ÇÎÄ«Á¤ºñ¼Ò Å×ÀÌºí¿¡¼­ Á¤ºñ¼ÒID°¡ "+data1+" ÀÎ data°¡ º¯°æµÇ¾ú½À´Ï´Ù.");
+         			txtResult2.setText("ìº í•‘ì¹´ì •ë¹„ì†Œ í…Œì´ë¸”ì—ì„œ ì •ë¹„ì†ŒIDê°€ "+data1+" ì¸ dataê°€ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.");
          		}
          		else if(tablenumber.compareTo("5")==0)
          		{
@@ -957,20 +952,20 @@ public class CampingcarRent extends JFrame implements ActionListener {
          				else
          					continue;
          			}
-         			txtResult2.setText("Á¤ºñÁ¤º¸ Å×ÀÌºí¿¡¼­ °íÀ¯Á¤ºñ¹øÈ£°¡ "+data1+" ÀÎ data°¡ º¯°æµÇ¾ú½À´Ï´Ù.");
+         			txtResult2.setText("ì •ë¹„ì •ë³´ í…Œì´ë¸”ì—ì„œ ê³ ìœ ì •ë¹„ë²ˆí˜¸ê°€ "+data1+" ì¸ dataê°€ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.");
          		}
          	 }
-         	else if(selectnumber.compareTo("4")==0)//'¹İÈ¯'¼±ÅÃ½Ã
+         	else if(selectnumber.compareTo("4")==0)//'ë°˜í™˜'ì„ íƒì‹œ
          		{
          			String str="";
-         		//Á¡°Ë³»¿ª ÀúÀå
+         		//ì ê²€ë‚´ì—­ ì €ì¥
          			query = "insert into CarCheck values("+data1+","+data2+",'"+data3+"','"+data4+"','"+data5+"','"+data6+"',"+data7+","+data8+")";
          			stmt.executeUpdate(query);
-         		//ÇöÀç ´ë¿©¸ñ·Ï¿¡¼­ delete
+         		//í˜„ì¬ ëŒ€ì—¬ëª©ë¡ì—ì„œ delete
          				query = "delete from PresentRentCampingcarList where rentid = "+data1;
          				stmt.executeUpdate(query);
          		
-         		//¼ö¸®°¡ ÇÊ¿äÇÏÁö ¾ÊÀ¸¸é ´ë¿©°¡´ÉÇÑ ¸ñ·ÏÀ¸·Î ÀÌµ¿
+         		//ìˆ˜ë¦¬ê°€ í•„ìš”í•˜ì§€ ì•Šìœ¼ë©´ ëŒ€ì—¬ê°€ëŠ¥í•œ ëª©ë¡ìœ¼ë¡œ ì´ë™
          			if(data7.compareTo("0")==0)
          			{
          				query = "select * from Campingcarlist where carid = "+data2;
@@ -983,7 +978,7 @@ public class CampingcarRent extends JFrame implements ActionListener {
          				
          			}
          			
-         			txtResult2.setText("°íÀ¯´ë¿©¹øÈ£°¡ "+data1+"ÀÎ Â÷·®ÀÌ ¹İÈ¯µÇ¾ú½À´Ï´Ù.");
+         			txtResult2.setText("ê³ ìœ ëŒ€ì—¬ë²ˆí˜¸ê°€ "+data1+"ì¸ ì°¨ëŸ‰ì´ ë°˜í™˜ë˜ì—ˆìŠµë‹ˆë‹¤.");
          		}
            }
           
@@ -992,12 +987,12 @@ public class CampingcarRent extends JFrame implements ActionListener {
           
           
           
-          else if(e.getSource() == AbtnSearch1) {//°ü¸®ÀÚ¿ë °Ë»ö1 ¹öÆ°À» ´­·¶À» ¶§
+          else if(e.getSource() == AbtnSearch1) {//ê´€ë¦¬ììš© ê²€ìƒ‰1 ë²„íŠ¼ì„ ëˆŒë €ì„ ë•Œ
          	 query = "select presentrentcampingcarlist.rentid, campingcarlist.carid, campingcarlist.carname, campingcustomer.licenseid, campingcustomer.customername,  campingcarlist.carnumber " + 
          	 		"from campingcustomer,presentrentcampingcarlist,campingcarlist " + 
          	 		"where presentrentcampingcarlist.licenseid = campingcustomer.licenseid and presentrentcampingcarlist.carid = campingcarlist.carid;";
           	txtResult2.setText("");
-          	txtResult2.setText("°íÀ¯´ë¿©¹øÈ£\tÄ·ÇÎÄ«µî·ÏID\tÂ÷·®¸í\t¿îÀü¸éÇãÁõ¹øÈ£\t°í°´¸í\tÂ÷·®¹øÈ£\n");
+          	txtResult2.setText("ê³ ìœ ëŒ€ì—¬ë²ˆí˜¸\tìº í•‘ì¹´ë“±ë¡ID\tì°¨ëŸ‰ëª…\tìš´ì „ë©´í—ˆì¦ë²ˆí˜¸\tê³ ê°ëª…\tì°¨ëŸ‰ë²ˆí˜¸\n");
           	rs = stmt.executeQuery(query);
           	while (rs.next()) {
                   String str = rs.getInt(1) + "\t" + rs.getInt(2) + "\t" + rs.getString(3) + "\t" + rs.getInt(4) + "\t" + rs.getString(5) + "\t" +rs.getInt(6)
@@ -1006,13 +1001,13 @@ public class CampingcarRent extends JFrame implements ActionListener {
           						}
            }
           
-          else if(e.getSource() == AbtnSearch2) {//°ü¸®ÀÚ¿ë °Ë»ö2 ¹öÆ°À» ´­·¶À» ¶§
+          else if(e.getSource() == AbtnSearch2) {//ê´€ë¦¬ììš© ê²€ìƒ‰2 ë²„íŠ¼ì„ ëˆŒë €ì„ ë•Œ
           	 query = "select campingcarlist.carid, campingcarlist.carname, campingcarlist.companyid, campingcustomer.licenseid, campingcustomer.customername, carcheck.frontdescription, carcheck.leftdescription, carcheck.rightdescription, carcheck.backdescription " + 
           	 		"from carcheck,campingcarlist,campingcustomer " + 
           	 		"where carcheck.havetofix=1 and carcheck.carID = campingcarlist.carid and carcheck.licenseid=campingcustomer.licenseid "+
           	 		"order by carid;";
            	txtResult2.setText("");
-           	txtResult2.setText("Ä·ÇÎÄ«µî·ÏID\tÄ·ÇÎÄ« ÀÌ¸§\tÄ·ÇÎÄ«´ë¿©È¸»çID    ¿îÀü¸éÇãÁõ¹øÈ£    °í°´¸í\t¾ÕºÎºĞ\t¿ŞÂÊºÎºĞ\t¿À¸¥ÂÊºÎºĞ\tµŞºÎºĞ\n");
+           	txtResult2.setText("ìº í•‘ì¹´ë“±ë¡ID\tìº í•‘ì¹´ ì´ë¦„\tìº í•‘ì¹´ëŒ€ì—¬íšŒì‚¬ID    ìš´ì „ë©´í—ˆì¦ë²ˆí˜¸    ê³ ê°ëª…\tì•ë¶€ë¶„\tì™¼ìª½ë¶€ë¶„\tì˜¤ë¥¸ìª½ë¶€ë¶„\të’·ë¶€ë¶„\n");
            	rs = stmt.executeQuery(query);
            	while (rs.next()) {
                    String str = rs.getInt(1) + "\t"+ rs.getString(2) + "\t"+ rs.getInt(3) + "\t       " + rs.getInt(4) + "\t          " + rs.getString(5) + "\t" + rs.getString(6) + "\t" + rs.getString(7) + "\t" + rs.getString(8) + "\t" + rs.getString(9)
@@ -1020,13 +1015,13 @@ public class CampingcarRent extends JFrame implements ActionListener {
                    txtResult2.append(str);
            						}
             }
-          else if(e.getSource() == AbtnSearch3) {//°ü¸®ÀÚ¿ë °Ë»ö3 ¹öÆ°À» ´­·¶À» ¶§
+          else if(e.getSource() == AbtnSearch3) {//ê´€ë¦¬ììš© ê²€ìƒ‰3 ë²„íŠ¼ì„ ëˆŒë €ì„ ë•Œ
            	 query = "select  carcenterlist.carcenterid, carcenterlist.carcentername, fixinformation.fixid, fixinformation.companyid, companylist.companyname, fixinformation.carid, campingcarlist.carname, fixinformation.fixdate " + 
            	 		"from fixinformation,carcenterlist,campingcarlist,companylist " + 
            	 		"where fixinformation.carcenterid = carcenterlist.carcenterid and fixinformation.carid = campingcarlist.carid and fixinformation.companyid = companylist.companyid " + 
            	 		"order by carcenterid;";
             	txtResult2.setText("");
-            	txtResult2.setText("Á¤ºñ¼ÒID\tÁ¤ºñ¼Ò ÀÌ¸§\tÁ¤ºñ¹øÈ£\t´ë¿©È¸»çID\t´ë¿©È¸»çÀÌ¸§ \tÄ·ÇÎÄ«µî·ÏID\tÄ·ÇÎÄ« ÀÌ¸§\t¼ö¸®³¯Â¥\n");
+            	txtResult2.setText("ì •ë¹„ì†ŒID\tì •ë¹„ì†Œ ì´ë¦„\tì •ë¹„ë²ˆí˜¸\tëŒ€ì—¬íšŒì‚¬ID\tëŒ€ì—¬íšŒì‚¬ì´ë¦„ \tìº í•‘ì¹´ë“±ë¡ID\tìº í•‘ì¹´ ì´ë¦„\tìˆ˜ë¦¬ë‚ ì§œ\n");
             	rs = stmt.executeQuery(query);
             	while (rs.next()) {
                     String str = rs.getInt(1) + "\t"+ rs.getString(2) + "\t"+ rs.getInt(3) + "\t" + rs.getInt(4) + "\t" + rs.getString(5) + "\t" + rs.getInt(6) + "\t" + rs.getString(7) + "\t" + rs.getString(8)
@@ -1034,14 +1029,14 @@ public class CampingcarRent extends JFrame implements ActionListener {
                     txtResult2.append(str);
             						}
              }
-          else if(e.getSource() == AbtnSearch4) {//°ü¸®ÀÚ¿ë °Ë»ö4 ¹öÆ°À» ´­·¶À» ¶§
+          else if(e.getSource() == AbtnSearch4) {//ê´€ë¦¬ììš© ê²€ìƒ‰4 ë²„íŠ¼ì„ ëˆŒë €ì„ ë•Œ
             	 query = "select campingcustomer.licenseid, campingcustomer.customername, sum(fixinformation.fixprice) " + 
             	 		"from campingcustomer,fixinformation " + 
             	 		"where campingcustomer.licenseid = fixinformation.licenseid " + 
             	 		"Group by campingcustomer.customername " + 
             	 		"order by campingcustomer.customername;";
              	txtResult2.setText("");
-             	txtResult2.setText("¿îÀü¸éÇãÁõ¹øÈ£\t°í°´¸í\t¼ö¸®ºñ¿ë\n");
+             	txtResult2.setText("ìš´ì „ë©´í—ˆì¦ë²ˆí˜¸\tê³ ê°ëª…\tìˆ˜ë¦¬ë¹„ìš©\n");
              	rs = stmt.executeQuery(query);
              	while (rs.next()) {
                      String str = rs.getInt(1) + "\t"+ rs.getString(2) + "\t"+ rs.getInt(3)
@@ -1052,8 +1047,8 @@ public class CampingcarRent extends JFrame implements ActionListener {
           
       }
       catch(Exception e2) {
-    	  System.out.println("Äõ¸® ÀĞ±â ½ÇÆĞ :" + e2);
-          txtResult2.setText("¿À·ù ¸Ş¼¼Áö :" + e2);
+    	  System.out.println("ì¿¼ë¦¬ ì½ê¸° ì‹¤íŒ¨ :" + e2);
+          txtResult2.setText("ì˜¤ë¥˜ ë©”ì„¸ì§€ :" + e2);
       }
 
    }
@@ -1069,7 +1064,7 @@ public class CampingcarRent extends JFrame implements ActionListener {
     		try {
     			con.close();
     		} catch (Exception e4) { 	}
-    		System.out.println("ÇÁ·Î±×·¥ ¿ÏÀü Á¾·á!");    		
+    		System.out.println("í”„ë¡œê·¸ë¨ ì™„ì „ ì¢…ë£Œ!");    		
     	    System.exit(0);
     	  }
     	});
