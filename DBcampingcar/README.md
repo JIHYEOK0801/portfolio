@@ -70,7 +70,7 @@
 
   </br>
 
-  > 2. ### 캠핑카 데이터 삽입/삭제/변경
+  > 2. ### 데이터 삽입/삭제/변경
 
   <img src = "https://github.com/JIHYEOK0801/record/blob/main/DBcampingcar/img/2.gif?raw=true">
 
@@ -91,11 +91,12 @@
 
      <img src = "https://github.com/JIHYEOK0801/record/blob/main/DBcampingcar/img/4.gif?raw=true">
 
-     관리자의 검색기능 3가지
+     관리자의 검색기능 4가지
 
      - 대여고객 및 대여차량 테이블 검색 기능
      - 반납 후 수리가 필요한 차량 테이블 검색 기능
      - 정비소별 정비내역 테이블 검색 기능
+     - 고객별 청구 수리비용 검색 기능
 
   </br>
 
@@ -165,6 +166,8 @@
    - > ### 데이터  스키마
 
      <img src = "https://github.com/JIHYEOK0801/record/blob/main/DBcampingcar/img/datatable.PNG?raw=true"  width = '1920px'>
+
+     </br>
 
      </br>
 
@@ -787,7 +790,7 @@
                    }
         ```
 
-        
+        </br>
 
      2. **'수리가 필요한 차량 검색'**
 
@@ -808,7 +811,7 @@
                     }
         ```
 
-        
+        </br>
 
      3. **'정비소별 정비내역'**
 
@@ -829,54 +832,29 @@
                      } 
         ```
 
-        
+        </br>
+
+     4. **'고객별 청구할 수리비용 검색'**
 
      ```java
-     else if(e.getSource() == AbtnSearch1) {//'대여고객 및 대여차량 검색' 버튼을 눌렀을 때
-              	 query = "select presentrentcampingcarlist.rentid, campingcarlist.carid, campingcarlist.carname, campingcustomer.licenseid, campingcustomer.customername,  campingcarlist.carnumber " + 
-              	 		"from campingcustomer,presentrentcampingcarlist,campingcarlist " + 
-              	 		"where presentrentcampingcarlist.licenseid = campingcustomer.licenseid and presentrentcampingcarlist.carid = campingcarlist.carid;";
-               	txtResult2.setText("");
-               	txtResult2.setText("고유대여번호\t캠핑카등록ID\t차량명\t운전면허증번호\t고객명\t차량번호\n");
-               	rs = stmt.executeQuery(query);
-               	while (rs.next()) {
-                       String str = rs.getInt(1) + "\t" + rs.getInt(2) + "\t" + rs.getString(3) + "\t" + rs.getInt(4) + "\t" + rs.getString(5) + "\t" +rs.getInt(6)
-                             + "\n";
-                       txtResult2.append(str);
-               						}
-                }
-               
-               else if(e.getSource() == AbtnSearch2) {//'수리가 필요한 차량 검색' 버튼을 눌렀을 때
-               	 query = "select campingcarlist.carid, campingcarlist.carname, campingcarlist.companyid, campingcustomer.licenseid, campingcustomer.customername, carcheck.frontdescription, carcheck.leftdescription, carcheck.rightdescription, carcheck.backdescription " + 
-               	 		"from carcheck,campingcarlist,campingcustomer " + 
-               	 		"where carcheck.havetofix=1 and carcheck.carID = campingcarlist.carid and carcheck.licenseid=campingcustomer.licenseid "+
-               	 		"order by carid;";
-                	txtResult2.setText("");
-                	txtResult2.setText("캠핑카등록ID\t캠핑카 이름\t캠핑카대여회사ID    운전면허증번호    고객명\t앞부분\t왼쪽부분\t오른쪽부분\t뒷부분\n");
-                	rs = stmt.executeQuery(query);
-                	while (rs.next()) {
-                        String str = rs.getInt(1) + "\t"+ rs.getString(2) + "\t"+ rs.getInt(3) + "\t       " + rs.getInt(4) + "\t          " + rs.getString(5) + "\t" + rs.getString(6) + "\t" + rs.getString(7) + "\t" + rs.getString(8) + "\t" + rs.getString(9)
-                              + "\n";
-                        txtResult2.append(str);
-                						}
-                 }
-               else if(e.getSource() == AbtnSearch3) {//'정비소별 정비 내역' 버튼을 눌렀을 때
-                	 query = "select  carcenterlist.carcenterid, carcenterlist.carcentername, fixinformation.fixid, fixinformation.companyid, companylist.companyname, fixinformation.carid, campingcarlist.carname, fixinformation.fixdate " + 
-                	 		"from fixinformation,carcenterlist,campingcarlist,companylist " + 
-                	 		"where fixinformation.carcenterid = carcenterlist.carcenterid and fixinformation.carid = campingcarlist.carid and fixinformation.companyid = companylist.companyid " + 
-                	 		"order by carcenterid;";
-                 	txtResult2.setText("");
-                 	txtResult2.setText("정비소ID\t정비소 이름\t정비번호\t대여회사ID\t대여회사이름 \t캠핑카등록ID\t캠핑카 이름\t수리날짜\n");
-                 	rs = stmt.executeQuery(query);
-                 	while (rs.next()) {
-                         String str = rs.getInt(1) + "\t"+ rs.getString(2) + "\t"+ rs.getInt(3) + "\t" + rs.getInt(4) + "\t" + rs.getString(5) + "\t" + rs.getInt(6) + "\t" + rs.getString(7) + "\t" + rs.getString(8)
-                               + "\n";
-                         txtResult2.append(str);
-                 						}
-                  }       
+     else if(e.getSource() == AbtnSearch4) {//관리자용 검색4 버튼을 눌렀을 때
+                 	 query = "select campingcustomer.licenseid, campingcustomer.customername, sum(fixinformation.fixprice) " + 
+                 	 		"from campingcustomer,fixinformation " + 
+                 	 		"where campingcustomer.licenseid = fixinformation.licenseid " + 
+                 	 		"Group by campingcustomer.customername " + 
+                 	 		"order by campingcustomer.customername;";
+                  	txtResult2.setText("");
+                  	txtResult2.setText("운전면허증번호\t고객명\t수리비용\n");
+                  	rs = stmt.executeQuery(query);
+                  	while (rs.next()) {
+                          String str = rs.getInt(1) + "\t"+ rs.getString(2) + "\t"+ rs.getInt(3)
+                                + "\n";
+                          txtResult2.append(str);
+                  						}
+                   }
      ```
 
-   </br>
+     ​	</br>
 
    ---
 
