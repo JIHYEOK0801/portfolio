@@ -61,7 +61,7 @@
 
   > 1. ### 데이터 초기화
 
-  <img src = "https://github.com/JIHYEOK0801/record/blob/main/DBcampingcar/img/1.gif?raw=true">
+  <img src = "https://github.com/JIHYEOK0801/record/blob/main/DBcampingcar/img/new_1.gif?raw=true">
 
   
 
@@ -72,14 +72,14 @@
 
   > 2. ### 데이터 삽입/삭제/변경
 
-  <img src = "https://github.com/JIHYEOK0801/record/blob/main/DBcampingcar/img/2.gif?raw=true">
+  <img src = "https://github.com/JIHYEOK0801/record/blob/main/DBcampingcar/img/new_2.gif?raw=true">
 
   - 'data 삽입/삭제/변경 및 반환' 버튼으로 데이터 조작
   - 생성된 창에 '수행할 작업' 과 '변경할 테이블'에 해당하는 번호 기입
 
   </br>
 
-  <img src = "https://github.com/JIHYEOK0801/record/blob/main/DBcampingcar/img/3.gif?raw=true">
+  <img src = "https://github.com/JIHYEOK0801/record/blob/main/DBcampingcar/img/new_3.gif?raw=true">
 
   - 내용 기입 후 '수행'
 
@@ -89,7 +89,7 @@
 
   3. > ### 검색기능
 
-     <img src = "https://github.com/JIHYEOK0801/record/blob/main/DBcampingcar/img/4.gif?raw=true">
+     <img src = "https://github.com/JIHYEOK0801/record/blob/main/DBcampingcar/img/new_4.gif?raw=true">
 
      관리자의 검색기능 4가지
 
@@ -106,7 +106,7 @@
 
   1. > ### 대여가능 캠핑카 검색
 
-     <img src = "https://github.com/JIHYEOK0801/record/blob/main/DBcampingcar/img/5.gif?raw=true">
+     <img src = "https://github.com/JIHYEOK0801/record/blob/main/DBcampingcar/img/new_5.gif?raw=true">
 
      - '대여가능한 캠핑카 목록 검색' 버튼으로 수행
      - 현재 대여 가능한 캠핑카의 목록을 검색하는 기능
@@ -115,7 +115,7 @@
 
   2. > ### 캠핑카 대여 신청
 
-     <img src = "https://github.com/JIHYEOK0801/record/blob/main/DBcampingcar/img/6.gif?raw=true">
+     <img src = "https://github.com/JIHYEOK0801/record/blob/main/DBcampingcar/img/new_6.gif?raw=true">
 
      - 양식 기입 후 '신청' 버튼으로 대여 신청 실행.
 
