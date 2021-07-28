@@ -36,15 +36,20 @@
 
   2021.05 ~ 2021.06
 
+- ### 개발 인원
+
+  4명
+
 - ### 사용 기술(개발 환경)
 
   Python, Firebase DB, AWS, Android Studio, TensorFlow, Keras
 
-- ### 역할 분담
+- ### 역할 
 
-  1. 데이터 분석 및 머신러닝 모델 제작 (2명)
-  2. 안드로이드 어플리케이션 개발(1명)
-  3. 서버 개발 및 데이터 유지보수(1명)
+  1. 서버 환경 구축
+  2. 데이터 수집 모듈 개발
+  3. 모델 실행, 데이터 수집 모듈 실행의 자동화 개발
+  4. DB관리
 
 - ### 소스코드
 
@@ -157,168 +162,327 @@
 
   2. > **머신러닝 모델 실행 모듈**
 
-     - 저장된 모델 파일에 입력값을 넣어 예측을 실행
-
-</br>
-
----
-
-## Machine Learning(ML)
-
-- > ### KOSPI 지수 예측에 사용한 일별 데이터(총 27개의 column)
-
-  1. *close(종가)*
-  2. *daebi(대비)*
-  3. *updown(등락률)*
-  4. *open(시가)*
-  5. *high(고가)*
-  6. *low(저가)*
-  7. *volume(거래량)*
-  8. *association(기관 순매수금)*
-  9. *foreign(외국인 순매수금)*
-  10. *person(개인 순매수금)*
-  11. *pension(연기금 순매수금)*
-  12. *hsi(홍콩 hsi지수)*
-  13. *shanghai(중국 상해지수)*
-  14. *nasdaq(미국 나스닥지수)*
-  15. *spy(미국 spi500 지수)*
-  16. *dji(미국 다우지수)*
-  17. *nikkei(일본 니케이지수)*
-  18. *won/USdollar(달러환율)*
-  19. *won/100en(엔환율)*
-  20. *won/euro(유로환율)*
-  21. *WTI(유가)*
-  22. *ema(지수이동평균 : 5, 10, 20, 60, 120일)*
-  23. *disp(이격도 : 주가와 지수이동평균선의 괴리를 수치화하여 나타낸 것)*
-
-  </br>
-
-  ---
-
-- > ### 예측 과정
-
-  - **예측 시행 요일 및 예측 목표 요일**
-
-    - *예측 시행 요일* : 매주 주식시장 마감날의 다음날
-
-    - *예측 목표 요일* : 근무일 기준 5일 후(일반적으로 그 다음 주 금요일)로, 매주 한 번씩 실행
-
-      *ex)* *예측 시행 요일* : 토요일 	- - >	*예측 목표 날* : 그 다음주 금요일
-
-    </br>
-
-  - **예측 단계 및 정보 제공**
-
-    1. 예측 시행날 기준 1일 후(월요일)의 KOSPI 예측 지수 저장
-    2. 1 에서 얻은 예측 지수를 기존의 데이터에 합하여 2일 후(화요일)값 예측 가능
-    3. 1, 2 의 과정을 5번 반복하여 5일 후(금요일)의 지수 예측
-    4. 이번주의 마지막 지수(이번주 금요일) 5일후의 지수(다음주 금요일)와 비교하여 0 or 1로 등락 표현
-
-  </br>
-
-  ---
-
-- > ### 서버 내 모델 실행코드
-
-  ```python
-  from copy import deepcopy
-  
-  import pandas as pd
-  from pandas import Series,DataFrame
-  import numpy as np
-  
-  import tensorflow as tf
-  from tensorflow import keras
-  from sklearn.preprocessing import MinMaxScaler
-  from sklearn.model_selection import train_test_split
-  
-  from tensorflow.keras.models import Sequential
-  from tensorflow.keras.layers import Dense
-  from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
-  from tensorflow.keras.layers import LSTM
-  from tensorflow.keras.layers import Dropout
-  
-  from tensorflow.keras.losses import Huber
-  from tensorflow.keras.optimizers import Adam
-  from tensorflow.keras import optimizers
-  from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
-  
-  from sklearn.metrics import r2_score
-  from sklearn.metrics import mean_squared_error
-  
-  from tensorflow.keras.models import load_model
-  import os
-  
-  print('<-----model.py import complete----------->')
-  
-  def run(model_data):
-      
-      model_data['EMA_close5'] = model_data['close'].ewm(5).mean()
-      model_data['EMA_close10'] = model_data['close'].ewm(10).mean()  
-      model_data['EMA_close20'] = model_data['close'].ewm(20).mean()
-      model_data['EMA_close60'] = model_data['close'].ewm(60).mean()
-      model_data['EMA_close120'] = model_data['close'].ewm(120).mean()
-      model_data['disp5'] = (model_data['close']/model_data['EMA_close5']) * 100
-      model_data['after4days_close'] = model_data['close'].shift(-4)
-      model_data = model_data.interpolate(method = 'values', limit_direction = 'both')
-      model_data = model_data[120:]
-      today_k=model_data['close'].iloc[-1]
-  
-      new_scaler = MinMaxScaler()
-      new_scaler.fit(model_data['close'].values.reshape(-1,1))
-  
-      for i in model_data.columns:
-          if i == 'date': continue
-          model_data[i] = MinMaxScaler().fit_transform(model_data[i].values.reshape(-1, 1)).round(4)
-  
-      feature_cols = ['volume','shanghai','dji', 'nikkei', 'hsi', 'won/US dollar', 'won/100en', 'won/euro','association','person','daebi',
-         'EMA_close5', 'EMA_close10', 'EMA_close20', 'EMA_close60', 'EMA_close120', 'disp5', 'updown','after4days_close']
-      label_cols = ['close']
-  
-  
-      base_dir = '' #모델 저장 위치 서버용
-      file_name = '75_LSTM.h5'  #모델 이름(파일명)
-      dir = os.path.join(base_dir, file_name)
-      model = load_model(dir)  #저장했던 모델 (dir에 있는거) 불러오는 코드
-  
-      print('model 불러오기 완료')
-  
-      def find_pred():
-          
-          df = model_data[-24:] # 예측값 하나만 뽑기 위해 원래 -24:
-          
-          for i in range(5): # 1-4번째 예측 값으로 빈칸을 채우고, 5번째 예측값을 예측 값으로 이용
-              df_tmp = df[i:i+20] #20개씩 잘라서 예측
-              my_final_x_test = df_tmp[feature_cols]
-              my_final_x_test = np.array(my_final_x_test)
-              my_final_x_test = my_final_x_test.reshape(1, 20, 19) # 예측하기 위한 정리
-  
-              my_final_y_pred = model.predict(my_final_x_test) # 예측하는 코드
-  
-              if i == 4: #5번째 예측을 마쳤으므로 실제 오늘의 kospi값과 지수들을 통해 예측한 오늘로부터 5일 뒤 값을 return
-                  return new_scaler.inverse_transform(my_final_y_pred)[0][0]
-              else: # 예측한 값을 df에 채워서 다음 예측을 위해 사용하므로 예측 값을 저장한다.
-                  df['after4days_close'].iloc[i+20] = my_final_y_pred[0][0]
-  
-      # return : 오늘의 코스피 값, 오늘의 지수들로 예측한 5일 뒤 코스피 값
-      pred = find_pred()
-      print('함수실행')
-      # 예측 값 - 오늘의 코스피지수 >0 이면 상승이므로 1, 유지 또는 하락의 경우 0
-      ud_5days = 0
-      if pred - today_k > 0:
-          ud_5days = 1
-      else:
-          ud_5days = 0
-      return ud_5days
-  
-  ```
-
+     - 저장된 모델 파일에 입력값을 넣어 예측 실행
 
 </br>
 
 ---
 
 ## Server & DB
+
+1. ### 서버 구축
+
+   - >**서버의 용도**
+
+     다음과 같은 기능을 위해 서버 구축
+
+     1. 데이터 수집
+
+     2. 머신러닝 모델 실행
+
+     3. 1,2 번의 자동화
+
+        </br>
+
+   - > **서버 구축**
+
+     AWS EC2, ubuntu 운영체제로 인스턴스 생성
+
+     </br>
+
+   - > **서버 구성 파일**
+
+     <img src = "https://github.com/JIHYEOK0801/record/blob/main/capstone/img/serverfile2.PNG?raw=true">
+
+     1. 데이터 수집 모듈 파일 (.py)
+     2. 모델 실행 파일 (.py)
+     3. 모델 파일(.h5)
+     4. 자동화 실행 파일(.py)
+     5. DB 권한 인가 파일(.json)
+
+     </br>
+
+   ---
+
+2. ### DB, 데이터 수집 모듈
+
+   - > **DB 구축**
+
+     Firebase Firestore Database 사용
+
+     </br>
+
+   - > **DB에 저장되는 데이터**
+
+     <img src = "https://github.com/JIHYEOK0801/record/blob/main/capstone/img/DB2.PNG?raw=true">
+
+     1. **모델 입력 데이터(dailydata)** 
+        : 모델 실행에 필요한 입력 값으로 사용 // {*key* = 날짜 : *value* = array(모델 입력 데이터)}
+
+        </br>
+
+     2. **KOSPI 종가 데이터(dailykospi_android)**  
+
+        : 사용자에게 보여줄 KOSPI 차트의 값으로 사용 // {*key* = 날짜 : *value* = string(해당 날짜의 종가)}
+
+        </br>
+
+     3. **모델 예측 결과값(predictedkospi_test)** 
+
+        : 모델이 실행되고 나온 결과 값 // {*key* = 예측 목표 날짜 : *value* = string(해당 날짜의 지수 등락 여부)}
+
+        </br>
+
+     4. **예측 시행날의 비교 값(origin)** 
+        : 모델 예측 결과 값을 사용자에게 제공하기 위한 비교값 // {*key* = 예측 시행 날짜 : *value* = string(해당 날짜의 종가)}
+
+        </br>
+
+   - > **데이터 수집**
+
+     모델 실행에 쓰이는 데이터 수집 방법은 두 가지로 **'웹페이지 크롤링'**과  **'API  활용'**
+
+     </br>
+
+     - > **크롤링(crawling)**
+
+       1. '[네이버 증권'](https://finance.naver.com/) 웹페이지 크롤링을 통해 각국의 주가지수, 유가 등의 정보 획득
+       2. 크롤링에 필요한 **'BeautifulSoup'** 패키지 사용
+
+       ```python
+       # -*- coding: utf-8 -*-
+       from bs4 import BeautifulSoup
+       from datetime import datetime
+       import requests
+       import time
+       
+       def get_kospi_daebiupdown(): ##kospi 대비, 등락률
+           url= 'https://finance.naver.com/sise/sise_index_day.nhn?code=KOSPI'
+           result=requests.get(url)
+           result.encoding = 'utf-8'
+           
+           soup=BeautifulSoup(result.content, "html.parser")
+           indice = soup.select("td.number_1")
+           updownpercent = float(indice[1].text.replace('%','').strip()) ## 등락률
+           
+           indice = soup.select("td.rate_down")
+           daebi = float(indice[0].text.strip()) ## 대비
+           updown = soup.select("img")[0]['alt'] 
+           if updown == '하락':
+               daebi = daebi * -1
+               
+           return daebi, updownpercent
+       
+       def get_hsi_indice():##홍콩 hsi 지수
+       
+           url = 'https://finance.naver.com/world/sise.nhn?symbol=HSI@HSI'
+           result=requests.get(url)
+           result.encoding = 'utf-8'
+       
+           soup=BeautifulSoup(result.content, "html.parser")
+           indice = soup.select("td.tb_td2")
+           return indice[0].text.replace(',','')
+       
+       def get_shanghai_indice(): ## 상하이 상해지수
+       
+           url = 'https://finance.naver.com/world/sise.nhn?symbol=SHS@000001'
+           result=requests.get(url)
+           result.encoding = 'utf-8'
+       
+           soup=BeautifulSoup(result.content, "html.parser")
+           indice = soup.select("td.tb_td2")
+           return indice[0].text.replace(',','')
+           
+       
+       def get_nikkei_indice():## 일본 니케이
+       
+           url = 'https://finance.naver.com/world/sise.nhn?symbol=NII@NI225'
+           result=requests.get(url)
+           result.encoding = 'utf-8'
+       
+           soup=BeautifulSoup(result.content, "html.parser")
+           indice = soup.select("td.tb_td2")
+           return indice[0].text.replace(',','')
+       
+       
+       def get_dji_indice(): ## 미국 다우존스
+       
+           url = 'https://finance.naver.com/world/sise.nhn?symbol=DJI@DJI'
+           result=requests.get(url)
+           result.encoding = 'utf-8'
+       
+           soup=BeautifulSoup(result.content, "html.parser")
+           indice = soup.select("td.tb_td2")
+           return indice[0].text.replace(',','')
+       
+       def get_nas_indice():  ## 미국 나스닥
+       
+           url = 'https://finance.naver.com/world/sise.nhn?symbol=NAS@IXIC&fdtc=0'
+           result=requests.get(url)
+           result.encoding = 'utf-8'
+       
+           soup=BeautifulSoup(result.content, "html.parser")
+           indice = soup.select("td.tb_td2")
+           return indice[0].text.replace(',','')
+       
+       def get_spi_indice(): ## 미국 s&p 500
+       
+           url = 'https://finance.naver.com/world/sise.nhn?symbol=SPI@SPX'
+           result=requests.get(url)
+           result.encoding = 'utf-8'
+       
+           soup=BeautifulSoup(result.content, "html.parser")
+           indice = soup.select("td.tb_td2")
+           return indice[0].text.replace(',','')
+       
+       
+       def get_oil_price(): ##wti 유가가격
+           
+           wti_url = 'https://finance.naver.com/marketindex/worldDailyQuote.nhn?marketindexCd=OIL_CL&fdtc=2'
+           
+           
+           result=requests.get(wti_url)
+           result.encoding = 'utf-8'
+           
+           soup=BeautifulSoup(result.content, "html.parser")
+           
+           indice = soup.select("td.num")
+           wti = indice[0].text.strip()
+       
+           return wti
+       
+       ```
+
+     </br>
+
+     - > **API**
+
+       API를 사용하여 각각의 데이터 획득
+
+       1. [한국은행 경제통계시스템 : ecos API](https://ecos.bok.or.kr/jsp/openapi/OpenApiController.jsp) - '환율' 
+
+          ```python
+          # 한국은행의 환율 정보를 가져오는데 사용
+          # -*- coding: utf-8 -*-
+          import requests 
+          import xml.etree.ElementTree as ET 
+          from datetime import datetime
+          from datetime import timedelta
+          import time
+          import isHoliday
+          
+          key = 'API_KEY'
+          
+          ## API 호출
+          def runAPI(url):
+              response = requests.get(url)  ## http 요청이 성공했을때 API의 리턴값을 가져옵니다.
+              
+              if response.status_code == 200:
+                  try:
+                      contents = response.text
+                      ecosRoot = ET.fromstring(contents)
+                      
+                      if ecosRoot[0].text[:4] in ("INFO","ERRO"):  ## 오류 확인
+                          print(ecosRoot[0].text + " : " + ecosRoot[1].text)  ## 오류메세지를 확인하고 처리합니다.
+                          
+                      else:
+                          return(ecosRoot[1][10].text)    ## 결과값 확인
+          
+                  except Exception as e:    ##예외 프린트
+                      print(str(e))
+          
+          def get_exchange(): ## 환율
+          
+              d = datetime.today().strftime('%Y%m%d')
+              statisticcode = '036Y001'
+              ## exchange_items = 미국달러, 일본엔, 유럽유로
+              exchange_items = ['0000001', '0000002', '0000003']  
+              exchanges = []
+              for itemcode in exchange_items:
+                      url = "http://ecos.bok.or.kr/api/StatisticSearch/"+key+"/xml/kr/1/5/"+statisticcode+"/DD/"+d+"/"+d+"/" + itemcode
+                      exchanges.append(runAPI(url))
+          
+              return exchanges
+          ```
+
+          </br>
+
+       2. ['GitHub 오픈소스 모듈 : PyKrx'](https://github.com/sharebook-kr/pykrx) - '시가', '저가', '고가', '종가', '거래량', '각 기관들의 KOSPI 시장 순매수금'
+
+          ```python
+          # kospi지수의 시가, 고가, 저가 종가, 거래량과 각 투자처(개인,기관,외국인,연기금)별 순거래금액을 가져온다.
+          
+          # -*- coding: utf-8 -*-
+          import time
+          from pykrx import stock
+          from datetime import datetime,timedelta
+          
+          ## documents : https://github.com/sharebook-kr/pykrx
+          def get_kospi_detail():
+              day = (datetime.today()).strftime("%Y%m%d")
+              df = stock.get_index_ohlcv_by_date(day, day, "1001")
+              open = df.iloc[0, 0] # 시가
+              high = df.iloc[0, 1] # 고가
+              low = df.iloc[0, 2] # 저가
+              close = df.iloc[0, 3] # 종가
+              volume = int(df.iloc[0, 4] * 0.001) # 거래량
+              return open,high,low,close,volume
+              
+          def get_trading_value():
+              day = (datetime.today()).strftime("%Y%m%d")
+              df = stock.get_market_trading_value_by_date(day, day, "KOSPI")
+              association = int(df.iloc[0,0] * 0.000001) # 기관 순매수금
+              person = int(df.iloc[0,2]* 0.000001) # 개인 순매수금
+              foreign = int(df.iloc[0,3]* 0.000001) # 외국인 순매수금
+              
+              df = stock.get_market_trading_value_by_date(day, day, "KOSPI",detail=True)
+              pension = int(df.iloc[0,6]* 0.000001) # 연기금 순매수금
+              
+              return association,foreign,person,pension
+          ```
+
+          </br>
+
+   ---
+
+3. ### DB 갱신과 모델 실행
+
+   - > **DB 갱신**
+
+     1. **모델 입력 데이터(dailydata)** 
+        갱신 시각 : 매일 정해진 시점 (각국의 증권시장 마감 이후 : 한국시간 기준 8AM)
+
+        </br>
+
+     2. **KOSPI 종가 데이터(dailykospi_android)**  
+
+        : 매일 정해진 시점 (한국의 증권시장 마감 이후 : 한국시간 기준 8PM)
+
+        </br>
+
+     3. **모델 예측 결과값(predictedkospi_test)** 
+
+        : 모델 예측 실행 시점 (매주 토요일 : 한국시간 기준 12PM)
+
+        </br>
+
+     4. **예측 시행날의 비교 값(origin)** 
+
+        : 모델 예측 실행 시점 (매주 토요일 : 한국시간 기준 12PM)
+
+        
+
+     </br>
+
+   - > **모델 실행**
+
+
+
+
+
+
+
+
 
 **Server** : 머신러닝 모델 실행, KOSPI 지수 예측에 필요한 데이터 수집, DB 데이터 갱신
 
@@ -338,208 +502,7 @@
 
 1. ####  데이터 수집
 
-   인공지능 학습에 쓰이는 데이터 수집 방법은 두 가지로 **'웹페이지 크롤링'**과  **'API  활용'**
-
-   </br>
-
-   - > ### 크롤링(crawling)
-
-     1. '[네이버 증권'](https://finance.naver.com/) 웹페이지 크롤링을 통해 각국의 주가지수, 유가 등의 정보 획득
-     2. 크롤링에 필요한 **'BeautifulSoup'** 패키지 사용
-
-     ```python
-     # -*- coding: utf-8 -*-
-     from bs4 import BeautifulSoup
-     from datetime import datetime
-     import requests
-     import time
-     
-     def get_kospi_daebiupdown(): ##kospi 대비, 등락률
-         url= 'https://finance.naver.com/sise/sise_index_day.nhn?code=KOSPI'
-         result=requests.get(url)
-         result.encoding = 'utf-8'
-         
-         soup=BeautifulSoup(result.content, "html.parser")
-         indice = soup.select("td.number_1")
-         updownpercent = float(indice[1].text.replace('%','').strip()) ## 등락률
-         
-         indice = soup.select("td.rate_down")
-         daebi = float(indice[0].text.strip()) ## 대비
-         updown = soup.select("img")[0]['alt'] 
-         if updown == '하락':
-             daebi = daebi * -1
-             
-         return daebi, updownpercent
-     
-     def get_hsi_indice():##홍콩 hsi 지수
-     
-         url = 'https://finance.naver.com/world/sise.nhn?symbol=HSI@HSI'
-         result=requests.get(url)
-         result.encoding = 'utf-8'
-     
-         soup=BeautifulSoup(result.content, "html.parser")
-         indice = soup.select("td.tb_td2")
-         return indice[0].text.replace(',','')
-     
-     def get_shanghai_indice(): ## 상하이 상해지수
-     
-         url = 'https://finance.naver.com/world/sise.nhn?symbol=SHS@000001'
-         result=requests.get(url)
-         result.encoding = 'utf-8'
-     
-         soup=BeautifulSoup(result.content, "html.parser")
-         indice = soup.select("td.tb_td2")
-         return indice[0].text.replace(',','')
-         
-     
-     def get_nikkei_indice():## 일본 니케이
-     
-         url = 'https://finance.naver.com/world/sise.nhn?symbol=NII@NI225'
-         result=requests.get(url)
-         result.encoding = 'utf-8'
-     
-         soup=BeautifulSoup(result.content, "html.parser")
-         indice = soup.select("td.tb_td2")
-         return indice[0].text.replace(',','')
-     
-     
-     def get_dji_indice(): ## 미국 다우존스
-     
-         url = 'https://finance.naver.com/world/sise.nhn?symbol=DJI@DJI'
-         result=requests.get(url)
-         result.encoding = 'utf-8'
-     
-         soup=BeautifulSoup(result.content, "html.parser")
-         indice = soup.select("td.tb_td2")
-         return indice[0].text.replace(',','')
-     
-     def get_nas_indice():  ## 미국 나스닥
-     
-         url = 'https://finance.naver.com/world/sise.nhn?symbol=NAS@IXIC&fdtc=0'
-         result=requests.get(url)
-         result.encoding = 'utf-8'
-     
-         soup=BeautifulSoup(result.content, "html.parser")
-         indice = soup.select("td.tb_td2")
-         return indice[0].text.replace(',','')
-     
-     def get_spi_indice(): ## 미국 s&p 500
-     
-         url = 'https://finance.naver.com/world/sise.nhn?symbol=SPI@SPX'
-         result=requests.get(url)
-         result.encoding = 'utf-8'
-     
-         soup=BeautifulSoup(result.content, "html.parser")
-         indice = soup.select("td.tb_td2")
-         return indice[0].text.replace(',','')
-     
-     
-     def get_oil_price(): ##wti 유가가격
-         
-         wti_url = 'https://finance.naver.com/marketindex/worldDailyQuote.nhn?marketindexCd=OIL_CL&fdtc=2'
-         
-         
-         result=requests.get(wti_url)
-         result.encoding = 'utf-8'
-         
-         soup=BeautifulSoup(result.content, "html.parser")
-         
-         indice = soup.select("td.num")
-         wti = indice[0].text.strip()
-     
-         return wti
-     
-     ```
-
-   </br>
-
-   - > ### API
-
-     API를 사용하여 각각의 데이터 획득
-
-     1. [한국은행 경제통계시스템 : ecos API](https://ecos.bok.or.kr/jsp/openapi/OpenApiController.jsp) - '환율' 
-
-        ```python
-        # 한국은행의 환율 정보를 가져오는데 사용
-        # -*- coding: utf-8 -*-
-        import requests 
-        import xml.etree.ElementTree as ET 
-        from datetime import datetime
-        from datetime import timedelta
-        import time
-        import isHoliday
-        
-        key = 'API_KEY'
-        
-        ## API 호출
-        def runAPI(url):
-            response = requests.get(url)  ## http 요청이 성공했을때 API의 리턴값을 가져옵니다.
-            
-            if response.status_code == 200:
-                try:
-                    contents = response.text
-                    ecosRoot = ET.fromstring(contents)
-                    
-                    if ecosRoot[0].text[:4] in ("INFO","ERRO"):  ## 오류 확인
-                        print(ecosRoot[0].text + " : " + ecosRoot[1].text)  ## 오류메세지를 확인하고 처리합니다.
-                        
-                    else:
-                        return(ecosRoot[1][10].text)    ## 결과값 확인
-        
-                except Exception as e:    ##예외 프린트
-                    print(str(e))
-        
-        def get_exchange(): ## 환율
-        
-            d = datetime.today().strftime('%Y%m%d')
-            statisticcode = '036Y001'
-            ## exchange_items = 미국달러, 일본엔, 유럽유로
-            exchange_items = ['0000001', '0000002', '0000003']  
-            exchanges = []
-            for itemcode in exchange_items:
-                    url = "http://ecos.bok.or.kr/api/StatisticSearch/"+key+"/xml/kr/1/5/"+statisticcode+"/DD/"+d+"/"+d+"/" + itemcode
-                    exchanges.append(runAPI(url))
-        
-            return exchanges
-        ```
-
-        </br>
-
-     2. ['GitHub 오픈소스 모듈 : PyKrx'](https://github.com/sharebook-kr/pykrx) - '시가', '저가', '고가', '종가', '거래량', '각 기관들의 KOSPI 시장 순매수금'
-
-        ```python
-        # kospi지수의 시가, 고가, 저가 종가, 거래량과 각 투자처(개인,기관,외국인,연기금)별 순거래금액을 가져온다.
-        
-        # -*- coding: utf-8 -*-
-        import time
-        from pykrx import stock
-        from datetime import datetime,timedelta
-        
-        ## documents : https://github.com/sharebook-kr/pykrx
-        def get_kospi_detail():
-            day = (datetime.today()).strftime("%Y%m%d")
-            df = stock.get_index_ohlcv_by_date(day, day, "1001")
-            open = df.iloc[0, 0] # 시가
-            high = df.iloc[0, 1] # 고가
-            low = df.iloc[0, 2] # 저가
-            close = df.iloc[0, 3] # 종가
-            volume = int(df.iloc[0, 4] * 0.001) # 거래량
-            return open,high,low,close,volume
-            
-        def get_trading_value():
-            day = (datetime.today()).strftime("%Y%m%d")
-            df = stock.get_market_trading_value_by_date(day, day, "KOSPI")
-            association = int(df.iloc[0,0] * 0.000001) # 기관 순매수금
-            person = int(df.iloc[0,2]* 0.000001) # 개인 순매수금
-            foreign = int(df.iloc[0,3]* 0.000001) # 외국인 순매수금
-            
-            df = stock.get_market_trading_value_by_date(day, day, "KOSPI",detail=True)
-            pension = int(df.iloc[0,6]* 0.000001) # 연기금 순매수금
-            
-            return association,foreign,person,pension
-        ```
-
-        </br>
+   - 1. 
 
    ---
 
