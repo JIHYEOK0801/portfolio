@@ -217,6 +217,7 @@
      <img src = "https://github.com/JIHYEOK0801/record/blob/main/capstone/img/DB3.PNG?raw=true">
 
      1. **모델 입력 데이터(dailydata)** 
+
         : 모델 실행에 필요한 입력 값으로 사용 // {*key* = 날짜 : *value* = array(모델 입력 데이터)}
 
         </br>
@@ -234,6 +235,7 @@
         </br>
 
      4. **예측 시행날의 비교 값(origin)** 
+
         : 모델 예측 결과 값을 사용자에게 제공하기 위한 비교값 // {*key* = 예측 시행 날짜 : *value* = string(해당 날짜의 종가)}
 
         </br>
