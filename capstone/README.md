@@ -192,7 +192,7 @@
 
    - > **서버 구성 파일**
 
-     <img src = "https://github.com/JIHYEOK0801/record/blob/main/capstone/img/serverfile2.PNG?raw=true">
+     <img src = "https://github.com/JIHYEOK0801/record/blob/main/capstone/img/serverfile3.PNG?raw=true">
 
      1. 데이터 수집 모듈 파일 (.py)
      2. 모델 실행 파일 (.py)
@@ -214,7 +214,7 @@
 
    - > **DB에 저장되는 데이터**
 
-     <img src = "https://github.com/JIHYEOK0801/record/blob/main/capstone/img/DB2.PNG?raw=true">
+     <img src = "https://github.com/JIHYEOK0801/record/blob/main/capstone/img/DB3.PNG?raw=true">
 
      1. **모델 입력 데이터(dailydata)** 
         : 모델 실행에 필요한 입력 값으로 사용 // {*key* = 날짜 : *value* = array(모델 입력 데이터)}
