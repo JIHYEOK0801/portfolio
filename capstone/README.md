@@ -56,8 +56,7 @@
 
 - ### 소스코드
 
-  1. [Android Studio](./AndroidStudio/myapplication1)
-  2. [Server/DB](./server/model)
+  [Server/DB](./server/model)
 
   </br>
 
