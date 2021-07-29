@@ -2,7 +2,7 @@
 
 ---
 
-> ## 목차
+> ## Contents
 
 - ### [Description](#description-1)
 
@@ -47,7 +47,7 @@
 
   Python, Firebase DB, AWS
 
-- ### 개발 내용
+- ### 담당 개발 내용
 
   1. 서버 환경 구축
   2. 데이터 수집 모듈 개발
