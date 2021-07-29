@@ -42,13 +42,13 @@
 
 - ### 사용 기술(개발 환경)
 
-  Python, Firebase DB, AWS, Android Studio, TensorFlow, Keras
+  Python, Firebase DB, AWS
 
-- ### 역할 
+- ### 개발 내용
 
   1. 서버 환경 구축
   2. 데이터 수집 모듈 개발
-  3. 모델 실행, 데이터 수집 모듈 실행의 자동화 개발
+  3. 시스템 자동화 구축
   4. DB관리
 
 - ### 소스코드
@@ -204,7 +204,7 @@
 
    ---
 
-2. ### DB, 데이터 수집 모듈
+2. ### 데이터 수집 
 
    - > **DB 구축**
 
@@ -230,7 +230,7 @@
 
      4. **예측 시행날의 비교 값(origin)** 
 
-        : 모델 예측 결과 값을 사용자에게 제공하기 위한 비교값 // {*key* = 예측 시행 날짜 : *value* = string(해당 날짜의 종가)}
+        : 모델 예측 값을 사용자에게 제공하기 위한 비교값 // {*key* = 가장 최근의 장마감 날짜 : *value* = string(해당 날짜의 종가)}
 
      </br>
 
@@ -439,428 +439,301 @@
 
    ---
 
-3. ### DB 갱신과 모델 실행
+3. ### DB 갱신 및 모델 실행
+
+   - > **DB 갱신 시점**
+
+     1. **모델 입력 데이터(dailydata)**
+
+        : 매일 정해진 시점 (각국의 증권시장 마감 이후 : 한국시간 기준 8AM)
+
+     2. **KOSPI 종가 데이터(dailykospi_android)**  
+
+        : 매일 정해진 시점 (한국의 증권시장 마감 이후 : 한국시간 기준 8PM)
+
+     3. **모델 예측 결과값(predictedkospi_test)** 
+
+        : 모델 예측 실행 시점 (매주 토요일 : 한국시간 기준 12PM)
+
+     4. **예측 시행날의 비교 값(origin)** 
+
+        : 모델 예측 실행 시점 (매주 토요일 : 한국시간 기준 12PM)
+
+     </br>
 
    - > **DB 갱신**
 
      1. **모델 입력 데이터(dailydata)**
 
-        갱신 시각 : 매일 정해진 시점 (각국의 증권시장 마감 이후 : 한국시간 기준 8AM)
+        - 해외 지수를 크롤링하는 시차 때문에 시간을 두고 DB갱신을 1,2차로 설정
+
+          *ex) 5/29 (목)의 데이터 수집*
+
+          1차  : 환율 데이터 갱신(한국시간 기준 5/29 (목) 16시) 
+
+          2차  : 환율 이외의 값 갱신(한국시간 기준 5/30(금) 8시)
+
+        ```python
+        ##########################################일별 데이터 ##########################################
+        def kospidaebiupdown_update(): ## 대비, 등락률
+            return crawling.get_kospi_daebiupdown()
+        
+        def kospidetail_update(): ## 시가, 고가, 저가, 종가, 거래량
+            return kospidetail.get_kospi_detail()
+        
+        def kospitrading_update(): ## 기관, 외국인, 개인, 연기금
+            return kospidetail.get_trading_value()
+        
+        def hsi_update(): # hsi지수
+            return crawling.get_hsi_indice()
+        
+        def shanghai_update(): # 상하이지수
+            return crawling.get_shanghai_indice()
+        
+        def nikkei_update(): # 닛케이지수
+            return crawling.get_nikkei_indice()
+        
+        def dji_update(): # 다우존스지수
+            return crawling.get_dji_indice()
+        
+        def nas_update(): # 나스닥지수
+            return crawling.get_nas_indice()
+        
+        def spi_update(): # s&p500 지수
+            return crawling.get_spi_indice()
+        
+        def oilprice_update(): # wti 가격
+            return crawling.get_oil_price()
+        
+        def exchange_update(): # 환율
+            return use_ecos.get_exchange()
+        
+        ##########################################일별 데이터 ##########################################
+        
+        #########################################fb 갱신 함수###############################################
+        ## 1차 갱신
+        def ecosDBupdate():
+            day = datetime.today()
+            if(isHoliday.isholiday(day) or isHoliday.isweekend(day)): ## 공휴일,주말이면 data갱신 안함
+                return
+            else:
+                ## 환율
+                exchanges = exchange_update()
+                day_str = day.strftime('%Y-%m-%d')
+                day_factors = exchanges
+        
+                ## DBupdate
+                fb.fb_update_ecos(day_str, day_factors)
+                
+        ## 2차 갱신
+        def crawlingDBupdate():
+            day = datetime.today()
+            if(isHoliday.isholiday(day) or isHoliday.isweekend(day)): ## 공휴일,주말이면 data갱신 안함 ##
+                return
+            else:
+                ## 시가, 고가, 저가, 종가, 거래량 데이터
+                open,high,low,close,volume = kospidetail_update()
+                ## 대비, 등락률 데이터
+                daebi,updown = kospidaebiupdown_update()
+        
+                ## 기관, 외국인, 개인, 연기금 데이터
+                association,foreign,person,pension = kospitrading_update()
+                ## 각국 지수 업데이트
+                ## hsi(홍콩), shanghai(상하이종합), nikkei(닛케이), dji(다우존스), nas(나스닥), spi(S&P 500)
+                hsi = hsi_update()
+                shanghai = shanghai_update()
+                nikkei = nikkei_update()
+                dji = dji_update()
+                nas = nas_update()
+                spi = spi_update()
+                ## wti 데이터
+                wti = oilprice_update()
+                today_str = day.strftime('%Y-%m-%d')
+                today_factors =[close, daebi, updown, open, high,
+                                low, volume, association, foreign, person, 
+                                pension, hsi, shanghai, nas, spi,
+                                dji, nikkei, 'NaN', 'NaN', 'NaN',
+                                wti]
+                
+                ## DBupdate
+                fb.fb_update_crawling(today_str, today_factors)
+        ```
+
+        </br>
 
      2. **KOSPI 종가 데이터(dailykospi_android)**  
 
-        갱신 시각 : 매일 정해진 시점 (한국의 증권시장 마감 이후 : 한국시간 기준 8PM)
+        ```python
+        def dailykospi_android_update():  ## 어플리케이션 차트에 필요한 데이터 갱신
+        	## 공휴일,주말이면 data 갱신 X
+            if(isHoliday.isholiday(datetime.today()) or isHoliday.isweekend(datetime.today())): 
+                return
+            else:
+                today = datetime.today().strftime('%Y-%m-%d')
+                open, high, low, close, volume = kospidetail_update()
+                fb.fb_update_daioykospi_android(today, str(close))
+        ```
 
-     3. **모델 예측 결과값(predictedkospi_test)** 
+        </br>
 
-        갱신 시각 : 모델 예측 실행 시점 (매주 토요일 : 한국시간 기준 12PM)
+     3. **모델 예측 결과값(predictedkospi_test)** , **예측 시행날의 비교 값(origin)** 
 
-     4. **예측 시행날의 비교 값(origin)** 
+        ```python
+        def runmodel():
+            ## 데이터프레임 생성
+            data = fb.make_data()
+        	## 모델 결과값
+            predict_kospi = model.run(data)
+            ## 가장 최근의 장 마감 날짜(비교 날짜)
+            day = datetime.today()
+            while(isHoliday.isweekend(day) or isHoliday.isholiday(day)):
+                day = day - timedelta(days=1)
+        	## 가장 최근의 종가(비교 값)
+            origin_kospi = kospidetail.get_original_kospi(day) 
+        	## DB 갱신
+            fb.upload_predict_kospi(predict_kospi,day,origin_kospi)
+        ```
 
-        갱신 시각 : 모델 예측 실행 시점 (매주 토요일 : 한국시간 기준 12PM)
+        </br>
+
+     4. **DB갱신 모듈**
+
+        ```python
+        # -*- coding: utf-8 -*-
+        from firebase_admin import credentials
+        from firebase_admin import firestore
+        from copy import deepcopy
+        from pandas import Series,DataFrame
+        from datetime import datetime,timedelta
+        import isHoliday
+        import pandas as pd
+        import firebase_admin
+        import crawling
+        
+        ## DB권한 인가
+        cred = credentials.Certificate("team1-1a267-firebase-adminsdk-v9932-63d62a617d.json")
+        firebase_admin.initialize_app(cred, {'databaseURL' : 'https://team1-1a267.firebaseio.com'})
+        db = firestore.client()
+        
+        ## 1차 갱신
+        def fb_update_ecos(day_str, day_factors):
+            doc_ref = db.collection(u'data').document(u'dailydata')
+            day_factors = ['NaN','NaN','NaN','NaN','NaN','NaN','NaN','NaN','NaN','NaN',
+                            'NaN','NaN','NaN','NaN','NaN','NaN','NaN']+day_factors+['NaN']
+            doc_ref.set({day_str : day_factors}, merge = True)
+            
+        ## 2차 갱신
+        def fb_update_crawling(today_str, today_factors):
+            doc_ref = db.collection(u'data').document(u'dailydata')
+            doc = doc_ref.get()
+            dic = deepcopy(doc.to_dict())
+            
+            today_list = dic[today_str]
+            today_list = today_factors[:17] + today_list[17:20] + [today_factors[20]]
+            today_list = list(map(str, today_list))
+            
+            doc_ref.update({today_str : today_list})
+            
+        ## 차트 데이터 갱신
+        def fb_update_daioykospi_android(today, kospi):
+            doc_ref = db.collection(u'data').document(u'dailykospi_android')
+            doc_ref.set({today : kospi}, merge = True)
+        
+        ## 모델 결과값 갱신
+        def upload_predict_kospi(predict_kospi_index, origin_day, origin_kospi):
+            day = datetime.today()
+            predictday = 0
+            
+        	## 예측 목표 날짜 구하기
+            while predictday < 5:
+                day += timedelta(days=1)
+                if(isHoliday.isholiday(day) or isHoliday.isweekend(day)): 
+                    continue
+                predictday += 1
+        
+            day_str = day.strftime("%Y-%m-%d")
+            doc_ref = db.collection(u'data').document(u'predictedkospi_test')
+            ## {'예측 목표 날짜' : '등락 여부'} 갱신
+            doc_ref.set({day_str : predict_kospi_index})
+            
+            doc_ref_origin = db.collection(u'data').document(u'origin')
+            origin_day = origin_day.strftime("%Y-%m-%d")
+            ## {'최근 장 마감 날짜' : '해당 날의 종가'} 갱신
+            doc_ref_origin.set({origin_day : origin_kospi})
+        
+        ## 모델 입력 데이터 프레임 생성
+        def make_data():
+            db = firestore.client()
+            data_doc_ref = db.collection(u'data').document(u'dailydata')
+            data_doc = data_doc_ref.get()
+            data_dic = deepcopy(data_doc.to_dict())
+            data_keylist = sorted(list(data_dic.keys())) ## keylist = YYYY-mm-dd 날짜 string
+        
+            data = {
+            'date' : data_keylist,
+            'close' : [float(data_dic[key][0]) for key in data_keylist],
+            'daebi' : [float(data_dic[key][1]) for key in data_keylist],
+            'updown' : [float(data_dic[key][2]) for key in data_keylist],
+            'open' : [float(data_dic[key][3]) for key in data_keylist],
+            'high' : [float(data_dic[key][4]) for key in data_keylist],
+            'low' : [float(data_dic[key][5]) for key in data_keylist],
+            'volume' : [float(data_dic[key][6]) for key in data_keylist],
+            'association' : [float(data_dic[key][7]) for key in data_keylist],
+            'foreign' : [float(data_dic[key][8]) for key in data_keylist],
+            'person' : [float(data_dic[key][9]) for key in data_keylist],
+            'pension' : [float(data_dic[key][10]) for key in data_keylist],
+            'hsi' : [float(data_dic[key][11]) for key in data_keylist],
+            'shanghai' : [float(data_dic[key][12]) for key in data_keylist],
+            'nasdaq' : [float(data_dic[key][13]) for key in data_keylist],
+            'spy' : [float(data_dic[key][14]) for key in data_keylist],
+            'dji' :	[float(data_dic[key][15]) for key in data_keylist],
+            'nikkei' : [float(data_dic[key][16]) for key in data_keylist],
+            'won/US dollar' : [float(data_dic[key][17]) for key in data_keylist],
+            'won/100en' : [float(data_dic[key][18]) for key in data_keylist],
+            'won/euro' : [float(data_dic[key][19]) for key in data_keylist],
+            'WTI' : [float(data_dic[key][20]) for key in data_keylist]
+            }
+        
+            data = DataFrame(data)
+            data = data.interpolate(method='values', limit_direction='both')
+            return data
+        ```
+
+        </br>
+
+   ---
+
+4. ### 시스템 자동화
+
+   - > **스케줄러**
+
+     - 자동화에는 python에서 제공하는 schedule 패키지 사용
+
+     ```python
+     ## 1차 갱신 // 한국시간 16시
+     schedule.every().day.at("07:00").do(ecosDBupdate) 
+     ## 2차 갱신 // 한국시간 8시 -- 한국시간으로는 전날 데이터가 업데이트
+     schedule.every().day.at("23:00").do(crawlingDBupdate)
+     ## 안드로이드 차트 KOSPI 데이터 갱신 // 한국시간 20시
+     schedule.every().day.at("11:00").do(dailykospi_android_update) 
+     ## 매주 토요일 모델 실행하여 예측 // 한국시간 12시
+     schedule.every().saturday.at("03:00").do(runmodel)
+     
+     ## 스케줄러 실행
+     while True:
+         schedule.run_pending()
+         time.sleep(1)
+     ```
 
      </br>
 
-   - > **모델 실행**
+   - > **백그라운드 실행**
 
+     - 서버에서 자동화 모듈 파일을 백그라운드로 실행하여 터미널을 종료하였을 때에도 가동하도록 설정
 
+     - *nohup* 명령어를 사용하여 백그라운드 실행</br>
 
+       **nohup이란?**
 
+       리눅스에서 프로세스를 실행한 터미널의 연결이 끊겨도 지속적으로 동작하게 해주는 명령어
 
-
-
-
-
-**Server** : 머신러닝 모델 실행, KOSPI 지수 예측에 필요한 데이터 수집, DB 데이터 갱신
-
-**DB** : KOSPI 지수 예측에 필요한 데이터, KOSPI 차트 표현에 필요한 데이터, 지수 등락 예측 데이터 저장
-
-- **Server와 DB의 실행 과정**
-
-  1. [데이터 수집](#데이터-수집)
-  2. [DB 갱신](#db-데이터-갱신)
-  3. [예측 모델 실행](#예측-모델-실행)
-  4. [DB에 예측 결과 값 저장](#KOSPI-등락-예측-정보-저장)
-  5. [스케줄러](#스케줄러)
-
-  </br>
-
----
-
-1. ####  데이터 수집
-
-   - 1. 
-
-   ---
-
-2. #### DB 데이터 갱신
-
-   DB에서 매일 갱신하는 데이터 2가지
-
-   1. dailydata (인공지능 학습 데이터) 
-   2. dailykospi_android (앱의 'KOSPI 차트' 데이터)
-
-   </br>
-
-   > ### 1. dailydata
-
-   - 해외 지수를 크롤링하는 시차 때문에 시간을 두고 DB갱신을 1,2차로 설정
-
-     *ex) 5/29 (목)의 데이터 수집*
-
-     1차 : 환율 데이터 갱신(한국시간 기준 5/29 (목) 16시)
-
-     2차 : 환율 이외의 값 갱신(한국시간 기준 5/30(금) 8시)
-
-   </br>
-
-   ```python
-   # -*- coding: utf-8 -*-
-   from firebase_admin import credentials
-   from firebase_admin import firestore
-   from copy import deepcopy
-   from pandas import Series,DataFrame
-   from datetime import datetime,timedelta
-   import isHoliday
-   import pandas as pd
-   import firebase_admin
-   import crawling
-   
-   ## firebase 권한 획득
-   cred = credentials.Certificate("team1-1a267-firebase-adminsdk.json")
-   firebase_admin.initialize_app(cred, {'databaseURL' : 'https://team1-1a267.firebaseio.com'})
-   db = firestore.client()
-   
-   ## 1차 갱신
-   def fb_update_ecos(day_str, day_factors):
-       print('<-----firebase 1차 갱신중----------------------------->')
-       doc_ref = db.collection(u'data').document(u'dailydata')
-       ## 환율 값을 제외한 나머지는 NaN 값
-       day_factors = ['NaN','NaN','NaN','NaN','NaN','NaN','NaN','NaN','NaN','NaN',
-                       'NaN','NaN','NaN','NaN','NaN','NaN','NaN']+day_factors+['NaN']
-       doc_ref.set({day_str : day_factors}, merge = True)
-   
-   ## 2차 갱신
-   def fb_update_crawling(today_str, today_factors):
-       doc_ref = db.collection(u'data').document(u'dailydata')
-       doc = doc_ref.get()
-       dic = deepcopy(doc.to_dict())
-       today_list = dic[today_str]
-       
-       ## 새로운 데이터 리스트1 + 1차 갱신한 환율 값 리스트 + 새로운 데이터 리스트2
-       today_list = today_factors[:17] + today_list[17:20] + [today_factors[20]]
-       today_list = list(map(str, today_list))
-       
-       doc_ref.update({today_str : today_list})
-   ```
-
-   </br>
-
-   <img src = "https://github.com/JIHYEOK0801/record/blob/main/capstone/img/firebase_2.png?raw=true">
-
-   </br>
-
-   > ### 2. dailykospi_android
-
-   - 앱의 'KOSPI 차트'에 들어가는 매일의 KOSPI 지수
-   - dailydata 데이터 수집시 구했던 종가 값을 사용
-
-   ```python
-    ## KOSPI 차트에 필요한 데이터 갱신
-   def fb_update_daioykospi_android(today, kospi): ## 오늘 날짜, KOSPI 종가
-       doc_ref = db.collection(u'data').document(u'dailykospi_android')
-       doc_ref.set({today : kospi}, merge = True) #DB에 금일 날짜와 KOSPI 지수 추가
-   ```
-
-   </br>
-
-   <img src = "https://github.com/JIHYEOK0801/record/blob/main/capstone/img/dailykospi.PNG?raw=true">
-
-   </br>
-
-   ---
-
-3. #### 예측 모델 실행
-
-   - 모델 파일(파일명 : 75_LSTM.h5)을 실행해서 예측값을 return 받는 모듈
-
-   ```python
-   from copy import deepcopy
-   import pandas as pd
-   from pandas import Series,DataFrame
-   import numpy as np
-   
-   import tensorflow as tf
-   from tensorflow import keras
-   from sklearn.preprocessing import MinMaxScaler
-   from sklearn.model_selection import train_test_split
-   from tensorflow.keras.models import Sequential
-   from tensorflow.keras.layers import Dense
-   from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
-   from tensorflow.keras.layers import LSTM
-   from tensorflow.keras.layers import Dropout
-   from tensorflow.keras.losses import Huber
-   from tensorflow.keras.optimizers import Adam
-   from tensorflow.keras import optimizers
-   from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
-   from sklearn.metrics import r2_score
-   from sklearn.metrics import mean_squared_error
-   
-   from tensorflow.keras.models import load_model
-   import os
-   
-   def run(model_data): # model_data = dataframe 형태
-       
-       ## model_data에 컬럼 추가
-       model_data['EMA_close5'] = model_data['close'].ewm(5).mean() # 지수이동 평균(5일)
-       model_data['EMA_close10'] = model_data['close'].ewm(10).mean() # 지수이동 평균(10일) 
-       model_data['EMA_close20'] = model_data['close'].ewm(20).mean() # 지수이동 평균(20일)
-       model_data['EMA_close60'] = model_data['close'].ewm(60).mean() # 지수이동 평균(60일)
-       model_data['EMA_close120'] = model_data['close'].ewm(120).mean() # 지수이동 평균(120일)
-       model_data['disp5'] = (model_data['close']/model_data['EMA_close5']) * 100 # 이격도
-       model_data['after4days_close'] = model_data['close'].shift(-4) #close를 4칸 위로 올린 컬럼
-   
-       # 빈값을 위해 interpolate
-       model_data = model_data.interpolate(method = 'values', limit_direction = 'both')
-       
-       # 정확한 지수이동 평균값과 이격도값은 121번째 row부터 들어있기에 데이터 슬라이스
-       model_data = model_data[120:]
-       today_k=model_data['close'].iloc[-1]
-       
-   	# 데이터 전처리 - MinMaxScaler 적용
-       new_scaler = MinMaxScaler()
-       new_scaler.fit(model_data['close'].values.reshape(-1,1))
-   
-       for i in model_data.columns:
-           if i == 'date': continue ## date 컬럼을 제외한 나머지 전처리
-           model_data[i] = MinMaxScaler().fit_transform(model_data[i].values.reshape(-1, 1)).round(4)
-   
-       feature_cols = ['volume','shanghai','dji', 'nikkei', 'hsi', 
-                       'won/US dollar', 'won/100en', 'won/euro','association','person',
-                       'daebi', 'EMA_close5', 'EMA_close10', 'EMA_close20', 'EMA_close60', 
-                       'EMA_close120', 'disp5', 'updown','after4days_close']
-       
-       label_cols = ['close']
-   
-   	###### 데이터셋 준비 완료
-       
-       base_dir = '' #모델 저장 위치 (서버용)
-       file_name = '75_LSTM.h5'  #모델 이름(파일명)
-       dir = os.path.join(base_dir, file_name)
-       model = load_model(dir)  #모델 load
-   	
-       ## 5일 후의 KOSPI 지수를 예측하는 모델을 5번 반복 --> 5일 후 예측
-       def find_pred():
-           df = model_data[-24:]        
-           for i in range(5): # 1-4번째 예측 값으로 빈칸을 채우고, 5번째 예측값을 예측 값으로 이용
-               df_tmp = df[i:i+20] #20개씩 잘라서 예측
-               my_final_x_test = df_tmp[feature_cols]
-               my_final_x_test = np.array(my_final_x_test)
-               my_final_x_test = my_final_x_test.reshape(1, 20, 19)
-               my_final_y_pred = model.predict(my_final_x_test)
-               
-               ## 5번 돌았을 때
-               if i == 4: 
-                   return new_scaler.inverse_transform(my_final_y_pred)[0][0]
-               ## 다음 예측을 위해 예측값을 데이터 프레임에 삽입
-               else: 
-                   df['after4days_close'].iloc[i+20] = my_final_y_pred[0][0]
-   
-       # return : 예측한 5일 뒤 코스피 값
-       pred = find_pred()
-       
-       # 예측 값(pred) - 예측 시행날 코스피지수(today_k) > 0 --> 1 (상승)
-       # 예측 값(pred) - 예측 시행날 코스피지수(today_k) <= 0 --> 0 (유지 or 하락)
-       
-       ud_5days = 0
-       if pred - today_k > 0:
-           ud_5days = 1
-       else:
-           ud_5days = 0
-   
-       return ud_5days
-   
-   ```
-
-   </br>
-
-   ---
-
-4. #### KOSPI 등락 예측 정보 저장
-
-   모델이 예측한 등락 정보를 DB에 저장(1 : 전주 금요일보다 상승 // 0 : 전주 금요일보다 하락 or 동일)
-
-   ```python
-   def upload_predict_kospi(predict_kospi_index, origin_day, origin_kospi):
-       day = datetime.today()
-       predictday = 0
-       
-       #근무일 기준 5일후 날짜 계산
-       while predictday < 5:
-           day += timedelta(days=1)
-           if(isHoliday.isholiday(day) or isHoliday.isweekend(day)): ## 공휴일,주말이면 no count
-               continue
-           predictday += 1
-   
-       day_str = day.strftime("%Y-%m-%d")
-       doc_ref = db.collection(u'data').document(u'predictedkospi_test')
-       doc_ref.set({day_str : predict_kospi_index}) ##{예측 목표 날짜 : 예측 결과} 저장
-       doc_ref_origin = db.collection(u'data').document(u'origin')
-       origin_day = origin_day.strftime("%Y-%m-%d") 
-       doc_ref_origin.set({origin_day : origin_kospi}) ##{예측 시행 날짜 : 예측 시행 날 종가} 저장
-   ```
-
-   </br>
-
-   DB에 등락예측 정보를 저장한 상태 (5/28(금)에 예측한 6/4(금)의 KOSPI 등락 : 0)
-
-   <img src = "https://github.com/JIHYEOK0801/record/blob/main/capstone/img/predictkospi.PNG?raw=true">
-
-   </br>
-
-   ---
-
-5. #### 스케줄러
-
-   - 위에서 설명한 모듈들을 정해진 시간에 수행하는 파이썬 스케줄러 모듈
-   - AWS EC2 서버에서 백그라운드로 실행
-
-   ```python
-   # -*- coding: utf-8 -*-
-   from datetime import datetime
-   from datetime import timedelta
-   
-   import schedule
-   import time
-   import crawling
-   import isHoliday
-   import use_ecos
-   import fb
-   import kospidetail
-   import model
-   from calendar import monthrange
-   ##########################################일별 데이터 ##########################################
-   def kospidaebiupdown_update(): ## 대비, 등락률
-       return crawling.get_kospi_daebiupdown()
-   
-   def kospidetail_update(): ## 시가, 고가, 저가, 종가, 거래량
-       return kospidetail.get_kospi_detail()
-   
-   def kospitrading_update(): ## 기관, 외국인, 개인, 연기금
-       return kospidetail.get_trading_value()
-   
-   def hsi_update(): # hsi지수
-       return crawling.get_hsi_indice()
-   
-   def shanghai_update(): # 상하이지수
-       return crawling.get_shanghai_indice()
-   
-   def nikkei_update(): # 닛케이지수
-       return crawling.get_nikkei_indice()
-   
-   def dji_update(): # 다우존스지수
-       return crawling.get_dji_indice()
-   
-   def nas_update(): # 나스닥지수
-       return crawling.get_nas_indice()
-   
-   def spi_update(): # s&p500 지수
-       return crawling.get_spi_indice()
-   
-   def oilprice_update(): # wti 가격
-       return crawling.get_oil_price()
-   
-   def exchange_update(): # 환율
-       return use_ecos.get_exchange()
-   ##########################################일별 데이터 ##########################################
-   
-   #########################################fb 갱신 함수###############################################
-   ## 환율 정보 가져오기
-   def ecosDBupdate():
-       day = datetime.today()
-       if(isHoliday.isholiday(day) or isHoliday.isweekend(day)): ## 공휴일,주말이면 data갱신 X
-           return
-       else:
-           ## 환율
-           exchanges = exchange_update()
-           day_str = day.strftime('%Y-%m-%d')
-           day_factors = exchanges
-           fb.fb_update_ecos(day_str, day_factors)
-           
-   ## 크롤링 정보 가져오기
-   def crawlingDBupdate():
-       day = datetime.today()
-       if(isHoliday.isholiday(day) or isHoliday.isweekend(day)): ## 공휴일,주말이면 data갱신 X
-           return
-       else:
-           ## 시가, 고가, 저가, 종가, 거래량 데이터
-           open,high,low,close,volume = kospidetail_update()
-   
-           ## 대비, 등락률 데이터
-           daebi,updown = kospidaebiupdown_update()
-   
-           ## 기관, 외국인, 개인, 연기금 데이터
-           association,foreign,person,pension = kospitrading_update()
-   
-           ## 각국 지수 업데이트
-           ## hsi(홍콩), shanghai(상하이종합), nikkei(닛케이), dji(다우존스), nas(나스닥), spi(S&P 500), wti(유가)
-           hsi = hsi_update()
-           shanghai = shanghai_update()
-           nikkei = nikkei_update()
-           dji = dji_update()
-           nas = nas_update()
-           spi = spi_update()
-           wti = oilprice_update()
-           
-           today_str = day.strftime('%Y-%m-%d')
-           today_factors =[close, daebi, updown, open, high,
-                           low, volume, association, foreign, person, 
-                           pension, hsi, shanghai, nas, spi,
-                           dji, nikkei, 'NaN', 'NaN', 'NaN',
-                           wti]
-           fb.fb_update_crawling(today_str, today_factors)
-   
-   ## 안드로이드 차트 데이터 갱신
-   def dailykospi_android_update():
-       
-       ## 공휴일,주말이면 실행 x
-       if(isHoliday.isholiday(datetime.today()) or isHoliday.isweekend(datetime.today())): 
-           return
-       else:
-           today = datetime.today().strftime('%Y-%m-%d')
-           open, high, low, close, volume = kospidetail_update()
-           fb.fb_update_daioykospi_android(today, str(close))
-   
-   ## model 실행 함수
-   def runmodel():
-       data = fb.make_data()
-       predict_kospi = model.run(data)
-   
-       day = datetime.today()
-       while(isHoliday.isweekend(day) or isHoliday.isholiday(day)):
-           day = day - timedelta(days=1)
-           
-       origin_kospi = kospidetail.get_original_kospi(day)
-       fb.upload_predict_kospi(predict_kospi,day,origin_kospi)
-   
-   ## 스케줄러 ##
-   
-    ## 금일 환율 데이터 갱신 // 한국시간 16시
-   schedule.every().day.at("07:00").do(ecosDBupdate)
-   
-    ## 안드로이드 차트에 들어가는 금일 코스피 업데이트// 한국시간 20시
-   schedule.every().day.at("11:00").do(dailykospi_android_update)
-   
-   ## 금일 요인들 모두 갱신// 한국시간 오전 8시 -- 한국시간으로는 전날꺼가 업데이트
-   schedule.every().day.at("23:00").do(crawlingDBupdate) 
-   
-   ## 매주 토요일마다 모델 실행
-   schedule.every().saturday.at("03:00").do(runmodel) 
-   
-   ## 스케줄러 실행
-   while True:
-       schedule.run_pending()
-       time.sleep(1)
-   ```
-
-   
