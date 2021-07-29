@@ -56,7 +56,7 @@
 
 - ### 소스코드
 
-  [Server/DB](./server/model)
+  [Server/DB](./model)
 
   </br>
 
