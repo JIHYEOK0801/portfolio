@@ -1,6 +1,5 @@
-## 첫번 째 방법 - permutations 이용하기 (시간초과 남)
-
 """
+1. 첫번 째 방법 - permutations 이용하기 (시간초과 남)
 from itertools import permutations
 def solution(n, k):
     li = [ i + 1 for i in range(n)]
@@ -17,12 +16,13 @@ def solution(n, k):
 
 print(solution(4,15))
 """
-## 2. 두번째 방법
-## 몫과 나머지를 활용한 방법
-## 나열하는 숫자의 각 자리마다 고정된 숫자가 몇번 반복되는지를 이용
 
 
 """
+2. 두번째 방법
+몫과 나머지를 활용한 방법
+나열하는 숫자의 각 자리마다 고정된 숫자가 몇번 반복되는지를 이용
+
 ex) n = 3, k = 5
 원활한 계산위해 k = k - 1
 
