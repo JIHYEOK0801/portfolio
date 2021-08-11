@@ -1,3 +1,2 @@
-a = 15
-a //= 5
-print (a)
+s = "{0:03d}".format(35)
+print(s)
