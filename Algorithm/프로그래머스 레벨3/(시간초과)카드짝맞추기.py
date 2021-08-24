@@ -43,7 +43,11 @@ def bfs(start,end, board, i):
                 break
         else:
             x = 0
-        return [x,y]
+
+        if position[0] != x:
+            return [x,y]
+        else:
+            return []
 
     def check_ctrl_right(position):
         x = position[0]
@@ -55,8 +59,13 @@ def bfs(start,end, board, i):
                 break
         else:
             y = len(board[0]) - 1
-            
-        return [x,y]
+        
+        if position[1] != y:
+            return [x,y]
+        else:
+            return []
+        
+        
 
     def check_ctrl_down(position):
         x = position[0] + 1
@@ -69,7 +78,10 @@ def bfs(start,end, board, i):
         else:
             x = len(board) - 1
             
-        return [x,y]
+        if position[0] != x:
+            return [x,y]
+        else:
+            return []
         
 
     def check_ctrl_left(position):
@@ -83,13 +95,15 @@ def bfs(start,end, board, i):
         else:
             y = 0
             
-        return [x,y]
+        if position[1] != y:
+            return [x,y]
+        else:
+            return []
 
     visited = []
     count = -1
     routes = [start]
     while(routes):
-        print(routes)
         count += 1
         add_route = []
 
@@ -99,6 +113,7 @@ def bfs(start,end, board, i):
                     if (board[start[0]][start[1]] == board[end[0]][end[1]]):
                         board[start[0]][start[1]] = 0
                         board[end[0]][end[1]] = 0
+                        count += 2
                 return count
 
             visited.append(route)
@@ -142,31 +157,64 @@ def bfs(start,end, board, i):
             if ctrl_left:
                 if ctrl_left not in add_route:
                     add_route.append(ctrl_left)
-            print(up,right,down,left,ctrl_up,ctrl_right,ctrl_down,ctrl_left)
+        
         routes = add_route
 
     return count
 
 def solution(board, r, c):
     answer = float('inf')
-
-    count = 0
-    copy_board = deepcopy(board)
+    coordinates = {}
+    for i in range(len(board)):
+        for j in range(len(board[i])):
+            if board[i][j] != 0:
+                if board[i][j] not in coordinates:
+                    coordinates[board[i][j]] = [[i,j]]
+                else:
+                    coordinates[board[i][j]].append([i,j])
     
-    orders = [[0, 1], [0, 0], [3, 3], [0, 3], [3, 0], [2, 1], [1, 2]]
-    print(orders)
-    for i in range(1, len(orders)):
-        count += bfs(orders[i-1], orders[i], copy_board, i)
-        print(count)
-        print(copy_board,'\n')
+    key_list = list(coordinates.keys())
+    orders_keys = list(permutations(key_list,len(key_list)))
+
+    available_order = []
+    
+    for order in orders_keys:
+        new_order = []
+        for key in order:
+            temp = []
+            add_1 = [coordinates[key][0], coordinates[key][1]]
+            add_2 = [coordinates[key][1], coordinates[key][0]]
+            if new_order:
+                for o in new_order:
+                    temp.append(o + add_1)
+                    temp.append(o + add_2)
+                new_order = temp
+            else:
+                temp.append(add_1)
+                temp.append(add_2)
+                temp[0] = [[r,c]] + temp[0]
+                temp[1] = [[r,c]] + temp[1]
+                new_order = temp
+        available_order += new_order
         
-    if count < answer:
-        answer = count
+
+
+    for orders in available_order:
+        count = 0
+        copy_board = deepcopy(board)
+        #print(orders)
+        for i in range(1, len(orders)):
+            count += bfs(orders[i-1], orders[i], copy_board, i)
+            #print(count)
+            #print(copy_board,'\n')
+            
+        if count < answer:
+            answer = count
 
     return answer
     
 
 
 # print(solution([[1,0,0,0],[2,0,0,0],[0,0,0,2],[0,0,1,0]], 1, 0))
-#print(solution([[1,0,0,3],[2,0,0,0],[0,0,0,2],[3,0,1,0]], 1, 0))
-print(solution([[3,0,0,2],[0,0,1,0],[0,1,0,0],[2,0,0,3]], 0, 1))
+print(solution([[1,0,0,3],[2,0,0,0],[0,0,0,2],[3,0,1,0]], 1, 0))
+#print(solution([[3,0,0,2],[0,0,1,0],[0,1,0,0],[2,0,0,3]], 0, 1))
